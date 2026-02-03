@@ -35,7 +35,8 @@ namespace CarController {
         [SerializeField] private float suspensionDamping;
 
         [Header("Steering Settings")] 
-        [SerializeField] private float steeringMaxAngle;
+        [SerializeField] private float steeringAngleLowSpeed;
+        [SerializeField] private float steeringAngleHightSpeed;
         [SerializeField] private float steeringSmoothing;
         //public AnimationCurve steeringCurve; //Courbe de % d'angle de rotation des roues en fonction de la vitesse de la voiture
         [SerializeField, Range(0f,1f)] private float steeringGrip; //Doit être compris entre 0 et 1 -- 0 étant pas de grip - 1 étant maximum grip
@@ -60,7 +61,10 @@ namespace CarController {
          // public float maxRPM = 7000f;
          // public float engineInertia = 0.1f;
          // public float downforceCoefficient = 3.0f;
-        
+         
+        [Header("Brake")]
+        [SerializeField] private float brakeForce;
+         
         [Header("Tire Visual")]
         [SerializeField] private Transform FrontRTire;
         [SerializeField] private Transform FrontLTire;
@@ -111,8 +115,14 @@ namespace CarController {
         Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
         //float driveForce => engineForce * gears[currentGear] * finalDriveRatio * transmissionEfficiency / wheelRadius;
 
+        private float brake;
+        
         private float accelTime = 0;
         private float currentEngineForce = 0;
+        private float currentSteeringAngle;
+        
+        //TODO faire la relation entre vitesse de la voiture et angle de braquage des roues
+        //Revoir le fonctionnement des suspsensions
         
         void Start() {
             if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
@@ -140,8 +150,11 @@ namespace CarController {
         }
 
         void TurnWheels() {
-            currentSteering = Mathf.SmoothStep(currentSteering, steering * steeringMaxAngle, steeringSmoothing * Time.deltaTime);
-            currentSteering = Mathf.Clamp(currentSteering, -steeringMaxAngle, steeringMaxAngle);
+            currentSteering = Mathf.SmoothStep(currentSteering, steering * currentSteeringAngle, steeringSmoothing * Time.deltaTime);
+            currentSteering = Mathf.Clamp(currentSteering, -currentSteeringAngle, currentSteeringAngle);
+
+            currentSteeringAngle = Mathf.Lerp(steeringAngleLowSpeed, steeringAngleHightSpeed,
+                currentEngineForce / maxEngineForce);
             
             FrontLSuspension.localRotation = Quaternion.Euler(0,currentSteering,0);
             FrontRSuspension.localRotation = Quaternion.Euler(0,currentSteering,0);
@@ -163,6 +176,7 @@ namespace CarController {
         void MyInputs() {
             steering = Inputs.Steering.ReadValue<float>();
             throttle = Inputs.Throttle.ReadValue<float>();
+            brake = Inputs.Brake.ReadValue<float>();
             
             if (Inputs.ShiftGear.WasPressedThisFrame()) {
                 if (Inputs.ShiftGear.ReadValue<float>() > 0) currentGear++;
@@ -187,6 +201,11 @@ namespace CarController {
             CalculateSteering(FrontLSuspension);
             CalculateSteering(RearRSuspension);
             CalculateSteering(RearLSuspension);
+            
+            CalculateBrakeForce(FrontRSuspension);
+            CalculateBrakeForce(FrontLSuspension);
+            CalculateBrakeForce(RearRSuspension);
+            CalculateBrakeForce(RearLSuspension);
             
             switch (wheelDriveMode) {
                 case WheelDriveMode.FWD:
@@ -252,10 +271,10 @@ namespace CarController {
         }
 
         void CalculateForwardForce(Transform suspension) {
-            if(!TireToucheGround(suspension)) return;
+            if(!TireToucheGround(suspension) || brake > 0) return;
             
             var accelDir = suspension.forward;
-
+            
             if (throttle >= 0.5f) {
                 accelTime += Time.fixedDeltaTime * throttle;
             }
@@ -276,6 +295,14 @@ namespace CarController {
                 carRb.AddForceAtPosition(accelDir * availableTorque, suspension.position);
             
             Debug.DrawRay(suspension.position, accelDir * availableTorque, Color.blue);
+        }
+
+        void CalculateBrakeForce(Transform suspension) {
+            if(Vector3.Angle(carRb.linearVelocity, transform.forward) < 5 && carRb.linearVelocity.magnitude > 0)
+                carRb.AddForceAtPosition(-suspension.forward * (brakeForce * brake), suspension.position);
+            
+            //currentEngineForce = carRb.linearVelocity.magnitude;
+            accelTime -= Time.fixedDeltaTime * (brakeForce * brake);
         }
         
         bool TireToucheGround(Transform tire) {
