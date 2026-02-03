@@ -1762,8 +1762,9 @@ MonoBehaviour:
   suspensionStrength: 200
   suspensionDamping: 50
   steeringAngleLowSpeed: 45
-  steeringAngleHightSpeed: 20
-  steeringSmoothing: 25
+  steeringAngleHighSpeed: 15
+  steeringSmoothingLowSpeed: 25
+  steeringSmoothingHighSpeed: 5
   steeringGrip: 0.8
   tireMass: 1
   rearSteeringAllowed: 0
