@@ -35,16 +35,21 @@ namespace CarController {
         [SerializeField] private float suspensionDamping;
 
         [Header("Steering Settings")] 
-        [SerializeField] private float steeringMaxAngle;
-        [SerializeField] private float steeringSmoothing;
+        [SerializeField] private float steeringAngleLowSpeed;
+        [SerializeField] private float steeringAngleHighSpeed;
+        [SerializeField] private float steeringSmoothingLowSpeed;
+        [SerializeField] private float steeringSmoothingHighSpeed;
         //public AnimationCurve steeringCurve; //Courbe de % d'angle de rotation des roues en fonction de la vitesse de la voiture
-        [Range(0, 1)]
-        [SerializeField] private float steeringGrip; //Doit être compris entre 0 et 1 -- 0 étant pas de grip - 1 étant maximum grip
+        [SerializeField, Range(0f,1f)] private float steeringGrip; //Doit être compris entre 0 et 1 -- 0 étant pas de grip - 1 étant maximum grip
         [SerializeField] private float tireMass; //Des choses à y faire
         [SerializeField] private bool rearSteeringAllowed = false;
         
         [Header("Drive Settings")]
         [SerializeField] private WheelDriveMode wheelDriveMode = WheelDriveMode.FWD;
+        [SerializeField] private float minEngineForce = 100;
+        [SerializeField] private float maxEngineForce = 500;
+        [SerializeField] private float timeToReachMaxForce = 10;
+        [SerializeField, Range(0.001f,1f)] private float decelerationRate = 0.1f;
         
         //public AnimationCurve torqueCurve = AnimationCurve.EaseInOut(0f, 100f, 7000f, 50f);
         
@@ -57,7 +62,10 @@ namespace CarController {
          // public float maxRPM = 7000f;
          // public float engineInertia = 0.1f;
          // public float downforceCoefficient = 3.0f;
-        
+         
+        [Header("Brake")]
+        [SerializeField] private float brakeForce;
+         
         [Header("Tire Visual")]
         [SerializeField] private Transform FrontRTire;
         [SerializeField] private Transform FrontLTire;
@@ -107,6 +115,16 @@ namespace CarController {
         Vector3 dragForce => -airDrag * carRb.linearVelocity * carRb.linearVelocity.magnitude;
         Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
         //float driveForce => engineForce * gears[currentGear] * finalDriveRatio * transmissionEfficiency / wheelRadius;
+
+        private float brake;
+        
+        private float accelTime = 0;
+        private float currentEngineForce = 0;
+        private float currentSteeringAngle;
+        private float steeringSmoothing;
+        
+        //TODO faire la relation entre vitesse de la voiture et angle de braquage des roues
+        //Revoir le fonctionnement des suspsensions
         
         void Start() {
             if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
@@ -134,8 +152,13 @@ namespace CarController {
         }
 
         void TurnWheels() {
-            currentSteering = Mathf.SmoothStep(currentSteering, steering * steeringMaxAngle, steeringSmoothing * Time.deltaTime);
-            currentSteering = Mathf.Clamp(currentSteering, -steeringMaxAngle, steeringMaxAngle);
+            steeringSmoothing = Mathf.Lerp(steeringAngleLowSpeed, steeringAngleHighSpeed, currentEngineForce / maxEngineForce);
+            
+            currentSteering = Mathf.SmoothStep(currentSteering, steering * currentSteeringAngle, steeringSmoothing * Time.deltaTime);
+            currentSteering = Mathf.Clamp(currentSteering, -currentSteeringAngle, currentSteeringAngle);
+            
+            currentSteeringAngle = Mathf.Lerp(steeringAngleLowSpeed, steeringAngleHighSpeed,
+                currentEngineForce / maxEngineForce);
             
             FrontLSuspension.localRotation = Quaternion.Euler(0,currentSteering,0);
             FrontRSuspension.localRotation = Quaternion.Euler(0,currentSteering,0);
@@ -157,6 +180,7 @@ namespace CarController {
         void MyInputs() {
             steering = Inputs.Steering.ReadValue<float>();
             throttle = Inputs.Throttle.ReadValue<float>();
+            brake = Inputs.Brake.ReadValue<float>();
             
             if (Inputs.ShiftGear.WasPressedThisFrame()) {
                 if (Inputs.ShiftGear.ReadValue<float>() > 0) currentGear++;
@@ -168,7 +192,7 @@ namespace CarController {
         }
         
         void LateUpdate() {
-            speedTxt.text = $"Speed: {carRb.linearVelocity.magnitude:F0}\ndriveForce: {engineForce}";
+            speedTxt.text = $"Speed: {carRb.linearVelocity.magnitude:F0}\ndriveForce: {currentEngineForce:F0}";
         }
         
         void FixedUpdate() {
@@ -181,6 +205,11 @@ namespace CarController {
             CalculateSteering(FrontLSuspension);
             CalculateSteering(RearRSuspension);
             CalculateSteering(RearLSuspension);
+            
+            CalculateBrakeForce(FrontRSuspension);
+            CalculateBrakeForce(FrontLSuspension);
+            CalculateBrakeForce(RearRSuspension);
+            CalculateBrakeForce(RearLSuspension);
             
             switch (wheelDriveMode) {
                 case WheelDriveMode.FWD:
@@ -246,19 +275,38 @@ namespace CarController {
         }
 
         void CalculateForwardForce(Transform suspension) {
-            if(!TireToucheGround(suspension)) return;
+            if(!TireToucheGround(suspension) || brake > 0) return;
             
             var accelDir = suspension.forward;
-
-            if (throttle != 0) {
-                var availableTorque = engineForce * throttle;
-                
-                if (wheelDriveMode is WheelDriveMode.AWD) availableTorque /= 4;
-                else availableTorque /= 2;
-                
-                carRb.AddForceAtPosition(accelDir * availableTorque, suspension.position);
-                Debug.DrawRay(suspension.position, accelDir * availableTorque, Color.blue);
+            
+            if (throttle >= 0.5f) {
+                accelTime += Time.fixedDeltaTime * throttle;
             }
+            else if( throttle <= 0.1f) {
+                accelTime -= Time.fixedDeltaTime * 0.1f;
+            }
+            
+            accelTime = Mathf.Clamp(accelTime, 0, timeToReachMaxForce);
+            currentEngineForce = Mathf.Lerp(minEngineForce, maxEngineForce, accelTime / timeToReachMaxForce);
+            
+            //var availableTorque = engineForce * throttle;
+            var availableTorque = currentEngineForce;
+                
+            if (wheelDriveMode is WheelDriveMode.AWD) availableTorque /= 4;
+            else availableTorque /= 2;
+                
+            if(currentEngineForce > minEngineForce)
+                carRb.AddForceAtPosition(accelDir * availableTorque, suspension.position);
+            
+            Debug.DrawRay(suspension.position, accelDir * availableTorque, Color.blue);
+        }
+
+        void CalculateBrakeForce(Transform suspension) {
+            if(Vector3.Angle(carRb.linearVelocity, transform.forward) < 5 && carRb.linearVelocity.magnitude > 0)
+                carRb.AddForceAtPosition(-suspension.forward * (brakeForce * brake), suspension.position);
+            
+            //currentEngineForce = carRb.linearVelocity.magnitude;
+            accelTime -= Time.fixedDeltaTime * (brakeForce * brake);
         }
         
         bool TireToucheGround(Transform tire) {
