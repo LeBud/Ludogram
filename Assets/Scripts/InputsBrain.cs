@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace DefaultNamespace {
+    [RequireComponent(typeof(PlayerInput))]
     public class InputsBrain : MonoBehaviour {
+        
         private InputActionAsset inputs;
         private InputActionMap inputMap;
         public InputAction Steering, Throttle;
@@ -12,6 +14,7 @@ namespace DefaultNamespace {
                 inputs = pInput.actions;
                 inputMap = inputs.FindActionMap("Car");
             }
+            else Debug.LogError("No PlayerInput found");
         }
 
         public void OnEnable() {
