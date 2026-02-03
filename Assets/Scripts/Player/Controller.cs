@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,30 +8,32 @@ public class Controller : MonoBehaviour
 {
     [Header("General Settings")]
     InputSystem_Actions playerInputActions;
-    [SerializeField]         TMP_Text  currentStateTxt;
-    [SerializeField]         Rigidbody rb;
-    [SerializeField]         Camera    playerCamera;
-    [SerializeField] private Transform cameraTarget;
-    [SerializeField]         Transform groundRayPosition;
-    [SerializeField]         LayerMask groundLayerMask;
+    [SerializeField] TMP_Text  currentStateTxt;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] Camera    playerCamera;
+    [SerializeField] Transform cameraTarget;
+    [SerializeField] Transform groundRayPosition;
+    [SerializeField] LayerMask groundLayerMask;
 
     [Header("Movement State Settings")] 
     [SerializeField] AnimationCurve movementSpeedCurve;
     [SerializeField] AnimationCurve airMovementSpeedCurve;
     [SerializeField] AnimationCurve decelerationSpeedCurve;
     
+    [Header("Fall State Settings")]
+    [SerializeField] AnimationCurve fallSpeedCurve;
+    
     [Header("Jump State Settings")]
     [SerializeField] AnimationCurve jumpSpeedCurve;
     [SerializeField] float minJumpTime = 0.2f;
     [SerializeField] float maxJumpTime = 0.5f;
     [SerializeField] int   maxJumpNumber;
-
-    [Header("Fall State Settings")]
-    [SerializeField] AnimationCurve fallSpeedCurve;
+    [SerializeField] float coyoteTime;
+    [SerializeField] float bufferTime;
 
     [Header("Camera Settings")]
     [SerializeField] float cameraSpeed;
-    [SerializeField] float mouseSensitivity = 2f;
+    [SerializeField] float lookSensitivity = 2f;
     [SerializeField] float verticalLimit    = 80f;
 
     public bool isGrounded;
@@ -39,18 +42,19 @@ public class Controller : MonoBehaviour
     Transform playerTransform;
 
     //MOVEMENTS
-    public float movementTimer;
-    public float stopTimer;
-    public float horizontalInput;
-    public float verticalInput;
+    float movementTimer;
+    float stopTimer;
+    float horizontalInput;
+    float verticalInput;
     
     //JUMP
-    int currentJumpNumber;
+    int   currentJumpNumber;
     float jumpTimer;
-    bool isOnJump;
+    bool  isOnJump;
+    bool  canStopJump;
 
     //FALL
-    public float fallTimer;
+    public float      fallTimer;
 
     //CAMERA
     float cameraHorizontalInput;
@@ -66,7 +70,7 @@ public class Controller : MonoBehaviour
     private Action stopJump;
     private Action stopMove;
     
-    private Coroutine jumpCoroutine;
+    private Coroutine bufferJumpCoroutine;
     
     [Header("State Machine")]
     public StateMachine<ControlerState> PlayerStateMachine = new ();
@@ -80,8 +84,8 @@ public class Controller : MonoBehaviour
 
     private void Start()
     {
-        cameraTransform = playerCamera.transform;
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        cameraTransform                      = playerCamera.transform;
+        rb.constraints                       = RigidbodyConstraints.FreezeRotation;
         CreateState();
     }
 
@@ -154,17 +158,29 @@ public class Controller : MonoBehaviour
     void IdleEnter()
     {
         stopTimer = 0;
+        Keyframe[] keyframes = decelerationSpeedCurve.keys;
+        keyframes[0].value          = movementSpeedCurve.Evaluate(movementTimer);
+        decelerationSpeedCurve.keys = keyframes;
+        //movementTimer = 0;
     }
 
     void IdleUpdate()
     {
-       
+        // if (!IsGrounded() && !isOnJump)
+        // {
+        //     PlayerStateMachine.ChangeState(ControlerState.Falling);
+        // }
     }
     
     void IdleFixedUpdate()
     {
-        if(horizontalInput == 0 || verticalInput == 0) return;
         stopTimer += Time.fixedDeltaTime;
+        if (horizontalInput == 0 && verticalInput == 0)
+        {
+            movementTimer = 0;
+            return;
+        }
+        
         Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
         Vector3 forward = targetRotation * Vector3.forward;
         Vector3 right = targetRotation * Vector3.right;
@@ -174,10 +190,10 @@ public class Controller : MonoBehaviour
         velocity.y = rb.linearVelocity.y;
         
         rb.linearVelocity = velocity;
-        if (rb.linearVelocity.magnitude > 0.01f)
-        {
-            movementTimer = 0;
-        }
+        // if (rb.linearVelocity.magnitude > 0.01f)
+        // {
+        //     movementTimer = 0;
+        // }
     }
     
     void IdleLateUpdate()
@@ -197,7 +213,7 @@ public class Controller : MonoBehaviour
 
     void MoveEnter()
     {
-        stopTimer       = 0;
+        stopTimer = 0;
     }
     void MoveUpdate()
     {
@@ -233,7 +249,9 @@ public class Controller : MonoBehaviour
 
     void FallEnter()
     {
-        fallTimer       = 0;
+        Keyframe[] keyframes = fallSpeedCurve.keys;
+        keyframes[0].value = -jumpSpeedCurve.Evaluate(jumpTimer);
+        fallSpeedCurve.keys = keyframes;
     }
     void FallUpdate()
     {
@@ -242,21 +260,20 @@ public class Controller : MonoBehaviour
             isOnJump = false;
             currentJumpNumber = 0;
             PlayerStateMachine.ChangeState(ControlerState.Idle);
-            
         }
     }
 
     void FallFixedUpdate()
     {
-        fallTimer     += Time.fixedDeltaTime;
-        movementTimer += Time.fixedDeltaTime;
+        fallTimer         += Time.fixedDeltaTime;
+        movementTimer     += Time.fixedDeltaTime;
         Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
         Vector3    forward        = targetRotation * Vector3.forward;
         Vector3    right          = targetRotation * Vector3.right;
     
         Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
         Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
-        velocity.y = -fallSpeedCurve.Evaluate(fallTimer);
+        velocity.y += -fallSpeedCurve.Evaluate(fallTimer);
         
         rb.linearVelocity = velocity;
     }
@@ -272,8 +289,11 @@ public class Controller : MonoBehaviour
 
     void JumpEnter()
     {
-        isOnJump  = true;
-        jumpTimer = 0;
+        if(bufferJumpCoroutine != null) StopCoroutine(bufferJumpCoroutine);
+        isOnJump    = true;
+        canStopJump = false;
+        jumpTimer   = 0;
+        fallTimer   = 0;
     }
 
     void JumpFixedUpdate()
@@ -287,11 +307,11 @@ public class Controller : MonoBehaviour
     
         Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
         Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
-        velocity.y = jumpSpeedCurve.Evaluate(jumpTimer);
+        velocity.y += jumpSpeedCurve.Evaluate(jumpTimer);
         
         rb.linearVelocity = velocity;
 
-        if (jumpTimer > minJumpTime && !isOnJump)
+        if (jumpTimer > minJumpTime && canStopJump)
         {
             PlayerStateMachine.ChangeState(ControlerState.Falling);
         }
@@ -355,8 +375,13 @@ public class Controller : MonoBehaviour
     
     void UnsubscribeInputSystemActions()
     {
-        playerInputActions.Player.Move.performed -= ctx => onMove?.Invoke(ctx);
-        playerInputActions.Player.Look.performed -= ctx => onLook?.Invoke(ctx);
+        playerInputActions.Player.Jump.started -= _ => onJump?.Invoke();
+        
+        playerInputActions.Player.Move.performed -= onMove;
+        playerInputActions.Player.Look.performed -= onLook;
+        
+        playerInputActions.Player.Move.canceled -= _ => stopMove?.Invoke();
+        playerInputActions.Player.Jump.canceled -= _ => stopJump?.Invoke();
     }
 
     #endregion
@@ -380,24 +405,37 @@ public class Controller : MonoBehaviour
     
     void CameraMovementsInputs(InputAction.CallbackContext context)
     {
-        cameraHorizontalInput = context.ReadValue<Vector2>().x * mouseSensitivity;
-        cameraVerticalInput = context.ReadValue<Vector2>().y * mouseSensitivity; 
+        cameraHorizontalInput = context.ReadValue<Vector2>().x;
+        cameraVerticalInput   = context.ReadValue<Vector2>().y;
     }
 
     void JumpInput()
     {
-        if(IsGrounded() || currentJumpNumber < maxJumpNumber)
+        if(IsGrounded() || currentJumpNumber < maxJumpNumber || (fallTimer < coyoteTime && currentJumpNumber == 0))
         {
             currentJumpNumber++;
-            PlayerStateMachine.ChangeState(ControlerState.Jumping);
+            if (isOnJump)
+            {
+                jumpTimer = 0;
+            }
+            else
+            {
+                PlayerStateMachine.ChangeState(ControlerState.Jumping);
+            }
+        }
+        else
+        {
+            if(bufferJumpCoroutine != null) StopCoroutine(bufferJumpCoroutine);
+            bufferJumpCoroutine = StartCoroutine(BufferJump());
         }
     }
 
     void StopJumpInput()
     {
         if(IsGrounded()) return;
-        isOnJump = false;
+        canStopJump = true;
         if(jumpTimer < minJumpTime) return;
+        isOnJump = false;
         if (!IsGrounded())
         {
             PlayerStateMachine.ChangeState(ControlerState.Falling);
@@ -414,13 +452,12 @@ public class Controller : MonoBehaviour
 
     void CameraMovement()
     {
-        yaw += cameraHorizontalInput;
-        pitch -= cameraVerticalInput;
+        yaw += cameraHorizontalInput * lookSensitivity;
+        pitch -= cameraVerticalInput *  lookSensitivity;
         pitch = Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
         
         cameraTransform.position = cameraTarget.position;
         cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, Quaternion.Euler(pitch, yaw, 0), Time.deltaTime * cameraSpeed);
-        
     }
 
     #endregion
@@ -441,6 +478,17 @@ public class Controller : MonoBehaviour
         isGrounded = IsGrounded();
         UnityEngine.Debug.DrawRay(groundRayPosition.position, -groundRayPosition.up * 0.5f, Color.red);
     }
-    //bool isGrounded() => Physics.Raycast(cameraTransform.position, Vector3.down, verticalLimit);
-    
+
+    IEnumerator BufferJump()
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < bufferTime)
+        {
+            elapsedTime += Time.deltaTime;
+            if(IsGrounded()) PlayerStateMachine.ChangeState(ControlerState.Jumping);
+            yield return null;
+        }
+        
+    }
+   
 }

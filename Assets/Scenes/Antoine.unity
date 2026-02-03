@@ -257,7 +257,6 @@ GameObject:
   - component: {fileID: 179595282}
   - component: {fileID: 179595285}
   - component: {fileID: 179595284}
-  - component: {fileID: 179595283}
   m_Layer: 0
   m_Name: View
   m_TagString: Untagged
@@ -280,27 +279,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1216840892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &179595283
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179595281}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &179595284
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1679,7 +1657,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216840891}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 87948d2332c671748999a50136fdd5ec, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2291,59 +2269,32 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.28674698
     - serializedVersion: 3
-      time: 0.5
+      time: 0.25
       value: 0
-      inSlope: -10
-      outSlope: -10
-      tangentMode: 34
+      inSlope: -5.5749125
+      outSlope: -5.5749125
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.17083335
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  jumpSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 10
-      inSlope: -0.15341815
-      outSlope: -0.15341815
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.35416666
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: -25.010809
-      outSlope: -25.010809
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.054166675
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  minJumpTime: 0.2
-  maxJumpTime: 0.5
-  maxJumpNumber: 2
   fallSpeedCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.0051574707
+      time: 0
       value: 0
-      inSlope: 27.523237
-      outSlope: 27.523237
+      inSlope: 125.71428
+      outSlope: 125.71428
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.074004196
+      outWeight: 0.05
     - serializedVersion: 3
-      time: 1
-      value: 10
+      time: 0.5
+      value: 20
       inSlope: -0.020910414
       outSlope: -0.020910414
       tangentMode: 0
@@ -2353,14 +2304,48 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  cameraSpeed: 17
-  mouseSensitivity: 1.5
+  jumpSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 15
+      inSlope: 0.24117012
+      outSlope: 0.24117012
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.86901736
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.19858052
+      value: 14.130338
+      inSlope: -13.345349
+      outSlope: -13.345349
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -83.78945
+      outSlope: -83.78945
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15833336
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minJumpTime: 0.2
+  maxJumpTime: 0.5
+  maxJumpNumber: 2
+  coyoteTime: 0.2
+  bufferTime: 0.5
+  cameraSpeed: 15
+  lookSensitivity: 1
   verticalLimit: 80
   isGrounded: 0
-  movementTimer: 0
-  stopTimer: 0
-  horizontalInput: 0
-  verticalInput: 0
   fallTimer: 0
 --- !u!4 &2082189380
 Transform:
