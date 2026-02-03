@@ -36,8 +36,9 @@ namespace CarController {
 
         [Header("Steering Settings")] 
         [SerializeField] private float steeringAngleLowSpeed;
-        [SerializeField] private float steeringAngleHightSpeed;
-        [SerializeField] private float steeringSmoothing;
+        [SerializeField] private float steeringAngleHighSpeed;
+        [SerializeField] private float steeringSmoothingLowSpeed;
+        [SerializeField] private float steeringSmoothingHighSpeed;
         //public AnimationCurve steeringCurve; //Courbe de % d'angle de rotation des roues en fonction de la vitesse de la voiture
         [SerializeField, Range(0f,1f)] private float steeringGrip; //Doit être compris entre 0 et 1 -- 0 étant pas de grip - 1 étant maximum grip
         [SerializeField] private float tireMass; //Des choses à y faire
@@ -120,6 +121,7 @@ namespace CarController {
         private float accelTime = 0;
         private float currentEngineForce = 0;
         private float currentSteeringAngle;
+        private float steeringSmoothing;
         
         //TODO faire la relation entre vitesse de la voiture et angle de braquage des roues
         //Revoir le fonctionnement des suspsensions
@@ -150,10 +152,12 @@ namespace CarController {
         }
 
         void TurnWheels() {
+            steeringSmoothing = Mathf.Lerp(steeringAngleLowSpeed, steeringAngleHighSpeed, currentEngineForce / maxEngineForce);
+            
             currentSteering = Mathf.SmoothStep(currentSteering, steering * currentSteeringAngle, steeringSmoothing * Time.deltaTime);
             currentSteering = Mathf.Clamp(currentSteering, -currentSteeringAngle, currentSteeringAngle);
-
-            currentSteeringAngle = Mathf.Lerp(steeringAngleLowSpeed, steeringAngleHightSpeed,
+            
+            currentSteeringAngle = Mathf.Lerp(steeringAngleLowSpeed, steeringAngleHighSpeed,
                 currentEngineForce / maxEngineForce);
             
             FrontLSuspension.localRotation = Quaternion.Euler(0,currentSteering,0);
