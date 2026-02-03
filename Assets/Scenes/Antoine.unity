@@ -694,6 +694,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -60, y: 0, z: 0}
+--- !u!1 &508232816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 508232817}
+  m_Layer: 0
+  m_Name: GroundRay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &508232817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508232816}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216840892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &525823762
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,7 +962,7 @@ GameObject:
   - component: {fileID: 780490269}
   - component: {fileID: 780490268}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: DebugCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1638,6 +1669,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 179595282}
+  - {fileID: 508232817}
   m_Father: {fileID: 2082189380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1216840893
@@ -2190,11 +2222,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9971a0fb4f1e427438b70d21c062ef65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  currentStateTXT: {fileID: 1897580047}
+  currentStateTxt: {fileID: 1897580047}
   rb: {fileID: 2082189381}
   playerCamera: {fileID: 813662668}
   cameraTarget: {fileID: 179595282}
+  groundRayPosition: {fileID: 508232817}
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 55
   movementSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 28.16071
+      outSlope: 28.16071
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.072289154
+    - serializedVersion: 3
+      time: 1
+      value: 10
+      inSlope: 0.26155594
+      outSlope: 0.26155594
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.40963858
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  airMovementSpeedCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -2242,9 +2302,66 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  jumpSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 10
+      inSlope: -0.15341815
+      outSlope: -0.15341815
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.35416666
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -25.010809
+      outSlope: -25.010809
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.054166675
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minJumpTime: 0.2
+  maxJumpTime: 0.5
+  maxJumpNumber: 2
+  fallSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0051574707
+      value: 0
+      inSlope: 27.523237
+      outSlope: 27.523237
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.074004196
+    - serializedVersion: 3
+      time: 1
+      value: 10
+      inSlope: -0.020910414
+      outSlope: -0.020910414
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.32741714
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   cameraSpeed: 17
-  mouseSensitivity: 1
+  mouseSensitivity: 1.5
   verticalLimit: 80
+  isGrounded: 0
+  movementTimer: 0
+  stopTimer: 0
+  horizontalInput: 0
+  verticalInput: 0
+  fallTimer: 0
 --- !u!4 &2082189380
 Transform:
   m_ObjectHideFlags: 0

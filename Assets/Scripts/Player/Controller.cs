@@ -7,44 +7,66 @@ public class Controller : MonoBehaviour
 {
     [Header("General Settings")]
     InputSystem_Actions playerInputActions;
-    [SerializeField] TMP_Text currentStateTXT;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] Camera    playerCamera;
-    [SerializeField] Transform cameraTarget;
-    [SerializeField] Transform groundRayPosiiton;
-    
-    
-    
+    [SerializeField]         TMP_Text  currentStateTxt;
+    [SerializeField]         Rigidbody rb;
+    [SerializeField]         Camera    playerCamera;
+    [SerializeField] private Transform cameraTarget;
+    [SerializeField]         Transform groundRayPosition;
+    [SerializeField]         LayerMask groundLayerMask;
 
-    [Header("Movement Settings")] 
+    [Header("Movement State Settings")] 
     [SerializeField] AnimationCurve movementSpeedCurve;
+    [SerializeField] AnimationCurve airMovementSpeedCurve;
     [SerializeField] AnimationCurve decelerationSpeedCurve;
-
     
+    [Header("Jump State Settings")]
+    [SerializeField] AnimationCurve jumpSpeedCurve;
+    [SerializeField] float minJumpTime = 0.2f;
+    [SerializeField] float maxJumpTime = 0.5f;
+    [SerializeField] int   maxJumpNumber;
+
+    [Header("Fall State Settings")]
+    [SerializeField] AnimationCurve fallSpeedCurve;
 
     [Header("Camera Settings")]
     [SerializeField] float cameraSpeed;
     [SerializeField] float mouseSensitivity = 2f;
     [SerializeField] float verticalLimit    = 80f;
 
+    public bool isGrounded;
+
     Transform cameraTransform;
     Transform playerTransform;
-    float     stopTimer;
-    float     horizontalInput;
-    float     verticalInput;
-    float     movementTimer;
-    float     cameraHorizontalInput;
-    float     cameraVerticalInput;
-    float     yaw;
-    float     pitch;
+
+    //MOVEMENTS
+    public float movementTimer;
+    public float stopTimer;
+    public float horizontalInput;
+    public float verticalInput;
+    
+    //JUMP
+    int currentJumpNumber;
+    float jumpTimer;
+    bool isOnJump;
+
+    //FALL
+    public float fallTimer;
+
+    //CAMERA
+    float cameraHorizontalInput;
+    float cameraVerticalInput;
+    float yaw;
+    float pitch;
     
     
     private Action<InputAction.CallbackContext> onMove;
     private Action<InputAction.CallbackContext> onLook;
     
     private Action onJump;
+    private Action stopJump;
     private Action stopMove;
     
+    private Coroutine jumpCoroutine;
     
     [Header("State Machine")]
     public StateMachine<ControlerState> PlayerStateMachine = new ();
@@ -69,6 +91,7 @@ public class Controller : MonoBehaviour
         PlayerStateMachine.Add(new State<ControlerState>(
             ControlerState.Idle,
             _onEnter: IdleEnter,
+            _onUpdate: IdleUpdate,
             _onFixedUpdate: IdleFixedUpdate,
             _onLateUpdate: IdleLateUpdate,
             _onExit: IdleExit
@@ -83,6 +106,24 @@ public class Controller : MonoBehaviour
             _onLateUpdate: MoveLateUpdate
         ));
         
+        //JUMP
+        PlayerStateMachine.Add(new State<ControlerState>(
+            ControlerState.Jumping,
+            _onEnter: JumpEnter,
+            _onFixedUpdate: JumpFixedUpdate,
+            _onLateUpdate: JumpLateUpdate,
+            _onExit: JumpExit
+        ));
+        
+        //FALL
+        PlayerStateMachine.Add(new State<ControlerState>(
+            ControlerState.Falling,
+            _onEnter: FallEnter,
+            _onUpdate: FallUpdate,
+            _onFixedUpdate: FallFixedUpdate,
+            _onLateUpdate: FallLateUpdate
+        ));
+        
         PlayerStateMachine.ChangeState(ControlerState.Idle);
     }
 
@@ -93,7 +134,7 @@ public class Controller : MonoBehaviour
     void Update()
     {
         PlayerStateMachine?.Update();
-        UpdateStateText();
+        Debug();
     }
 
     void FixedUpdate()
@@ -113,16 +154,16 @@ public class Controller : MonoBehaviour
     void IdleEnter()
     {
         stopTimer = 0;
-        movementTimer = 0;
     }
 
-    // void IdleUpdate()
-    // {
-    //     
-    // }
-    //
+    void IdleUpdate()
+    {
+       
+    }
+    
     void IdleFixedUpdate()
     {
+        if(horizontalInput == 0 || verticalInput == 0) return;
         stopTimer += Time.fixedDeltaTime;
         Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
         Vector3 forward = targetRotation * Vector3.forward;
@@ -133,7 +174,10 @@ public class Controller : MonoBehaviour
         velocity.y = rb.linearVelocity.y;
         
         rb.linearVelocity = velocity;
-        
+        if (rb.linearVelocity.magnitude > 0.01f)
+        {
+            movementTimer = 0;
+        }
     }
     
     void IdleLateUpdate()
@@ -143,7 +187,8 @@ public class Controller : MonoBehaviour
 
     void IdleExit()
     {
-        
+        horizontalInput = 0;
+        verticalInput = 0;
     }
 
     #endregion
@@ -152,12 +197,14 @@ public class Controller : MonoBehaviour
 
     void MoveEnter()
     {
-        movementTimer = 0f;
-        stopTimer = 0;
+        stopTimer       = 0;
     }
     void MoveUpdate()
     {
-        
+        if (!IsGrounded())
+        {
+            PlayerStateMachine?.ChangeState(ControlerState.Falling);
+        }
     }
     
     void MoveFixedUpdate()
@@ -184,28 +231,86 @@ public class Controller : MonoBehaviour
     
     #region FALLING
 
+    void FallEnter()
+    {
+        fallTimer       = 0;
+    }
     void FallUpdate()
     {
-        
+        if (IsGrounded())
+        {
+            isOnJump = false;
+            currentJumpNumber = 0;
+            PlayerStateMachine.ChangeState(ControlerState.Idle);
+            
+        }
     }
 
     void FallFixedUpdate()
     {
+        fallTimer     += Time.fixedDeltaTime;
+        movementTimer += Time.fixedDeltaTime;
+        Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
+        Vector3    forward        = targetRotation * Vector3.forward;
+        Vector3    right          = targetRotation * Vector3.right;
+    
+        Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
+        Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
+        velocity.y = -fallSpeedCurve.Evaluate(fallTimer);
         
+        rb.linearVelocity = velocity;
+    }
+
+    void FallLateUpdate()
+    {
+        CameraMovement();
     }
     
     #endregion
     
     #region JUMPING
 
-    void JumpUpdate()
+    void JumpEnter()
     {
-        
+        isOnJump  = true;
+        jumpTimer = 0;
     }
 
     void JumpFixedUpdate()
     {
+        jumpTimer     += Time.fixedDeltaTime;
+        movementTimer += Time.fixedDeltaTime;
         
+        Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
+        Vector3    forward        = targetRotation * Vector3.forward;
+        Vector3    right          = targetRotation * Vector3.right;
+    
+        Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
+        Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
+        velocity.y = jumpSpeedCurve.Evaluate(jumpTimer);
+        
+        rb.linearVelocity = velocity;
+
+        if (jumpTimer > minJumpTime && !isOnJump)
+        {
+            PlayerStateMachine.ChangeState(ControlerState.Falling);
+        }
+
+        if (jumpTimer > maxJumpTime)
+        {
+            PlayerStateMachine.ChangeState(ControlerState.Falling);
+        }
+        
+    }
+
+    void JumpExit()
+    {
+        
+    }
+
+    void JumpLateUpdate()
+    {
+        CameraMovement();
     }
 
     #endregion
@@ -230,19 +335,22 @@ public class Controller : MonoBehaviour
 
     void SubscribeInputSystemActions()
     {
-        //playerInputActions.Player.Jump.started += ctx => onLook?.Invoke(ctx);
+        playerInputActions.Player.Jump.started += _ => onJump?.Invoke();
         
         playerInputActions.Player.Move.performed += ctx => onMove?.Invoke(ctx);
         playerInputActions.Player.Look.performed += ctx => onLook?.Invoke(ctx);
         
         playerInputActions.Player.Move.canceled += _ => stopMove?.Invoke();
+        playerInputActions.Player.Jump.canceled  += _ => stopJump?.Invoke();
     }
 
     void AssignActions()
     {
-        onMove += PlayerMovementInputs;
-        onLook += CameraMovementsInputs;
+        onMove   += PlayerMovementInputs;
+        onLook   += CameraMovementsInputs;
         stopMove += ResetPlayerMovementInputs;
+        onJump   += JumpInput;
+        stopJump += StopJumpInput;
     }
     
     void UnsubscribeInputSystemActions()
@@ -257,14 +365,17 @@ public class Controller : MonoBehaviour
 
     void PlayerMovementInputs(InputAction.CallbackContext context)
     {
-        PlayerStateMachine.ChangeState(ControlerState.Moving);
+        if(IsGrounded() && !isOnJump)PlayerStateMachine.ChangeState(ControlerState.Moving);
         horizontalInput = context.ReadValue<Vector2>().x;
         verticalInput = context.ReadValue<Vector2>().y;
     }
     
     void ResetPlayerMovementInputs()
     {
-        PlayerStateMachine.ChangeState(ControlerState.Idle);
+        if (IsGrounded() && !isOnJump)
+        {
+            PlayerStateMachine.ChangeState(ControlerState.Idle);
+        }
     }
     
     void CameraMovementsInputs(InputAction.CallbackContext context)
@@ -273,6 +384,29 @@ public class Controller : MonoBehaviour
         cameraVerticalInput = context.ReadValue<Vector2>().y * mouseSensitivity; 
     }
 
+    void JumpInput()
+    {
+        if(IsGrounded() || currentJumpNumber < maxJumpNumber)
+        {
+            currentJumpNumber++;
+            PlayerStateMachine.ChangeState(ControlerState.Jumping);
+        }
+    }
+
+    void StopJumpInput()
+    {
+        if(IsGrounded()) return;
+        isOnJump = false;
+        if(jumpTimer < minJumpTime) return;
+        if (!IsGrounded())
+        {
+            PlayerStateMachine.ChangeState(ControlerState.Falling);
+        }
+        else
+        {
+            PlayerStateMachine.ChangeState(ControlerState.Idle);
+        }
+    }
     #endregion
     
     
@@ -295,17 +429,18 @@ public class Controller : MonoBehaviour
 
     bool IsGrounded()
     {
-        Ray ray = new Ray(groundRayPosiiton.position, -groundRayPosiiton.up);
-        return Physics.Raycast(ray, out RaycastHit hit, 1f);
+        Ray ray = new Ray(groundRayPosition.position, -groundRayPosition.up);
+        return Physics.Raycast(ray, out RaycastHit ground, 0.5f, groundLayerMask);
     }
 
     #endregion
 
-    void UpdateStateText()
+    void Debug()
     {
-        currentStateTXT.text = PlayerStateMachine.currentState.iD.ToString();
+        currentStateTxt.text = PlayerStateMachine.currentState.iD.ToString();
+        isGrounded = IsGrounded();
+        UnityEngine.Debug.DrawRay(groundRayPosition.position, -groundRayPosition.up * 0.5f, Color.red);
     }
-    
     //bool isGrounded() => Physics.Raycast(cameraTransform.position, Vector3.down, verticalLimit);
     
 }
