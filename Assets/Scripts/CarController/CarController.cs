@@ -123,8 +123,7 @@ namespace CarController {
         private float currentSteeringAngle;
         private float steeringSmoothing;
         
-        //TODO faire la relation entre vitesse de la voiture et angle de braquage des roues
-        //Revoir le fonctionnement des suspsensions
+        //TODO Revoir le fonctionnement des suspsensions
         
         void Start() {
             if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
@@ -244,7 +243,7 @@ namespace CarController {
         void CalculateSuspension(Transform suspension, Transform tire) {
             var ray = new Ray(suspension.position, -suspension.up);
 
-            if (!Physics.Raycast(ray, out var hit, suspensionRestDistance)) return;
+            if (!Physics.Raycast(ray, out var hit, suspensionRestDistance - 0.05f)) return;
             
             var springDir = suspension.up;
             var tireWorldVel = carRb.GetPointVelocity(suspension.position);
