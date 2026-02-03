@@ -1099,6 +1099,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ShiftGear"",
+                    ""type"": ""Button"",
+                    ""id"": ""d4c76c4f-02fa-4025-ac63-7d302c3bb107"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1123,6 +1132,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Steering"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""5d1e4b4f-cd54-4657-a3d8-2b96e1bbb6b6"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShiftGear"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""4f0d8541-6d2e-4836-ad55-82cad3635d03"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ShiftGear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""1e2567dc-187f-4388-99b9-e73ad721e5d1"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShiftGear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -1217,6 +1259,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Car = asset.FindActionMap("Car", throwIfNotFound: true);
         m_Car_Throttle = m_Car.FindAction("Throttle", throwIfNotFound: true);
         m_Car_Steering = m_Car.FindAction("Steering", throwIfNotFound: true);
+        m_Car_ShiftGear = m_Car.FindAction("ShiftGear", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1680,6 +1723,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<ICarActions> m_CarActionsCallbackInterfaces = new List<ICarActions>();
     private readonly InputAction m_Car_Throttle;
     private readonly InputAction m_Car_Steering;
+    private readonly InputAction m_Car_ShiftGear;
     /// <summary>
     /// Provides access to input actions defined in input action map "Car".
     /// </summary>
@@ -1699,6 +1743,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Car/Steering".
         /// </summary>
         public InputAction @Steering => m_Wrapper.m_Car_Steering;
+        /// <summary>
+        /// Provides access to the underlying input action "Car/ShiftGear".
+        /// </summary>
+        public InputAction @ShiftGear => m_Wrapper.m_Car_ShiftGear;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1731,6 +1779,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Steering.started += instance.OnSteering;
             @Steering.performed += instance.OnSteering;
             @Steering.canceled += instance.OnSteering;
+            @ShiftGear.started += instance.OnShiftGear;
+            @ShiftGear.performed += instance.OnShiftGear;
+            @ShiftGear.canceled += instance.OnShiftGear;
         }
 
         /// <summary>
@@ -1748,6 +1799,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Steering.started -= instance.OnSteering;
             @Steering.performed -= instance.OnSteering;
             @Steering.canceled -= instance.OnSteering;
+            @ShiftGear.started -= instance.OnShiftGear;
+            @ShiftGear.performed -= instance.OnShiftGear;
+            @ShiftGear.canceled -= instance.OnShiftGear;
         }
 
         /// <summary>
@@ -2016,5 +2070,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSteering(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ShiftGear" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShiftGear(InputAction.CallbackContext context);
     }
 }
