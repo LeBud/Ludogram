@@ -1,9 +1,11 @@
+using DefaultNamespace;
 using UnityEngine;
 
 namespace CarController {
     [RequireComponent(typeof(Rigidbody))]
     public class CarController : MonoBehaviour {
         private Rigidbody carRb;
+        private InputsBrain Inputs;
 
         public enum WheelDriveMode {
             FWD, //Front
@@ -106,8 +108,8 @@ namespace CarController {
         //float driveForce => engineForce * gears[currentGear] * finalDriveRatio * transmissionEfficiency / wheelRadius;
         
         void Start() {
-            // if (TryGetComponent<InputsBrain>(out Inputs)) Debug.Log($"Inputs Assigned");
-            // else Debug.LogWarning($"Inputs Not Found");
+            if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
+            else Debug.LogWarning($"Inputs Not Found");
             
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
             else Debug.LogWarning($"RigidBody Not Found");
@@ -126,8 +128,7 @@ namespace CarController {
         }
 
         void Update() {
-            //MyInputs();
-            
+            MyInputs();
             TurnWheels();
         }
 
@@ -139,31 +140,31 @@ namespace CarController {
             FrontRSuspension.localRotation = Quaternion.Euler(0,currentSteering,0);
             
             //Visuel
-            FrontRTire.localRotation = Quaternion.Euler(0,currentSteering,90);
-            FrontLTire.localRotation = Quaternion.Euler(0,currentSteering,90);
+            FrontRTire.localRotation = Quaternion.Euler(0,currentSteering,0);
+            FrontLTire.localRotation = Quaternion.Euler(0,currentSteering,0);
 
             if (rearSteeringAllowed) {
                 RearLSuspension.localRotation = Quaternion.Euler(0,-currentSteering,0);
                 RearRSuspension.localRotation = Quaternion.Euler(0,-currentSteering,0);
                 
                 //Visuel
-                RearRTire.localRotation = Quaternion.Euler(0,-currentSteering,90);
-                RearLTire.localRotation = Quaternion.Euler(0,-currentSteering,90);
+                RearRTire.localRotation = Quaternion.Euler(0,-currentSteering,0);
+                RearLTire.localRotation = Quaternion.Euler(0,-currentSteering,0);
             }
         }
 
-        // void MyInputs() {
-        //     steering = Inputs.Steering.ReadValue<float>();
-        //     throttle = Inputs.Throttle.ReadValue<float>();
-        //     
-        //     if (Inputs.GearShift.WasPressedThisFrame()) {
-        //         if (Inputs.GearShift.ReadValue<float>() > 0) currentGear++;
-        //         else currentGear--;
-        //         
-        //         if(currentGear >= gears.Length) currentGear = gears.Length - 1;
-        //         if(currentGear < 0) currentGear = 0;
-        //     }
-        // }
+        void MyInputs() {
+            steering = Inputs.Steering.ReadValue<float>();
+            throttle = Inputs.Throttle.ReadValue<float>();
+            
+            // if (Inputs.GearShift.WasPressedThisFrame()) {
+            //     if (Inputs.GearShift.ReadValue<float>() > 0) currentGear++;
+            //     else currentGear--;
+            //     
+            //     if(currentGear >= gears.Length) currentGear = gears.Length - 1;
+            //     if(currentGear < 0) currentGear = 0;
+            // }
+        }
         
         // void LateUpdate() {
         //     speedTxt.text = $"Speed: {rigidBody.linearVelocity.magnitude:F0}\ndragForce: {dragForce}\nrollingResistanceForce: {rollingResistanceForce}\ndriveForce: {engineForce}";

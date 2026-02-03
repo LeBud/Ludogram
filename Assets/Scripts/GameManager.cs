@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour {
     
-    HashSet<PlayerInput> players = new HashSet<PlayerInput>();
+    HashSet<PlayerInput> players = new();
     
     private void Awake() {
         PlayerInputManager.instance.onPlayerJoined += HandlePlayerJoining;
@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
     }
 
     private void SetupCamera() {
+        Debug.Log($"SetupCamera, {players.Count} players connected");
+        
         foreach (var player in players) {
             switch (players.Count) {
                 case 0:
