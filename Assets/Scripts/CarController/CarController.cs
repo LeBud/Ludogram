@@ -1,4 +1,5 @@
 using DefaultNamespace;
+using TMPro;
 using UnityEngine;
 
 namespace CarController {
@@ -13,65 +14,68 @@ namespace CarController {
             AWD //All
         }
 
-        // [Header("HUD")]
-        // public TextMeshProUGUI speedTxt;
+        [Header("HUD")]
+        public TextMeshProUGUI speedTxt;
         // public TextMeshProUGUI suspensionTxt;
         
         [Header("Settings")] 
-        public Vector3 centerOfMass;
-        //public float carMass;
+        [SerializeField] private Vector3 centerOfMass;
         
         [Header("Suspension Transform")]
-        public Transform FrontRSuspension;
-        public Transform FrontLSuspension;
-        public Transform RearRSuspension;
-        public Transform RearLSuspension;
+        [SerializeField] private Transform FrontRSuspension;
+        [SerializeField] private Transform FrontLSuspension;
+        [SerializeField] private Transform RearRSuspension;
+        [SerializeField] private Transform RearLSuspension;
 
         Transform[] allSuspensions = new Transform[4];
         
         [Header("Suspension Settings")] 
-        public float suspensionRestDistance;
-        public float suspensionStrength;
-        public float suspensionDamping;
+        [SerializeField] private float suspensionRestDistance;
+        [SerializeField] private float suspensionStrength;
+        [SerializeField] private float suspensionDamping;
 
         [Header("Steering Settings")] 
-        public float steeringMaxAngle;
-        public float steeringSmoothing;
+        [SerializeField] private float steeringMaxAngle;
+        [SerializeField] private float steeringSmoothing;
         //public AnimationCurve steeringCurve; //Courbe de % d'angle de rotation des roues en fonction de la vitesse de la voiture
-        [Range(0, 1)]
-        public float steeringGrip; //Doit être compris entre 0 et 1 -- 0 étant pas de grip - 1 étant maximum grip
-        public float tireMass;
-        public bool rearSteeringAllowed = false;
+        [SerializeField, Range(0f,1f)] private float steeringGrip; //Doit être compris entre 0 et 1 -- 0 étant pas de grip - 1 étant maximum grip
+        [SerializeField] private float tireMass; //Des choses à y faire
+        [SerializeField] private bool rearSteeringAllowed = false;
         
         [Header("Drive Settings")]
-        public WheelDriveMode wheelDriveMode = WheelDriveMode.FWD;
+        [SerializeField] private WheelDriveMode wheelDriveMode = WheelDriveMode.FWD;
+        [SerializeField] private float minEngineForce = 100;
+        [SerializeField] private float maxEngineForce = 500;
+        [SerializeField] private float timeToReachMaxForce = 10;
+        [SerializeField, Range(0.001f,1f)] private float decelerationRate = 0.1f;
+        
         //public AnimationCurve torqueCurve = AnimationCurve.EaseInOut(0f, 100f, 7000f, 50f);
         
-        // public float[] gears = new float[6];
-        // public int currentGear = 0;
-        // public float finalDriveRatio = 3.42f;
-        // public float transmissionEfficiency = 0.7f;
-        //public float wheelRadius = 0.25f;
-        // public float idleRPM = 800f;
-        // public float maxRPM = 7000f;
-        // public float engineInertia = 0.1f;
-        // public float downforceCoefficient = 3.0f;
+         public float[] gears = new float[6];
+         public int currentGear = 0;
+         // public float finalDriveRatio = 3.42f;
+         // public float transmissionEfficiency = 0.7f;
+         // public float wheelRadius = 0.25f;
+         // public float idleRPM = 800f;
+         // public float maxRPM = 7000f;
+         // public float engineInertia = 0.1f;
+         // public float downforceCoefficient = 3.0f;
         
         [Header("Tire Visual")]
-        public Transform FrontRTire;
-        public Transform FrontLTire;
-        public Transform RearRTire;
-        public Transform RearLTire;
-        public float tireMeshRadius = 0.25f;
+        [SerializeField] private Transform FrontRTire;
+        [SerializeField] private Transform FrontLTire;
+        [SerializeField] private Transform RearRTire;
+        [SerializeField] private Transform RearLTire;
+        [SerializeField] private float tireMeshRadius = 0.25f;
 
         [Header("Friction Settings")] 
-        public float frictionCoefficient = 0.3f;
-        public float carFrontalSurface = 2.2f;
-        public float airDensity = 1.29f;
+        [SerializeField] private float frictionCoefficient = 0.3f;
+        [SerializeField] private float carFrontalSurface = 2.2f;
+        [SerializeField] private float airDensity = 1.29f;
 
         [Header("Car Mass")] 
-        public float carMass = 10f;
-        //public float gravity = 9.81f;
+        [SerializeField] private float carMass = 10f;
+        //[SerializeField] private float gravity = 9.81f;
         
         //Pour le moment ces valeurs ne sont pas utillisés
         float b = 1.25f; //Distance entre le centre de gravité et l'essieu avant
@@ -102,10 +106,13 @@ namespace CarController {
         
         float throttle;
         float airDrag => 0.5f * frictionCoefficient * carFrontalSurface * airDensity;
-        
+        private float throttleTimer;
         Vector3 dragForce => -airDrag * carRb.linearVelocity * carRb.linearVelocity.magnitude;
         Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
         //float driveForce => engineForce * gears[currentGear] * finalDriveRatio * transmissionEfficiency / wheelRadius;
+
+        private float accelTime = 0;
+        private float currentEngineForce = 0;
         
         void Start() {
             if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
@@ -157,18 +164,18 @@ namespace CarController {
             steering = Inputs.Steering.ReadValue<float>();
             throttle = Inputs.Throttle.ReadValue<float>();
             
-            // if (Inputs.GearShift.WasPressedThisFrame()) {
-            //     if (Inputs.GearShift.ReadValue<float>() > 0) currentGear++;
-            //     else currentGear--;
-            //     
-            //     if(currentGear >= gears.Length) currentGear = gears.Length - 1;
-            //     if(currentGear < 0) currentGear = 0;
-            // }
+            if (Inputs.ShiftGear.WasPressedThisFrame()) {
+                if (Inputs.ShiftGear.ReadValue<float>() > 0) currentGear++;
+                else currentGear--;
+                
+                if(currentGear >= gears.Length) currentGear = gears.Length - 1;
+                if(currentGear < 0) currentGear = 0;
+            }
         }
         
-        // void LateUpdate() {
-        //     speedTxt.text = $"Speed: {rigidBody.linearVelocity.magnitude:F0}\ndragForce: {dragForce}\nrollingResistanceForce: {rollingResistanceForce}\ndriveForce: {engineForce}";
-        // }
+        void LateUpdate() {
+            speedTxt.text = $"Speed: {carRb.linearVelocity.magnitude:F0}\ndriveForce: {currentEngineForce:F0}";
+        }
         
         void FixedUpdate() {
             CalculateSuspension(FrontRSuspension, FrontRTire);
@@ -227,7 +234,7 @@ namespace CarController {
             
             //Visuels des roues
             tire.position = suspension.position - springDir * (hit.distance - tireMeshRadius);
-            Debug.DrawRay(suspension.position, springDir * force, Color.green);
+            Debug.DrawRay(suspension.position, springDir * (force / 10), Color.green);
         }
 
         void CalculateSteering(Transform suspension) {
@@ -249,15 +256,26 @@ namespace CarController {
             
             var accelDir = suspension.forward;
 
-            if (throttle != 0) {
-                var availableTorque = engineForce * throttle;
-                
-                if (wheelDriveMode is WheelDriveMode.AWD) availableTorque /= 4;
-                else availableTorque /= 2;
-                
-                carRb.AddForceAtPosition(accelDir * availableTorque, suspension.position);
-                Debug.DrawRay(suspension.position, accelDir * availableTorque, Color.blue);
+            if (throttle >= 0.5f) {
+                accelTime += Time.fixedDeltaTime * throttle;
             }
+            else if( throttle <= 0.1f) {
+                accelTime -= Time.fixedDeltaTime * 0.1f;
+            }
+            
+            accelTime = Mathf.Clamp(accelTime, 0, timeToReachMaxForce);
+            currentEngineForce = Mathf.Lerp(minEngineForce, maxEngineForce, accelTime / timeToReachMaxForce);
+            
+            //var availableTorque = engineForce * throttle;
+            var availableTorque = currentEngineForce;
+                
+            if (wheelDriveMode is WheelDriveMode.AWD) availableTorque /= 4;
+            else availableTorque /= 2;
+                
+            if(currentEngineForce > minEngineForce)
+                carRb.AddForceAtPosition(accelDir * availableTorque, suspension.position);
+            
+            Debug.DrawRay(suspension.position, accelDir * availableTorque, Color.blue);
         }
         
         bool TireToucheGround(Transform tire) {
