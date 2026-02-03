@@ -1022,6 +1022,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Brake",
+                    "type": "Value",
+                    "id": "54c79a12-2ce2-402b-a0e2-d1543d69ff91",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1079,6 +1088,17 @@
                     "action": "ShiftGear",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6456f05e-cd3c-49ee-9062-a0400baa7be3",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Brake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
