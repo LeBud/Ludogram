@@ -1761,8 +1761,9 @@ MonoBehaviour:
   suspensionRestDistance: 0.8
   suspensionStrength: 200
   suspensionDamping: 50
-  steeringMaxAngle: 45
-  steeringSmoothing: 15
+  steeringAngleLowSpeed: 45
+  steeringAngleHightSpeed: 20
+  steeringSmoothing: 25
   steeringGrip: 0.8
   tireMass: 1
   rearSteeringAllowed: 0
@@ -1770,6 +1771,7 @@ MonoBehaviour:
   minEngineForce: 100
   maxEngineForce: 800
   timeToReachMaxForce: 5
+  decelerationRate: 0.1
   gears:
   - 2.66
   - 1.78
@@ -1778,6 +1780,7 @@ MonoBehaviour:
   - 0.74
   - 0.5
   currentGear: 0
+  brakeForce: 200
   FrontRTire: {fileID: 7809168154450319249}
   FrontLTire: {fileID: 4859295154715724744}
   RearRTire: {fileID: 5015184643391165149}
@@ -1823,6 +1826,15 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 6bb0f756-9d89-40eb-9e8e-138a3a16d686
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Brake:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 737a2a93-3d4a-40f8-a71b-d0e0c6bcb2a9
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []

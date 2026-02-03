@@ -7,7 +7,7 @@ namespace DefaultNamespace {
         
         private InputActionAsset inputs;
         private InputActionMap inputMap;
-        public InputAction Steering, Throttle, ShiftGear;
+        public InputAction Steering, Throttle, ShiftGear, Brake;
 
         public void Awake() {
             if (TryGetComponent(out PlayerInput pInput)) {
@@ -21,6 +21,7 @@ namespace DefaultNamespace {
             Steering = inputMap.FindAction("Steering");
             Throttle = inputMap.FindAction("Throttle");
             ShiftGear = inputMap.FindAction("ShiftGear");
+            Brake = inputMap.FindAction("Brake");
             
             inputs.Enable();
         }
