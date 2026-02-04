@@ -1,13 +1,12 @@
 using System.Collections.Generic;
-using DefaultNamespace;
 using TMPro;
 using UnityEngine;
 
-namespace CarController {
+namespace CarScripts {
     [RequireComponent(typeof(Rigidbody))]
     public class CarController : MonoBehaviour {
         private Rigidbody carRb;
-        private InputsBrain Inputs;
+        private CarInputs _carInputs;
 
         private enum WheelDriveMode {
             FWD, //Front
@@ -128,7 +127,7 @@ namespace CarController {
         //TODO Ajouter une condition pour dire si il freine en allant en avant ou en reculant pour le engineTorque qu'il s'incrémente que lorsque il va dans la bonne direction
         
         void Start() {
-            if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
+            if (TryGetComponent(out _carInputs)) Debug.Log($"Inputs Assigned");
             else Debug.LogWarning($"Inputs Not Found");
             
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
@@ -187,9 +186,9 @@ namespace CarController {
         }
 
         void MyInputs() {
-            steering = Inputs.Steering.ReadValue<float>();
-            throttle = Inputs.Throttle.ReadValue<float>();
-            brake = Inputs.Brake.ReadValue<float>();
+            steering = _carInputs.Steering.ReadValue<float>();
+            throttle = _carInputs.Throttle.ReadValue<float>();
+            brake = _carInputs.Brake.ReadValue<float>();
         }
         
         void LateUpdate() {
@@ -355,8 +354,8 @@ namespace CarController {
             return true;
         }
 
-        public InputsBrain GetInputs() {
-            return Inputs;
+        public CarInputs GetInputs() {
+            return _carInputs;
         }
     }
 

@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace DefaultNamespace {
-    public class InputsBrain : MonoBehaviour {
+namespace CarScripts {
+    public class CarInputs : MonoBehaviour {
         
         private InputActionAsset inputs;
         private InputActionMap inputMap;
@@ -12,6 +12,7 @@ namespace DefaultNamespace {
             if (pInput) {
                 inputs = pInput.actions;
                 inputMap = inputs.FindActionMap("Car");
+                EnableInputs();
             }
             else Debug.LogError("No PlayerInput found");
         }
@@ -21,11 +22,11 @@ namespace DefaultNamespace {
             Throttle = inputMap.FindAction("Throttle");
             Brake = inputMap.FindAction("Brake");
             
-            inputs.Enable();
+            inputMap.Enable();
         }
 
         public void DisableInputs() {
-            inputs.Disable();
+            inputMap.Disable();
         }
     }
 }
