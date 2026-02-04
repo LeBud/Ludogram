@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using CarScripts;
 using DefaultNamespace.Player;
 using TMPro;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class Controller : MonoBehaviour
     [Header("General Settings")]
     [SerializeField] TMP_Text  currentStateTxt;
     [SerializeField] Rigidbody rb;
-    [SerializeField] Camera    playerCamera;
+    [SerializeField] public Camera    playerCamera;
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform cameraTarget;
     [SerializeField] Transform groundRayPosition;
@@ -46,6 +47,8 @@ public class Controller : MonoBehaviour
     [SerializeField] AnimationCurve headBobAmplitudeCurve;
 
 
+    private CarController currentCar;
+    
     public float headBobAmmount;
     public float headBobFrequency;
     
@@ -376,9 +379,13 @@ public class Controller : MonoBehaviour
 
     private void EnterDriving() {
         //Bind les inputs au véhicules
+        currentCar.GetInputs().BindInput(GetInputs().GetPlayerInput());
+        GetInputs().DisablePlayerInput();
     }
     private void ExitDriving() {
         //Unbind
+        currentCar.GetInputs().DisableInputs();
+        GetInputs().EnablePlayerInput();
     }
 
     #endregion
@@ -401,11 +408,9 @@ public class Controller : MonoBehaviour
     void SubscribeInputSystemActions()
     {
         pInput.jump.started += _ => onJump?.Invoke();
-        
        
-        pInput.move.performed += ctx => onMove?.Invoke(ctx);
-        
-        pInput.look.performed += ctx => onLook?.Invoke(ctx);
+        pInput.move.performed += onMove;
+        pInput.look.performed += onLook;
         
         pInput.move.canceled += _ => stopMove?.Invoke();
         pInput.jump.canceled += _ => stopJump?.Invoke();
@@ -556,6 +561,9 @@ public class Controller : MonoBehaviour
         cameraTarget.localPosition += pos;
     }
 
+    public void SetCarController(CarController car) {
+        currentCar = car;
+    }
 
     public PInputs GetInputs()
     {

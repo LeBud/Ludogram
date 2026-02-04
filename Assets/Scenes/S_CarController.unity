@@ -792,9 +792,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1354607841546809854, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
+      propertyPath: m_Actions
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2775783150475247795, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3559521458470436891, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.3631
+      value: -3.05
       objectReference: {fileID: 0}
     - target: {fileID: 3559521458470436891, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -802,7 +810,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3559521458470436891, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 33.51163
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 3559521458470436891, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -836,7 +844,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarObject
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7948800197669867479, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1354607841546809854, guid: c6b09428c11d8dd4c883189d98c15a3c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
