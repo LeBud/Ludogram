@@ -1766,8 +1766,10 @@ MonoBehaviour:
   steeringAngleHighSpeed: 8
   steeringSmoothingLowSpeed: 12
   steeringSmoothingHighSpeed: 6
-  steeringGrip: 0.8
-  tireMass: 60
+  steeringGripLowSpeed: 0.862
+  steeringGripHighSpeed: 0.669
+  tireMassLowSpeed: 60
+  tireMassHighSpeed: 40
   rearSteeringAllowed: 0
   wheelDriveMode: 0
   maxEngineTorque: 400
@@ -1777,7 +1779,7 @@ MonoBehaviour:
   finalDrive: 3.2
   transmissionEfficiency: 0.85
   gearRatio: 2.66
-  brakeForce: 1500
+  brakeForce: 3000
   FrontRTire: {fileID: 7809168154450319249}
   FrontLTire: {fileID: 4859295154715724744}
   RearRTire: {fileID: 5015184643391165149}
@@ -1786,7 +1788,6 @@ MonoBehaviour:
   frictionCoefficient: 0.3
   carFrontalSurface: 2.2
   airDensity: 1.29
-  engineForce: 100
 --- !u!114 &6283278119965211736
 MonoBehaviour:
   m_ObjectHideFlags: 0
