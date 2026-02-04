@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
+        
         private Controller player;
         [SerializeField] private GadgetInventory playerInventory;
         [SerializeField] private Transform gadgetTransform;
@@ -13,19 +14,16 @@ namespace GadgetSystem {
         private const int MAX_PICKUP_COUNT = 5;
         private Collider[] hitColliders;
 
-        private void Awake() {
-            if (TryGetComponent(out player)) {
-                
-            }
-            else 
-                Debug.LogError("Player component not found!");
+        public void Initialize(Controller p) {
+            player = p;
+            player.GetInputs().pickUp.started += _ => TryPickupNearbyGadget();
         }
 
 
         #region InputSystem
 
         void OnEnable() {
-            player.GetInputs().pickUp.started += _ => TryPickupNearbyGadget();
+            
         }
 
         void OnDisable() {

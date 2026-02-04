@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CarScripts;
 using DefaultNamespace.Player;
+using GadgetSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -102,9 +103,14 @@ public class Controller : MonoBehaviour
 
     private void Awake() {
         if (TryGetComponent(out pInput)) {
+            pInput.Initialize();
             Debug.Log("Found PLAYER INPUT");
         }
         else Debug.LogError("PlayerInput not found");
+
+        if (TryGetComponent(out GadgetPickup g)) {
+            g.Initialize(this);
+        }
     }
 
     private void Start()
@@ -115,6 +121,17 @@ public class Controller : MonoBehaviour
         rb.constraints                       = RigidbodyConstraints.FreezeRotation;
         
         CreateState();
+        AssignActions();
+        SubscribeInputSystemActions();
+    }
+    
+    private void OnEnable()
+    {
+    }
+    
+    private void OnDisable()
+    {
+        UnsubscribeInputSystemActions();
     }
 
     void CreateState()
@@ -393,17 +410,6 @@ public class Controller : MonoBehaviour
     #endregion
 
     #region INPUT SYSTEM SETUP
-
-    private void OnEnable()
-    {
-        AssignActions();
-        SubscribeInputSystemActions();
-    }
-    
-    private void OnDisable()
-    {
-        UnsubscribeInputSystemActions();
-    }
 
     void SubscribeInputSystemActions()
     {
