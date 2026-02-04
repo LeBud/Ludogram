@@ -51,7 +51,8 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	
 	protected virtual void OnDepleted()
 	{
-		Destroy(gameObject);
+		//Destroy(gameObject);
+		Debug.Log("Depleted");
 	}
 	
 	
@@ -60,7 +61,12 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		return IsInfinite || currentUses > 0;
 	}
 	
-	public void OnPickup()
+	public virtual void OnPickup()
+	{
+		Debug.Log(this.name);
+	}
+	
+	public virtual void OnDrop()
 	{
 		Debug.Log(this.name);
 	}
