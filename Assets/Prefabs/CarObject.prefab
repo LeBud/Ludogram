@@ -1759,20 +1759,22 @@ MonoBehaviour:
   RearRSuspension: {fileID: 8240842267433663614}
   RearLSuspension: {fileID: 5964366082547242843}
   suspensionRestDistance: 0.8
-  suspensionStrength: 200
-  suspensionDamping: 50
-  steeringAngleLowSpeed: 45
-  steeringAngleHighSpeed: 15
-  steeringSmoothingLowSpeed: 25
-  steeringSmoothingHighSpeed: 5
+  suspensionStrength: 30000
+  suspensionDamping: 4500
+  steeringAngleLowSpeed: 35
+  steeringAngleHighSpeed: 8
+  steeringSmoothingLowSpeed: 12
+  steeringSmoothingHighSpeed: 6
   steeringGrip: 0.8
   tireMass: 1
   rearSteeringAllowed: 0
   wheelDriveMode: 0
-  minEngineForce: 100
-  maxEngineForce: 800
-  timeToReachMaxForce: 5
-  decelerationRate: 0.1
+  maxEngineTorque: 400
+  engineResponse: 6
+  engineBrakeTorque: 30
+  wheelRadius: 0.3
+  finalDrive: 3.2
+  transmissionEfficiency: 0.85
   gears:
   - 2.66
   - 1.78
@@ -1781,7 +1783,7 @@ MonoBehaviour:
   - 0.74
   - 0.5
   currentGear: 0
-  brakeForce: 200
+  brakeForce: 1500
   FrontRTire: {fileID: 7809168154450319249}
   FrontLTire: {fileID: 4859295154715724744}
   RearRTire: {fileID: 5015184643391165149}
@@ -1790,7 +1792,7 @@ MonoBehaviour:
   frictionCoefficient: 0.3
   carFrontalSurface: 2.2
   airDensity: 1.29
-  carMass: 10
+  carMass: 1200
   engineForce: 100
 --- !u!114 &6283278119965211736
 MonoBehaviour:
@@ -1832,7 +1834,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   Brake:
-    m_Name: 
+    m_Name: Brake
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 737a2a93-3d4a-40f8-a71b-d0e0c6bcb2a9
