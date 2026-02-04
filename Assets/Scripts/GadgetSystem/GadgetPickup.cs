@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GadgetPickup : MonoBehaviour
 {
-    private                  Controller      player;
+    public                  Controller      player;
     [SerializeField] private GadgetInventory playerInventory;
     [SerializeField] private Transform       gadgetTransform;
     [SerializeField] private LayerMask       gadgetLayerMask;
@@ -43,7 +43,7 @@ public class GadgetPickup : MonoBehaviour
         {
             if (closestObj == null) continue;
             if (Vector3.Distance(transform.position, hitColliders[i].transform.position) < Vector3.Distance(transform.position, closestObj.position)
-                &&  !playerInventory.gadgets.Contains(gadget))
+                &&  playerInventory.selectedGadget != hitColliders[i].GetComponent<IGadget>())
             {
                 closestObj = hitColliders[i].transform;
                 gadget     = closestObj.GetComponent<IGadget>();

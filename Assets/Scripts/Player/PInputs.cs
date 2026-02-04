@@ -13,7 +13,6 @@ namespace DefaultNamespace.Player
         {
             playerActions = GetComponent<PlayerInput>().actions;
             inputMap = playerActions.FindActionMap("Player");
-            
         }
 
         void OnEnable()
