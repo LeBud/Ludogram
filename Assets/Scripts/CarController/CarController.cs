@@ -354,6 +354,10 @@ namespace CarController {
 
             return true;
         }
+
+        public InputsBrain GetInputs() {
+            return Inputs;
+        }
     }
 
     public struct WheelContact {
