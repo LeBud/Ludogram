@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using DefaultNamespace.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,9 +8,7 @@ using UnityEngine.InputSystem;
 public class Controller : MonoBehaviour
 {
     //InputSystem_Actions playerInputActions;
-    private InputActionAsset inputs;
-    private InputActionMap inputMap;
-    private InputAction jump, move, look;
+    private PInputs pInput;
     
     [Header("General Settings")]
     [SerializeField] TMP_Text  currentStateTxt;
@@ -99,9 +98,8 @@ public class Controller : MonoBehaviour
     }
 
     private void Awake() {
-        if (TryGetComponent(out PlayerInput playerInput)) {
-            inputs = playerInput.actions;
-            inputMap = inputs.FindActionMap("Player");
+        if (TryGetComponent(out pInput)) {
+            Debug.Log("Found PLAYER INPUT");
         }
         else Debug.LogError("PlayerInput not found");
     }
@@ -393,30 +391,24 @@ public class Controller : MonoBehaviour
     {
         AssignActions();
         SubscribeInputSystemActions();
-        
-        inputs.Enable();
     }
     
     private void OnDisable()
     {
         UnsubscribeInputSystemActions();
-        
-        inputs.Disable();
     }
 
     void SubscribeInputSystemActions()
     {
-        jump = inputMap.FindAction("Jump");
-        jump.started += _ => onJump?.Invoke();
+        pInput.jump.started += _ => onJump?.Invoke();
         
-        move = inputMap.FindAction("Move");
-        move.performed += ctx => onMove?.Invoke(ctx);
+       
+        pInput.move.performed += ctx => onMove?.Invoke(ctx);
         
-        look = inputMap.FindAction("Look");
-        look.performed += ctx => onLook?.Invoke(ctx);
+        pInput.look.performed += ctx => onLook?.Invoke(ctx);
         
-        move.canceled += _ => stopMove?.Invoke();
-        jump.canceled  += _ => stopJump?.Invoke();
+        pInput.move.canceled += _ => stopMove?.Invoke();
+        pInput.jump.canceled += _ => stopJump?.Invoke();
     }
 
     void AssignActions()
@@ -430,13 +422,13 @@ public class Controller : MonoBehaviour
     
     void UnsubscribeInputSystemActions()
     {
-        jump.started -= _ => onJump?.Invoke();
+        pInput.jump.started -= _ => onJump?.Invoke();
         
-        move.performed -= onMove;
-        look.performed -= onLook;
+        pInput.move.performed -= onMove;
+        pInput.look.performed -= onLook;
         
-        move.canceled -= _ => stopMove?.Invoke();
-        jump.canceled  -= _ => onJump?.Invoke();
+        pInput.move.canceled -= _ => stopMove?.Invoke();
+        pInput.jump.canceled  -= _ => onJump?.Invoke();
     }
 
     #endregion
@@ -502,7 +494,6 @@ public class Controller : MonoBehaviour
     }
     #endregion
     
-    
     #region CAMERA
 
     void CameraUpdate()
@@ -565,6 +556,10 @@ public class Controller : MonoBehaviour
         cameraTarget.localPosition += pos;
     }
 
-   
+
+    public PInputs GetInputs()
+    {
+        return pInput;
+    }
    
 }

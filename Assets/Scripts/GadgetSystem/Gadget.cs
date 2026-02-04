@@ -5,7 +5,8 @@ public abstract class Gadget : MonoBehaviour, IGadget
 {
 	[SerializeField] protected string gadgetName;
 	[SerializeField] protected Sprite icon;
-	[SerializeField] protected int    maxUses = 1; // -1 pour infini
+	[SerializeField] protected int    maxUses = 1;
+	[SerializeField] protected bool   isLaunchable;
     
 	protected int currentUses;
     
@@ -13,13 +14,14 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	public event Action<Gadget> OnGadgetDepleted;
 	public event Action<Gadget> OnUsesChanged;
     
-	public string Name        => gadgetName;
-	public Sprite Icon        => icon;
-	public int    CurrentUses => currentUses;
-	public int    MaxUses     => maxUses;
-	public bool   IsInfinite  => maxUses == -1;
-	public bool   IsDepleted  => !IsInfinite && currentUses <= 0;
-	
+	public string Name         => gadgetName;
+	public Sprite Icon         => icon;
+	public int    CurrentUses  => currentUses;
+	public int    MaxUses      => maxUses;
+	public bool   IsInfinite   => maxUses == -1;
+	public bool   IsDepleted   => !IsInfinite && currentUses <= 0;
+	public bool   IsLaunchable =>  isLaunchable;
+
 	protected virtual void Awake() => currentUses = maxUses;
 
 	public void Use()
@@ -30,6 +32,8 @@ public abstract class Gadget : MonoBehaviour, IGadget
         
 		ConsumeUse();
 	}
+
+	
 
 	protected abstract void OnUse();
 	
@@ -74,5 +78,15 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	public virtual void Select()
 	{
 		gameObject.SetActive(true);
+	}
+	
+	public virtual void Unselect()
+	{
+		gameObject.SetActive(false);
+	}
+	
+	public void Drop()
+	{
+		
 	}
 }
