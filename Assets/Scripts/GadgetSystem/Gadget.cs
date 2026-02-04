@@ -27,14 +27,11 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	public void Use()
 	{
 		if (!CanUse()) return;
-        
 		OnUse();
-        
 		ConsumeUse();
 	}
 
 	
-
 	protected abstract void OnUse();
 	
 	private void ConsumeUse()
@@ -52,14 +49,9 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		OnDepleted();
 		OnGadgetDepleted?.Invoke(this);
 	}
+
 	
-	protected virtual void OnDepleted()
-	{
-		//Destroy(gameObject);
-		Debug.Log("Depleted");
-	}
-	
-	
+
 	public virtual bool CanUse()
 	{
 		return IsInfinite || currentUses > 0;
@@ -70,23 +62,15 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		Debug.Log(this.name);
 	}
 	
-	public virtual void OnDrop()
+	public virtual void Drop() 
 	{
-		Debug.Log(this.name);
+		Debug.Log(name + " is dropped");
 	}
 	
-	public virtual void Select()
+	public virtual void OnDepleted()
 	{
-		gameObject.SetActive(true);
+		Debug.Log(name + " is depleted");
 	}
+
 	
-	public virtual void Unselect()
-	{
-		gameObject.SetActive(false);
-	}
-	
-	public void Drop()
-	{
-		
-	}
 }

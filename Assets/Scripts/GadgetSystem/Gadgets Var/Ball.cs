@@ -28,4 +28,10 @@ public class Ball :  Gadget
     {
         rb.isKinematic = true;
     }
+    
+
+    public override void OnDepleted()
+    {
+        base.OnDepleted();
+    }
 }
