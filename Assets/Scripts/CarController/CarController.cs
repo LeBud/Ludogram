@@ -124,6 +124,7 @@ namespace CarController {
         private Dictionary<Transform, WheelContact> wheelsContact = new();
         
         //TODO Revoir le fonctionnement des suspsensions
+        //TODO ajouter en paramètre scalable avec la vitesse le TireMass et SteeringGrip
         
         void Start() {
             if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
@@ -257,12 +258,20 @@ namespace CarController {
                 return;
             }
 
-            if (transform.eulerAngles.z > 45 && transform.eulerAngles.z < 320) {
-                Debug.Log($"euler angle is {transform.eulerAngles.z}");
-                return;
+            var springDir = Vector3.up;
+            
+            if (transform.eulerAngles.z > 45 && transform.eulerAngles.z < 315) {
+                if (transform.eulerAngles.z < 60) { //Pousser a droite
+                    springDir = suspension.right;
+                }
+                else if (transform.eulerAngles.z > 300){ //Pousser a gauche
+                    springDir = -suspension.right;
+                }
+                else {
+                    return;
+                }
             }
             
-            var springDir = Vector3.up;
             var tireWorldVel = carRb.GetPointVelocity(suspension.position);
                 
             var offset = suspensionRestDistance - wheelsContact[suspension].hit.distance;
