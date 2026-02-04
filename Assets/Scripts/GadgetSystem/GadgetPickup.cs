@@ -19,12 +19,12 @@ public class GadgetPickup : MonoBehaviour
         playerActions = new InputSystem_Actions();
         playerActions.Enable();
 
-        playerActions.Player.Interact.started += _ =>TryPickupNearbyGadget();
+        playerActions.Player.PickUpGadget.started += _ =>TryPickupNearbyGadget();
     }
 
     void OnDisable()
     {
-        playerActions.Player.Interact.started -= _ =>TryPickupNearbyGadget();
+        playerActions.Player.PickUpGadget.started -= _ =>TryPickupNearbyGadget();
         playerActions.Disable();
     }
 
@@ -69,5 +69,7 @@ public class GadgetPickup : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, pickupRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(gadgetTransform.position, 0.5f);
     }
 }

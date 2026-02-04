@@ -36,8 +36,19 @@ public class Controller : MonoBehaviour
     [SerializeField] float cameraSpeed;
     [SerializeField] float lookSensitivity = 2f;
     [SerializeField] float verticalLimit    = 80f;
+    
+    [Header("Head Bob Settings")]
+    [SerializeField] float  headBobSmoothSpeed;
+    [SerializeField] AnimationCurve headBobFrequencyCurve;
+    [SerializeField] AnimationCurve headBobAmplitudeCurve;
+
+
+    public float headBobAmmount;
+    public float headBobFrequency;
+    
 
     public bool isGrounded;
+    public float velocityDebug;
 
     Transform cameraTransform;
 
@@ -218,6 +229,8 @@ public class Controller : MonoBehaviour
     }
     void MoveUpdate()
     {
+        CameraUpdate();
+
         if (!IsGrounded())
         {
             PlayerStateMachine?.ChangeState(ControlerState.Falling);
@@ -454,13 +467,19 @@ public class Controller : MonoBehaviour
     
     #region CAMERA
 
+    void CameraUpdate()
+    {
+        
+        
+    }
     void CameraMovement()
     {
-        yaw += cameraHorizontalInput * lookSensitivity;
-        pitch -= cameraVerticalInput *  lookSensitivity;
-        pitch = Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
-        
-        cameraTransform.position = cameraTarget.position;
+        yaw            += cameraHorizontalInput * lookSensitivity;
+        pitch          -= cameraVerticalInput   *  lookSensitivity;
+        pitch          =  Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
+        headBobAmmount =  headBobAmplitudeCurve.Evaluate(rb.linearVelocity.magnitude);
+        headBobFrequency =  headBobFrequencyCurve.Evaluate(rb.linearVelocity.magnitude);
+        HeadBobMovement();
         cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, Quaternion.Euler(pitch, yaw, 0), Time.deltaTime * cameraSpeed);
     }
 
@@ -481,6 +500,7 @@ public class Controller : MonoBehaviour
         currentStateTxt.text = PlayerStateMachine.currentState.iD.ToString();
         isGrounded = IsGrounded();
         UnityEngine.Debug.DrawRay(groundRayPosition.position, -groundRayPosition.up * 0.5f, Color.red);
+        velocityDebug = rb.linearVelocity.magnitude;
     }
 
     IEnumerator BufferJump()
@@ -494,5 +514,18 @@ public class Controller : MonoBehaviour
         }
         
     }
+
+
+    void HeadBobMovement()
+    {
+        Vector3 pos = Vector3.zero;
+        pos.x = Mathf.Lerp(pos.x, Mathf.Sin(Time.time * headBobFrequency) * headBobAmmount * 1.4f, Time.deltaTime * headBobSmoothSpeed);
+        pos.y = Mathf.Lerp(pos.y, Mathf.Sin(Time.time * headBobFrequency /2) * headBobAmmount * 1.6f, Time.deltaTime * headBobSmoothSpeed);
+        pos.z = 0;
+        cameraTransform.localPosition += pos;
+        
+    }
+
+   
    
 }

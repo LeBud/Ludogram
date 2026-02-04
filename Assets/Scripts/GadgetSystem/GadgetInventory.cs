@@ -20,6 +20,7 @@ public class GadgetInventory : MonoBehaviour
 	private void Awake()
 	{
 		gadgets = new IGadget[maxSlots];
+		gadgetsNames = new List<string>();
 	}
 	
 	public int MaxSlots 
@@ -50,11 +51,11 @@ public class GadgetInventory : MonoBehaviour
 			if (gadgets[i] == null)
 			{
 				gadgets[i] = gadget;
-				gadgetsNames.Insert(i, gadgets[i].Name);
+				//gadgetsNames.Insert(i, gadgets[i].Name);
 				selectedGadget = gadget;
 				currentSlot = i;
-				gadget.OnGadgetDepleted += OnGadgetDepleted;
-				gadget.OnUsesChanged += OnGadgetUsesChanged;
+				//gadget.OnGadgetDepleted += OnGadgetDepleted;
+				//gadget.OnUsesChanged += OnGadgetUsesChanged;
 				return true;
 			}
 		}
