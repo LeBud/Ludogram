@@ -12,7 +12,7 @@ namespace Player
         [HideInInspector] public InputAction    move, look, jump, pickUp;
         
         private InputActionMap carMap;
-        public InputAction Steering, Throttle, Brake;
+        public InputAction Steering, Throttle, Brake, LeaveCar;
 
         public void Initialize()
         {
@@ -29,6 +29,7 @@ namespace Player
                 Steering = carMap.FindAction("Steering");
                 Throttle = carMap.FindAction("Throttle");
                 Brake = carMap.FindAction("Brake");
+                LeaveCar = carMap.FindAction("LeaveCar");
             }
             else {
                 Debug.LogError("Player Input component not found!");
