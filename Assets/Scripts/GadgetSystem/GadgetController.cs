@@ -1,23 +1,30 @@
 using System;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GadgetInventory : MonoBehaviour
+public class GadgetController : MonoBehaviour
 {
 	//public static GadgetInventory     instance;
 	[SerializeField] private Controller          player;
-	public                  IGadget             selectedGadget;
+	public static            IGadget             selectedGadget;
+	public                   GameObject          handledObject;
 	private                  InputSystem_Actions playerActions;
 	
-	private Action<InputAction.CallbackContext> onNextGadgetAction;
-	private Action<InputAction.CallbackContext> onPreviousGadgetAction;
+	
+	private Action<InputAction.CallbackContext> dropGadget;
 	private Action<InputAction.CallbackContext> useGadgetAction;
 	
 	public bool AddGadget(IGadget gadget)
 	{
 		Debug.Log("Add Gadget");
-		if (selectedGadget != null) gadget.Drop();
+		//if (selectedGadget == gadget) return false;
+		if (selectedGadget != null)
+		{
+			selectedGadget.Drop();
+			selectedGadget = null;
+		}
 		selectedGadget          =  gadget;
 		return true; 
 	}
@@ -35,7 +42,8 @@ public class GadgetInventory : MonoBehaviour
 
 	public void DropGadget()
 	{
-		selectedGadget.Drop();
+		selectedGadget?.Drop();
+		selectedGadget = null;
 	}
 	
 	
@@ -43,16 +51,17 @@ public class GadgetInventory : MonoBehaviour
 
 	void OnEnable()
 	{
-		//TEMP input assignation
-		useGadgetAction                 += _ => UseGadget();
-		player.GetInputs().jump.started += useGadgetAction;
+		useGadgetAction += _ => UseGadget();
+		dropGadget += _ => DropGadget();
+		player.GetInputs().use.started += useGadgetAction;
+		player.GetInputs().drop.started += dropGadget;
 	}
 	
 	void OnDisable()
 	{
 		//TEMP input assignation
-		player.GetInputs().jump.started -= useGadgetAction;
-		playerActions.Disable();
+		player.GetInputs().use.started -= useGadgetAction;
+		player.GetInputs().use.started -= dropGadget;
 	}
 	
 	#endregion

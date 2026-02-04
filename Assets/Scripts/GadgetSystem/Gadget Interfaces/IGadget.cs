@@ -15,8 +15,5 @@ public interface IGadget
 	void Drop();
 	void OnDepleted();
 	bool CanUse();
-    
-	event Action<Gadget> OnGadgetDepleted;
-	event Action<Gadget> OnUsesChanged;
 
 }

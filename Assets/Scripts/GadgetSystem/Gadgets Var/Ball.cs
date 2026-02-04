@@ -28,7 +28,14 @@ public class Ball :  Gadget
     {
         rb.isKinematic = true;
     }
-    
+
+    public override void Drop()
+    {
+        if(transform.parent != null) transform.SetParent(null);
+        rb.isKinematic = false;
+        rb.AddForce(transform.up * 4f, ForceMode.Impulse);
+    }
+
 
     public override void OnDepleted()
     {

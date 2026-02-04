@@ -1,15 +1,16 @@
 using CarScripts;
 using Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
         
-        private Controller player;
-        [SerializeField] private GadgetInventory playerInventory;
-        [SerializeField] private Transform gadgetTransform;
-        [SerializeField] private LayerMask interactableLayerMask;
-        [SerializeField] private float pickupRange = 2f;
+        private                                                            Controller       player;
+        [FormerlySerializedAs("playerInventory")] [SerializeField] private GadgetController playerController;
+        [SerializeField]                                           private Transform        gadgetTransform;
+        [SerializeField]                                           private LayerMask        interactableLayerMask;
+        [SerializeField]                                           private float            pickupRange = 2f;
 
         private const int MAX_PICKUP_COUNT = 5;
         private Collider[] hitColliders;
@@ -54,26 +55,33 @@ namespace GadgetSystem {
             //     }
             // }
 
-            Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
+            //Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
+            Ray baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
+            Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);
             
             //Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
-
-            if (hit.collider.TryGetComponent(out CarController car)) {
+            //Debug.Log(hit.collider.gameObject.name);
+            
+            if (hit.collider.TryGetComponent(out CarController car))
+            {
                 player.SetCarController(car);
                 player.PlayerStateMachine.ChangeState(Controller.ControlerState.Driving);
                 return;
             }
             
             Transform hitted = hit.collider.transform;
-            if (playerInventory.AddGadget(hit.collider.GetComponent<IGadget>())) {
+            if (playerController.AddGadget(hit.collider.GetComponent<IGadget>()) 
+                && hit.collider.gameObject != playerController.handledObject) 
+            {
                 hitted.position = gadgetTransform.position;
                 hitted.forward = gadgetTransform.forward;
+                playerController.handledObject = hitted.gameObject;
                 hitted.SetParent(gadgetTransform);
                 hitted.GetComponent<Gadget>().OnPickup();
                 //Debug.Log("Ramassé:" + gadget.Name);
             }
             else {
-                Debug.Log("Inventaire plein !");
+                Debug.Log("vous possedez dez déjà cet objet !");
             }
         }
 
@@ -83,6 +91,8 @@ namespace GadgetSystem {
             Gizmos.color = Color.red;
             //Gizmos.DrawWireSphere(gadgetTransform.position, 0.5f);
             Gizmos.DrawWireCube(gadgetTransform.position, Vector3.one);
+            Gizmos.color = Color.green;
+            if(player != null )Gizmos.DrawRay(player.playerCamera.transform.position, player.playerCamera.transform.forward * pickupRange);
         }
     }
 }
