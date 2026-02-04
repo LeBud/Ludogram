@@ -790,8 +790,8 @@ Transform:
   m_GameObject: {fileID: 3899652827418288142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.875, z: 0.5}
-  m_LocalScale: {x: 2, y: 0.75, z: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 2, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6377478285991768646}
@@ -1753,35 +1753,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController.CarController
   speedTxt: {fileID: 257101946754443809}
-  centerOfMass: {x: 0, y: -0.5, z: 0}
+  carMass: 1200
+  centerOfMass: {x: 0, y: -0.4, z: 0}
   FrontRSuspension: {fileID: 6771110810195218092}
   FrontLSuspension: {fileID: 1544594958191960074}
   RearRSuspension: {fileID: 8240842267433663614}
   RearLSuspension: {fileID: 5964366082547242843}
   suspensionRestDistance: 0.8
-  suspensionStrength: 200
-  suspensionDamping: 50
-  steeringAngleLowSpeed: 45
-  steeringAngleHighSpeed: 15
-  steeringSmoothingLowSpeed: 25
-  steeringSmoothingHighSpeed: 5
+  suspensionStrength: 30000
+  suspensionDamping: 4500
+  steeringAngleLowSpeed: 35
+  steeringAngleHighSpeed: 8
+  steeringSmoothingLowSpeed: 12
+  steeringSmoothingHighSpeed: 6
   steeringGrip: 0.8
-  tireMass: 1
+  tireMass: 60
   rearSteeringAllowed: 0
   wheelDriveMode: 0
-  minEngineForce: 100
-  maxEngineForce: 800
-  timeToReachMaxForce: 5
-  decelerationRate: 0.1
-  gears:
-  - 2.66
-  - 1.78
-  - 1.3
-  - 1
-  - 0.74
-  - 0.5
-  currentGear: 0
-  brakeForce: 200
+  maxEngineTorque: 400
+  engineResponse: 6
+  engineBrakeTorque: 30
+  wheelRadius: 0.3
+  finalDrive: 3.2
+  transmissionEfficiency: 0.85
+  gearRatio: 2.66
+  brakeForce: 1500
   FrontRTire: {fileID: 7809168154450319249}
   FrontLTire: {fileID: 4859295154715724744}
   RearRTire: {fileID: 5015184643391165149}
@@ -1790,7 +1786,6 @@ MonoBehaviour:
   frictionCoefficient: 0.3
   carFrontalSurface: 2.2
   airDensity: 1.29
-  carMass: 10
   engineForce: 100
 --- !u!114 &6283278119965211736
 MonoBehaviour:
@@ -1832,7 +1827,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   Brake:
-    m_Name: 
+    m_Name: Brake
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 737a2a93-3d4a-40f8-a71b-d0e0c6bcb2a9
