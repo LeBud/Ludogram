@@ -54,7 +54,7 @@ public class GadgetInventory : MonoBehaviour
 				gadgetsNames.Insert(i, gadgets[i].Name);
 				selectedGadget = gadget;
 				currentSlot = i;
-				//gadget.OnGadgetDepleted += OnGadgetDepleted;
+				gadget.OnGadgetDepleted += OnGadgetDepleted;
 				gadget.OnUsesChanged += OnGadgetUsesChanged;
 				return true;
 			}

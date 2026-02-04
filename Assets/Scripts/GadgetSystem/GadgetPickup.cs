@@ -31,12 +31,13 @@ public class GadgetPickup : MonoBehaviour
 
     void Start()
     {
-        hitColliders = new Collider[MAX_PICKUP_COUNT];
+        
     }
     
     [ContextMenu("Pickup")]
     private void TryPickupNearbyGadget()
     {
+        hitColliders = new Collider[MAX_PICKUP_COUNT];
         int numColliders = Physics.OverlapSphereNonAlloc(transform.position, pickupRange, hitColliders, gadgetLayerMask);
 
         Transform closestObj = hitColliders[0].transform;
@@ -53,6 +54,7 @@ public class GadgetPickup : MonoBehaviour
         if (playerInventory.AddGadget(gadget.GetComponent<IGadget>()))
         {
             closestObj.position = gadgetTransform.position;
+            closestObj.forward = gadgetTransform.forward;
             closestObj.SetParent(gadgetTransform);
             gadget.OnPickup();
             Debug.Log("Ramassé:" + gadget.Name);
@@ -69,6 +71,7 @@ public class GadgetPickup : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, pickupRange);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(gadgetTransform.position, 0.5f);
+        //Gizmos.DrawWireSphere(gadgetTransform.position, 0.5f);
+        Gizmos.DrawWireCube(gadgetTransform.position, Vector3.one);
     }
 }

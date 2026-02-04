@@ -125,9 +125,7 @@ namespace CarController {
         private Vector3 dragForce => -airDrag * carRb.linearVelocity * carRb.linearVelocity.magnitude;
         private Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
         
-        
-        //TODO Revoir le fonctionnement des suspsensions
-        //TODO ajouter en paramètre scalable avec la vitesse le TireMass et SteeringGrip
+        //TODO Ajouter une condition pour dire si il freine en allant en avant ou en reculant pour le engineTorque qu'il s'incrémente que lorsque il va dans la bonne direction
         
         void Start() {
             if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
@@ -192,14 +190,6 @@ namespace CarController {
             steering = Inputs.Steering.ReadValue<float>();
             throttle = Inputs.Throttle.ReadValue<float>();
             brake = Inputs.Brake.ReadValue<float>();
-            
-            // if (Inputs.ShiftGear.WasPressedThisFrame()) {
-            //     if (Inputs.ShiftGear.ReadValue<float>() > 0) currentGear++;
-            //     else currentGear--;
-            //     
-            //     if(currentGear >= gears.Length) currentGear = gears.Length - 1;
-            //     if(currentGear < 0) currentGear = 0;
-            // }
         }
         
         void LateUpdate() {
@@ -267,6 +257,9 @@ namespace CarController {
             }
 
             var springDir = Vector3.up;
+            if(wheelsContact[suspension].hit.normal != Vector3.up)
+                springDir = wheelsContact[suspension].hit.normal.normalized;
+            //Prohect on plane pour les pentes
             
             if (transform.eulerAngles.z > 45 && transform.eulerAngles.z < 315) {
                 if (transform.eulerAngles.z < 60) { //Pousser a droite
@@ -313,15 +306,17 @@ namespace CarController {
             var accelDir = suspension.forward;
             var forwardSpeed = Vector3.Dot(carRb.GetPointVelocity(suspension.position), suspension.forward);
             
-            var targetTorque = throttle * maxEngineTorque;
+            var targetTorque = throttle * maxEngineTorque;   
             currentEngineTorque = Mathf.Lerp(currentEngineTorque, targetTorque, engineResponse * Time.fixedDeltaTime);
             var wheelTorque = currentEngineTorque * gearRatio * finalDrive * transmissionEfficiency;
             
             if (brake > 0 && forwardSpeed < 1f) {
                 targetTorque = brake * maxEngineTorque;
                 currentEngineTorque = Mathf.Lerp(currentEngineTorque, targetTorque, engineResponse * Time.fixedDeltaTime);
-                wheelTorque = currentEngineTorque * -gearRatio * finalDrive * transmissionEfficiency;
+                wheelTorque = currentEngineTorque * (-gearRatio / 2) * finalDrive * transmissionEfficiency;
             }
+            
+            
             
             var driveForce = wheelTorque / wheelRadius;
             
@@ -336,18 +331,18 @@ namespace CarController {
         }
 
         void CalculateBrakeForce(Transform suspension) {
+            if(!wheelsContact[suspension].grounded) return;
             var forwardSpeed = Vector3.Dot(carRb.GetPointVelocity(suspension.position), suspension.forward);
             
             var brakeTorque = brake * brakeForce;
-            if (forwardSpeed < 0 && throttle > 0) brakeTorque = throttle * brakeForce;
+            if (forwardSpeed < 0f && throttle > 0f) brakeTorque = throttle * brakeForce;
             
             var brakeForceAtWheel = brakeTorque / wheelRadius;
             
-            if(forwardSpeed > 0.1f)
+            if(forwardSpeed > 0f)
                 carRb.AddForceAtPosition(-suspension.forward * brakeForceAtWheel, suspension.position);
-            else if (throttle > 0 && forwardSpeed < 0) {
+            else if (throttle > 0.01f && forwardSpeed < 0f) {
                 carRb.AddForceAtPosition(suspension.forward * brakeForceAtWheel, suspension.position);
-                Debug.Log("Forward Brake");
             }
         }
         
