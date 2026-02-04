@@ -6,8 +6,12 @@ using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviour
 {
+    //InputSystem_Actions playerInputActions;
+    private InputActionAsset inputs;
+    private InputActionMap inputMap;
+    private InputAction jump, move, look;
+    
     [Header("General Settings")]
-    InputSystem_Actions playerInputActions;
     [SerializeField] TMP_Text  currentStateTxt;
     [SerializeField] Rigidbody rb;
     [SerializeField] Camera    playerCamera;
@@ -91,6 +95,15 @@ public class Controller : MonoBehaviour
         Moving,
         Falling,
         Jumping,
+        Driving
+    }
+
+    private void Awake() {
+        if (TryGetComponent(out PlayerInput playerInput)) {
+            inputs = playerInput.actions;
+            inputMap = inputs.FindActionMap("Player");
+        }
+        else Debug.LogError("PlayerInput not found");
     }
 
     private void Start()
@@ -99,6 +112,7 @@ public class Controller : MonoBehaviour
         Cursor.visible = false;
         cameraTransform                      = playerCamera.transform;
         rb.constraints                       = RigidbodyConstraints.FreezeRotation;
+        
         CreateState();
     }
 
@@ -141,6 +155,12 @@ public class Controller : MonoBehaviour
             _onLateUpdate: FallLateUpdate
         ));
         
+        PlayerStateMachine.Add(new State<ControlerState>(
+            ControlerState.Driving,
+            _onEnter: EnterDriving,
+            _onExit: ExitDriving
+            ));
+        
         PlayerStateMachine.ChangeState(ControlerState.Idle);
     }
 
@@ -151,7 +171,7 @@ public class Controller : MonoBehaviour
     void Update()
     {
         PlayerStateMachine?.Update();
-        Debug();
+        DebugStateMachine();
     }
 
     void FixedUpdate()
@@ -354,33 +374,49 @@ public class Controller : MonoBehaviour
 
     #endregion
 
+    #region Driving
+
+    private void EnterDriving() {
+        //Bind les inputs au véhicules
+    }
+    private void ExitDriving() {
+        //Unbind
+    }
+
+    #endregion
+    
     #endregion
 
     #region INPUT SYSTEM SETUP
 
     private void OnEnable()
     {
-        playerInputActions = new InputSystem_Actions();
-        playerInputActions.Enable();
         AssignActions();
         SubscribeInputSystemActions();
+        
+        inputs.Enable();
     }
     
     private void OnDisable()
     {
         UnsubscribeInputSystemActions();
-        playerInputActions.Disable();
+        
+        inputs.Disable();
     }
 
     void SubscribeInputSystemActions()
     {
-        playerInputActions.Player.Jump.started += _ => onJump?.Invoke();
+        jump = inputMap.FindAction("Jump");
+        jump.started += _ => onJump?.Invoke();
         
-        playerInputActions.Player.Move.performed += ctx => onMove?.Invoke(ctx);
-        playerInputActions.Player.Look.performed += ctx => onLook?.Invoke(ctx);
+        move = inputMap.FindAction("Move");
+        move.performed += ctx => onMove?.Invoke(ctx);
         
-        playerInputActions.Player.Move.canceled += _ => stopMove?.Invoke();
-        playerInputActions.Player.Jump.canceled  += _ => stopJump?.Invoke();
+        look = inputMap.FindAction("Look");
+        look.performed += ctx => onLook?.Invoke(ctx);
+        
+        move.canceled += _ => stopMove?.Invoke();
+        jump.canceled  += _ => stopJump?.Invoke();
     }
 
     void AssignActions()
@@ -394,13 +430,13 @@ public class Controller : MonoBehaviour
     
     void UnsubscribeInputSystemActions()
     {
-        playerInputActions.Player.Jump.started -= _ => onJump?.Invoke();
+        jump.started -= _ => onJump?.Invoke();
         
-        playerInputActions.Player.Move.performed -= onMove;
-        playerInputActions.Player.Look.performed -= onLook;
+        move.performed -= onMove;
+        look.performed -= onLook;
         
-        playerInputActions.Player.Move.canceled -= _ => stopMove?.Invoke();
-        playerInputActions.Player.Jump.canceled -= _ => stopJump?.Invoke();
+        move.canceled -= _ => stopMove?.Invoke();
+        jump.canceled  -= _ => onJump?.Invoke();
     }
 
     #endregion
@@ -498,11 +534,12 @@ public class Controller : MonoBehaviour
 
     #endregion
 
-    void Debug()
+    void DebugStateMachine()
     {
-        currentStateTxt.text = PlayerStateMachine.currentState.iD.ToString();
+        if(currentStateTxt)
+            currentStateTxt.text = PlayerStateMachine.currentState.iD.ToString();
         isGrounded = IsGrounded();
-        UnityEngine.Debug.DrawRay(groundRayPosition.position, -groundRayPosition.up * 0.5f, Color.red);
+        Debug.DrawRay(groundRayPosition.position, -groundRayPosition.up * 0.5f, Color.red);
         velocityDebug = rb.linearVelocity.magnitude;
     }
 
