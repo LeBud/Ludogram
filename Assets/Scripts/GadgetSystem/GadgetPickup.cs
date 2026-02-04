@@ -1,5 +1,5 @@
-using System;
 using CarScripts;
+using Player;
 using UnityEngine;
 
 namespace GadgetSystem {
@@ -59,8 +59,8 @@ namespace GadgetSystem {
             //Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
 
             if (hit.collider.TryGetComponent(out CarController car)) {
-                player.PlayerStateMachine.ChangeState(Controller.ControlerState.Driving);
                 player.SetCarController(car);
+                player.PlayerStateMachine.ChangeState(Controller.ControlerState.Driving);
                 return;
             }
             

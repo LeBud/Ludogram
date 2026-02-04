@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Player;
 using TMPro;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace CarScripts {
     [RequireComponent(typeof(Rigidbody))]
     public class CarController : MonoBehaviour {
         private Rigidbody carRb;
-        private CarInputs _carInputs;
+        private InputsBrain inputs;
 
         private enum WheelDriveMode {
             FWD, //Front
@@ -127,8 +128,8 @@ namespace CarScripts {
         //TODO Ajouter une condition pour dire si il freine en allant en avant ou en reculant pour le engineTorque qu'il s'incrémente que lorsque il va dans la bonne direction
         
         void Start() {
-            if (TryGetComponent(out _carInputs)) Debug.Log($"Inputs Assigned");
-            else Debug.LogWarning($"Inputs Not Found");
+            // if (TryGetComponent(out _carInputs)) Debug.Log($"Inputs Assigned");
+            // else Debug.LogWarning($"Inputs Not Found");
             
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
             else Debug.LogWarning($"RigidBody Not Found");
@@ -149,8 +150,14 @@ namespace CarScripts {
                 wheelsContact.Add(suspension, new WheelContact());
             }
         }
+        
+        public void BindInput(InputsBrain brain) {
+            inputs = brain;
+        }
 
         void Update() {
+            if(inputs == null) return;
+            
             MyInputs();
             WheelsSteering();
             HandleWheelsGrip();
@@ -186,9 +193,9 @@ namespace CarScripts {
         }
 
         void MyInputs() {
-            steering = _carInputs.Steering.ReadValue<float>();
-            throttle = _carInputs.Throttle.ReadValue<float>();
-            brake = _carInputs.Brake.ReadValue<float>();
+            steering = inputs.Steering.ReadValue<float>();
+            throttle = inputs.Throttle.ReadValue<float>();
+            brake = inputs.Brake.ReadValue<float>();
         }
         
         void LateUpdate() {
@@ -352,10 +359,6 @@ namespace CarScripts {
             }
 
             return true;
-        }
-
-        public CarInputs GetInputs() {
-            return _carInputs;
         }
     }
 
