@@ -18,7 +18,6 @@ public class GadgetPickup : MonoBehaviour
     {
         playerActions = new InputSystem_Actions();
         playerActions.Enable();
-
         playerActions.Player.PickUpGadget.started += _ =>TryPickupNearbyGadget();
     }
 
@@ -51,7 +50,7 @@ public class GadgetPickup : MonoBehaviour
         Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
         Gadget gadget = closestObj.GetComponent<Gadget>();
         
-        if (playerInventory.AddGadget(gadget))
+        if (playerInventory.AddGadget(gadget.GetComponent<IGadget>()))
         {
             closestObj.position = gadgetTransform.position;
             closestObj.SetParent(gadgetTransform);

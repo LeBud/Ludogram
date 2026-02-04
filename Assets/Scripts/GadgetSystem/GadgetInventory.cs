@@ -51,11 +51,11 @@ public class GadgetInventory : MonoBehaviour
 			if (gadgets[i] == null)
 			{
 				gadgets[i] = gadget;
-				//gadgetsNames.Insert(i, gadgets[i].Name);
+				gadgetsNames.Insert(i, gadgets[i].Name);
 				selectedGadget = gadget;
 				currentSlot = i;
 				//gadget.OnGadgetDepleted += OnGadgetDepleted;
-				//gadget.OnUsesChanged += OnGadgetUsesChanged;
+				gadget.OnUsesChanged += OnGadgetUsesChanged;
 				return true;
 			}
 		}

@@ -95,6 +95,8 @@ public class Controller : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         cameraTransform                      = playerCamera.transform;
         rb.constraints                       = RigidbodyConstraints.FreezeRotation;
         CreateState();
