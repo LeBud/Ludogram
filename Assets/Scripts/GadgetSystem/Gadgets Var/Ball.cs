@@ -1,31 +1,31 @@
+using System.Collections;
 using UnityEngine;
 
 public class Ball :  Gadget
 {
-    bool         isUsed = false;
-    public float speed;
+    bool             isUsed = false;
+    public float     speed;
+    public Rigidbody rb;
 
     protected override void OnUse()
     {
+        transform.SetParent(null);
+        rb.isKinematic = false;
         isUsed = true;
-        Ray ray = new Ray(transform.position, transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 50f))
-        {
-            transform.position = Vector3.MoveTowards(transform.position, hit.point, speed * Time.deltaTime);
-        }
-        else
-        {
-            transform.position += transform.forward * speed * Time.deltaTime;
-        }
+        Debug.Log($"{name} : {isUsed}");
+        rb.AddForce(transform.forward * speed, ForceMode.Impulse);
     }
     
-
     void OnCollisionEnter(Collision collision)
     {
-        if (!isUsed) return;
+        if (!isUsed)return;
+        
         Debug.Log(collision.gameObject.name);
-        Destroy(gameObject, 2f);
+        Destroy(gameObject);
     }
 
-   
+    public override void OnPickup()
+    {
+        rb.isKinematic = true;
+    }
 }
