@@ -482,6 +482,7 @@ public class Controller : MonoBehaviour
         headBobAmmount =  headBobAmplitudeCurve.Evaluate(rb.linearVelocity.magnitude);
         headBobFrequency =  headBobFrequencyCurve.Evaluate(rb.linearVelocity.magnitude);
         HeadBobMovement();
+        cameraTransform.position = cameraTarget.position;
         cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, Quaternion.Euler(pitch, yaw, 0), Time.deltaTime * cameraSpeed);
     }
 
@@ -524,8 +525,7 @@ public class Controller : MonoBehaviour
         pos.x = Mathf.Lerp(pos.x, Mathf.Sin(Time.time * headBobFrequency) * headBobAmmount * 1.4f, Time.deltaTime * headBobSmoothSpeed);
         pos.y = Mathf.Lerp(pos.y, Mathf.Sin(Time.time * headBobFrequency /2) * headBobAmmount * 1.6f, Time.deltaTime * headBobSmoothSpeed);
         pos.z = 0;
-        cameraTransform.localPosition += pos;
-        
+        cameraTarget.localPosition += pos;
     }
 
    
