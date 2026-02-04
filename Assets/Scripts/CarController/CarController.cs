@@ -125,9 +125,7 @@ namespace CarController {
         private Vector3 dragForce => -airDrag * carRb.linearVelocity * carRb.linearVelocity.magnitude;
         private Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
         
-        
-        //TODO Revoir le fonctionnement des suspsensions
-        //TODO ajouter en paramètre scalable avec la vitesse le TireMass et SteeringGrip
+        //TODO Ajouter une condition pour dire si il freine en allant en avant ou en reculant pour le engineTorque qu'il s'incrémente que lorsque il va dans la bonne direction
         
         void Start() {
             if (TryGetComponent(out Inputs)) Debug.Log($"Inputs Assigned");
@@ -266,7 +264,7 @@ namespace CarController {
                 return;
             }
 
-            var springDir = Vector3.up;
+            var springDir = suspension.up;
             
             if (transform.eulerAngles.z > 45 && transform.eulerAngles.z < 315) {
                 if (transform.eulerAngles.z < 60) { //Pousser a droite
