@@ -177,6 +177,7 @@ namespace Player {
             PlayerStateMachine.Add(new State<ControlerState>(
                 ControlerState.Driving,
                 _onEnter: EnterDriving,
+                _onUpdate: UpdateDriving,
                 _onExit: ExitDriving
             ));
 
@@ -374,9 +375,13 @@ namespace Player {
 
         private void EnterDriving() {
             //Bind les inputs au véhicules
-            currentCar.BindInput(pInput);
+            currentCar.BindInput(pInput, this);
             GetInputs().DisablePlayerInput();
             GetInputs().EnableCarInput();
+        }
+
+        private void UpdateDriving() {
+            CameraMovement();
         }
 
         private void ExitDriving() {

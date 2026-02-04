@@ -8,7 +8,8 @@ namespace CarScripts {
     public class CarController : MonoBehaviour {
         private Rigidbody carRb;
         private InputsBrain inputs;
-
+        private Controller player;
+        
         private enum WheelDriveMode {
             FWD, //Front
             RWD, //Rear
@@ -151,8 +152,9 @@ namespace CarScripts {
             }
         }
         
-        public void BindInput(InputsBrain brain) {
+        public void BindInput(InputsBrain brain, Controller p = null) {
             inputs = brain;
+            player = p;
         }
 
         void Update() {
@@ -196,6 +198,11 @@ namespace CarScripts {
             steering = inputs.Steering.ReadValue<float>();
             throttle = inputs.Throttle.ReadValue<float>();
             brake = inputs.Brake.ReadValue<float>();
+
+            if (inputs.LeaveCar.WasPressedThisFrame()) {
+                player.PlayerStateMachine.ChangeState(Controller.ControlerState.Idle);
+                BindInput(null);
+            }
         }
         
         void LateUpdate() {
