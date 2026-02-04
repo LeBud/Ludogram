@@ -60,9 +60,9 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		return IsInfinite || currentUses > 0;
 	}
 	
-	public virtual void OnPickup()
+	public void OnPickup()
 	{
-		//gameObject.SetActive(false);
+		Debug.Log(this.name);
 	}
 	
 	public virtual void Select()

@@ -27,8 +27,5 @@ public class Ball :  Gadget
         Destroy(gameObject, 2f);
     }
 
-    // public override void Select()
-    // {
-    //     Debug.Log(this.name);
-    // }
+   
 }
