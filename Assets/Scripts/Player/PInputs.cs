@@ -11,7 +11,7 @@ namespace DefaultNamespace.Player
         private InputActionMap playerMap;
         [HideInInspector] public InputAction    move, look, jump, pickUp;
 
-        void Start()
+        public void Initialize()
         {
             if (TryGetComponent(out pInput)) {
                 playerActions = pInput.actions;
