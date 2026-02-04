@@ -11,6 +11,7 @@ public class Controller : MonoBehaviour
     [SerializeField] TMP_Text  currentStateTxt;
     [SerializeField] Rigidbody rb;
     [SerializeField] Camera    playerCamera;
+    [SerializeField] Transform playerTransform;
     [SerializeField] Transform cameraTarget;
     [SerializeField] Transform groundRayPosition;
     [SerializeField] LayerMask groundLayerMask;
@@ -39,7 +40,6 @@ public class Controller : MonoBehaviour
     public bool isGrounded;
 
     Transform cameraTransform;
-    Transform playerTransform;
 
     //MOVEMENTS
     float movementTimer;
@@ -189,6 +189,7 @@ public class Controller : MonoBehaviour
         Vector3 velocity = move * decelerationSpeedCurve.Evaluate(stopTimer);
         velocity.y = rb.linearVelocity.y;
         
+        playerTransform.forward = forward;
         rb.linearVelocity = velocity;
         // if (rb.linearVelocity.magnitude > 0.01f)
         // {
@@ -235,6 +236,7 @@ public class Controller : MonoBehaviour
         Vector3 velocity = move * movementSpeedCurve.Evaluate(movementTimer);
         velocity.y = rb.linearVelocity.y;
         
+        playerTransform.forward = forward;
         rb.linearVelocity = velocity;
     }
 
@@ -275,6 +277,7 @@ public class Controller : MonoBehaviour
         Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
         velocity.y += -fallSpeedCurve.Evaluate(fallTimer);
         
+        playerTransform.forward = forward;
         rb.linearVelocity = velocity;
     }
 
@@ -309,6 +312,7 @@ public class Controller : MonoBehaviour
         Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
         velocity.y += jumpSpeedCurve.Evaluate(jumpTimer);
         
+        playerTransform.forward = forward;
         rb.linearVelocity = velocity;
 
         if (jumpTimer > minJumpTime && canStopJump)
