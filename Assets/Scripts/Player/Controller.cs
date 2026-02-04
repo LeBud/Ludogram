@@ -95,6 +95,7 @@ public class Controller : MonoBehaviour
         Moving,
         Falling,
         Jumping,
+        Driving
     }
 
     private void Awake() {
@@ -153,6 +154,12 @@ public class Controller : MonoBehaviour
             _onFixedUpdate: FallFixedUpdate,
             _onLateUpdate: FallLateUpdate
         ));
+        
+        PlayerStateMachine.Add(new State<ControlerState>(
+            ControlerState.Driving,
+            _onEnter: EnterDriving,
+            _onExit: ExitDriving
+            ));
         
         PlayerStateMachine.ChangeState(ControlerState.Idle);
     }
@@ -367,6 +374,17 @@ public class Controller : MonoBehaviour
 
     #endregion
 
+    #region Driving
+
+    private void EnterDriving() {
+        //Bind les inputs au véhicules
+    }
+    private void ExitDriving() {
+        //Unbind
+    }
+
+    #endregion
+    
     #endregion
 
     #region INPUT SYSTEM SETUP
