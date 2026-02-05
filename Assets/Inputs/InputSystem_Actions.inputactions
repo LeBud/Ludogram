@@ -11,7 +11,7 @@
                     "type": "Value",
                     "id": "351f2ccd-1f9f-44bf-9bec-d62ac5c5f408",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "interactions": "",
                     "initialStateCheck": true
                 },
@@ -25,7 +25,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "UseGadget",
+                    "name": "Use",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
                     "expectedControlType": "",
@@ -34,19 +34,19 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PickUpGadget",
+                    "name": "PickUp",
                     "type": "Button",
                     "id": "852140f2-7766-474d-8707-702459ba45f3",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Press",
-                    "initialStateCheck": false
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": true
                 },
                 {
-                    "name": "Crouch",
+                    "name": "DropGadget",
                     "type": "Button",
                     "id": "27c5f898-bc57-4ee1-8800-db469aca5fe3",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -252,7 +252,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "UseGadget",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -263,7 +263,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "UseGadget",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -274,7 +274,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
-                    "action": "UseGadget",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -285,7 +285,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "UseGadget",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -296,7 +296,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "UseGadget",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -307,7 +307,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "UseGadget",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -351,7 +351,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "PickUpGadget",
+                    "action": "PickUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -362,7 +362,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "PickUpGadget",
+                    "action": "PickUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f12bd47-d76e-4698-a987-fc4336460c19",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -373,7 +384,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Crouch",
+                    "action": "DropGadget",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -384,7 +395,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Crouch",
+                    "action": "DropGadget",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2dd768fd-9324-440f-ba15-f1dd2f7d3372",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DropGadget",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
