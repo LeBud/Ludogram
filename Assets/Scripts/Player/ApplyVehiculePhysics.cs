@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Player {
     public class ApplyVehiculePhysics : MonoBehaviour {
         private Controller player;
-        private CarMotionTracker tracker;
+        public CarMotionTracker tracker { get; private set; }
 
         private Vector3 relativeVel;
 
@@ -14,24 +14,25 @@ namespace Player {
             else Debug.LogWarning($"Controller Not Found");
         }
 
-        void FixedUpdate() {
-            if(tracker == null) return;
-
-            ApplyVehiculeMotion();
-        }
-
-        private void ApplyVehiculeMotion() {
-            var playerLocalVel = player.GetRB().linearVelocity - tracker.LinearVelocity;
-            player.GetRB().linearVelocity = playerLocalVel + tracker.LinearVelocity;
+        public Vector3 CalculateAngular() {
+            if(tracker == null) return Vector3.zero;
             
             var relativePos = player.GetRB().position - tracker.GetRB().worldCenterOfMass;
             var rotationalVel = Vector3.Cross(tracker.AngularVelocity, relativePos);
             
-            player.GetRB().linearVelocity += rotationalVel;
+            return rotationalVel;
+        }
+
+        public Vector3 CalculateVel() {
+            if(tracker == null) return Vector3.zero;
+            
+            var playerLocalVel = player.GetRB().linearVelocity - tracker.LinearVelocity;
+            return playerLocalVel + tracker.LinearVelocity;
         }
 
         public void SetTracker(CarMotionTracker tracker) {
             this.tracker = tracker;
+            player.PlayerStateMachine.ChangeState(Controller.ControlerState.InCar);
         }
 
         public void RemoveTracker() {
@@ -41,6 +42,7 @@ namespace Player {
             player.GetRB().linearVelocity -= Vector3.Cross(tracker.AngularVelocity, relativePos);
             
             tracker = null;
+            player.PlayerStateMachine.ChangeState(Controller.ControlerState.Idle);
         }
     }
 }
