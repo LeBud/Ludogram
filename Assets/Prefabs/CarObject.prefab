@@ -493,7 +493,7 @@ Transform:
   m_GameObject: {fileID: 3435033165015050791}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.6, y: 0.3, z: -1}
+  m_LocalPosition: {x: -1.6, y: 0.4, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -788,7 +788,7 @@ Transform:
   m_GameObject: {fileID: 6424097006862330418}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.6, y: 0.3, z: 2.75}
+  m_LocalPosition: {x: -1.6, y: 0.4, z: 2.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -820,7 +820,7 @@ Transform:
   m_GameObject: {fileID: 6430061074275350259}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8, y: 0.3, z: 2.75}
+  m_LocalPosition: {x: 0.8, y: 0.4, z: 2.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1077,7 +1077,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarController.CarController
   speedTxt: {fileID: 257101946754443809}
   carMass: 1200
-  centerOfMass: {x: 0, y: -0.4, z: 2}
+  centerOfMass: {x: 0, y: 0.365, z: 2}
   FrontRSuspension: {fileID: 6771110810195218092}
   FrontLSuspension: {fileID: 1544594958191960074}
   RearRSuspension: {fileID: 8240842267433663614}
@@ -1096,7 +1096,7 @@ MonoBehaviour:
   rearSteeringAllowed: 0
   wheelDriveMode: 1
   maxEngineTorque: 500
-  engineResponse: 4
+  engineResponse: 6
   engineBrakeTorque: 30
   wheelRadius: 0.3
   finalDrive: 3.5
@@ -1214,7 +1214,7 @@ Transform:
   m_GameObject: {fileID: 8284387209669753133}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8, y: 0.3, z: -1}
+  m_LocalPosition: {x: 0.8, y: 0.4, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
