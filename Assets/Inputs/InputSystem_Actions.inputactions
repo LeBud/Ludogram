@@ -951,19 +951,28 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ShiftGear",
+                    "name": "Brake",
+                    "type": "Value",
+                    "id": "54c79a12-2ce2-402b-a0e2-d1543d69ff91",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeaveCar",
                     "type": "Button",
-                    "id": "d4c76c4f-02fa-4025-ac63-7d302c3bb107",
+                    "id": "8a2e2550-6e0d-4915-a9e0-e73899bba05a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Brake",
-                    "type": "Value",
-                    "id": "54c79a12-2ce2-402b-a0e2-d1543d69ff91",
-                    "expectedControlType": "Double",
+                    "name": "Look",
+                    "type": "PassThrough",
+                    "id": "8e509b80-3fd0-4c76-8a2e-634bdcb82537",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -993,39 +1002,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "1D Axis",
-                    "id": "5d1e4b4f-cd54-4657-a3d8-2b96e1bbb6b6",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ShiftGear",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "4f0d8541-6d2e-4836-ad55-82cad3635d03",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "ShiftGear",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "1e2567dc-187f-4388-99b9-e73ad721e5d1",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ShiftGear",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "6456f05e-cd3c-49ee-9062-a0400baa7be3",
                     "path": "<Gamepad>/leftTrigger",
@@ -1033,6 +1009,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Brake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d6c44d7-0f43-4313-a16c-e89ca398804c",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeaveCar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f9b3372-41a7-4a03-851b-6e2bc16b3dc3",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

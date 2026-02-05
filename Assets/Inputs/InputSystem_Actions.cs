@@ -1037,19 +1037,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ShiftGear"",
+                    ""name"": ""Brake"",
+                    ""type"": ""Value"",
+                    ""id"": ""54c79a12-2ce2-402b-a0e2-d1543d69ff91"",
+                    ""expectedControlType"": ""Double"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LeaveCar"",
                     ""type"": ""Button"",
-                    ""id"": ""d4c76c4f-02fa-4025-ac63-7d302c3bb107"",
+                    ""id"": ""8a2e2550-6e0d-4915-a9e0-e73899bba05a"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Brake"",
-                    ""type"": ""Value"",
-                    ""id"": ""54c79a12-2ce2-402b-a0e2-d1543d69ff91"",
-                    ""expectedControlType"": ""Double"",
+                    ""name"": ""Look"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""8e509b80-3fd0-4c76-8a2e-634bdcb82537"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -1079,39 +1088,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""5d1e4b4f-cd54-4657-a3d8-2b96e1bbb6b6"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ShiftGear"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""4f0d8541-6d2e-4836-ad55-82cad3635d03"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""ShiftGear"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""1e2567dc-187f-4388-99b9-e73ad721e5d1"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ShiftGear"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""6456f05e-cd3c-49ee-9062-a0400baa7be3"",
                     ""path"": ""<Gamepad>/leftTrigger"",
@@ -1119,6 +1095,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Brake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d6c44d7-0f43-4313-a16c-e89ca398804c"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeaveCar"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f9b3372-41a7-4a03-851b-6e2bc16b3dc3"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1214,8 +1212,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Car = asset.FindActionMap("Car", throwIfNotFound: true);
         m_Car_Throttle = m_Car.FindAction("Throttle", throwIfNotFound: true);
         m_Car_Steering = m_Car.FindAction("Steering", throwIfNotFound: true);
-        m_Car_ShiftGear = m_Car.FindAction("ShiftGear", throwIfNotFound: true);
         m_Car_Brake = m_Car.FindAction("Brake", throwIfNotFound: true);
+        m_Car_LeaveCar = m_Car.FindAction("LeaveCar", throwIfNotFound: true);
+        m_Car_Look = m_Car.FindAction("Look", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1668,8 +1667,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<ICarActions> m_CarActionsCallbackInterfaces = new List<ICarActions>();
     private readonly InputAction m_Car_Throttle;
     private readonly InputAction m_Car_Steering;
-    private readonly InputAction m_Car_ShiftGear;
     private readonly InputAction m_Car_Brake;
+    private readonly InputAction m_Car_LeaveCar;
+    private readonly InputAction m_Car_Look;
     /// <summary>
     /// Provides access to input actions defined in input action map "Car".
     /// </summary>
@@ -1690,13 +1690,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Steering => m_Wrapper.m_Car_Steering;
         /// <summary>
-        /// Provides access to the underlying input action "Car/ShiftGear".
-        /// </summary>
-        public InputAction @ShiftGear => m_Wrapper.m_Car_ShiftGear;
-        /// <summary>
         /// Provides access to the underlying input action "Car/Brake".
         /// </summary>
         public InputAction @Brake => m_Wrapper.m_Car_Brake;
+        /// <summary>
+        /// Provides access to the underlying input action "Car/LeaveCar".
+        /// </summary>
+        public InputAction @LeaveCar => m_Wrapper.m_Car_LeaveCar;
+        /// <summary>
+        /// Provides access to the underlying input action "Car/Look".
+        /// </summary>
+        public InputAction @Look => m_Wrapper.m_Car_Look;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1729,12 +1733,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Steering.started += instance.OnSteering;
             @Steering.performed += instance.OnSteering;
             @Steering.canceled += instance.OnSteering;
-            @ShiftGear.started += instance.OnShiftGear;
-            @ShiftGear.performed += instance.OnShiftGear;
-            @ShiftGear.canceled += instance.OnShiftGear;
             @Brake.started += instance.OnBrake;
             @Brake.performed += instance.OnBrake;
             @Brake.canceled += instance.OnBrake;
+            @LeaveCar.started += instance.OnLeaveCar;
+            @LeaveCar.performed += instance.OnLeaveCar;
+            @LeaveCar.canceled += instance.OnLeaveCar;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
         }
 
         /// <summary>
@@ -1752,12 +1759,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Steering.started -= instance.OnSteering;
             @Steering.performed -= instance.OnSteering;
             @Steering.canceled -= instance.OnSteering;
-            @ShiftGear.started -= instance.OnShiftGear;
-            @ShiftGear.performed -= instance.OnShiftGear;
-            @ShiftGear.canceled -= instance.OnShiftGear;
             @Brake.started -= instance.OnBrake;
             @Brake.performed -= instance.OnBrake;
             @Brake.canceled -= instance.OnBrake;
+            @LeaveCar.started -= instance.OnLeaveCar;
+            @LeaveCar.performed -= instance.OnLeaveCar;
+            @LeaveCar.canceled -= instance.OnLeaveCar;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
         }
 
         /// <summary>
@@ -2020,18 +2030,25 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSteering(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "ShiftGear" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShiftGear(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Brake" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBrake(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LeaveCar" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeaveCar(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLook(InputAction.CallbackContext context);
     }
 }

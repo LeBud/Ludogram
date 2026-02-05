@@ -493,7 +493,7 @@ Transform:
   m_GameObject: {fileID: 3435033165015050791}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.6, y: 0.3, z: -1}
+  m_LocalPosition: {x: -1.6, y: 0.4, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -788,7 +788,7 @@ Transform:
   m_GameObject: {fileID: 6424097006862330418}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.6, y: 0.3, z: 2.75}
+  m_LocalPosition: {x: -1.6, y: 0.4, z: 2.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -820,7 +820,7 @@ Transform:
   m_GameObject: {fileID: 6430061074275350259}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8, y: 0.3, z: 2.75}
+  m_LocalPosition: {x: 0.8, y: 0.4, z: 2.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1011,7 +1011,8 @@ GameObject:
   - component: {fileID: 6206072431550848154}
   - component: {fileID: 6283278119965211736}
   - component: {fileID: 1354607841546809854}
-  m_Layer: 0
+  - component: {fileID: 16878177697582555}
+  m_Layer: 7
   m_Name: CarObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1077,7 +1078,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarController.CarController
   speedTxt: {fileID: 257101946754443809}
   carMass: 1200
-  centerOfMass: {x: 0, y: -0.4, z: 2}
+  centerOfMass: {x: 0, y: 0.365, z: 2}
   FrontRSuspension: {fileID: 6771110810195218092}
   FrontLSuspension: {fileID: 1544594958191960074}
   RearRSuspension: {fileID: 8240842267433663614}
@@ -1096,7 +1097,7 @@ MonoBehaviour:
   rearSteeringAllowed: 0
   wheelDriveMode: 1
   maxEngineTorque: 500
-  engineResponse: 4
+  engineResponse: 6
   engineBrakeTorque: 30
   wheelRadius: 0.3
   finalDrive: 3.5
@@ -1141,15 +1142,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  ShiftGear:
-    m_Name: Shift Gear
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 6bb0f756-9d89-40eb-9e8e-138a3a16d686
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   Brake:
     m_Name: Brake
     m_Type: 0
@@ -1189,6 +1181,27 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 8245011284803956466}
+--- !u!65 &16878177697582555
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7948800197669867479}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.934896, y: 1.9513623, z: 4.1610665}
+  m_Center: {x: 0, y: 0.47568113, z: 0}
 --- !u!1 &8284387209669753133
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,7 +1227,7 @@ Transform:
   m_GameObject: {fileID: 8284387209669753133}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8, y: 0.3, z: -1}
+  m_LocalPosition: {x: 0.8, y: 0.4, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
