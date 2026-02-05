@@ -8,12 +8,7 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[SerializeField] protected int    maxUses = 1;
 	[SerializeField] protected bool   isLaunchable;
 	
-    
 	protected int currentUses;
-    
-	// Events pour notifier l'extérieur
-	public event Action<Gadget> OnGadgetDepleted;
-	public event Action<Gadget> OnUsesChanged;
     
 	public string Name         => gadgetName;
 	public Sprite Icon         => icon;

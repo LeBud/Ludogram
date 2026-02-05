@@ -36,7 +36,7 @@ public class GadgetController : MonoBehaviour
 		if (selectedGadget.CanUse())
 		{
 			selectedGadget.Use();
-			Debug.Log($"{selectedGadget.Name} is used : {selectedGadget.CurrentUses}/{selectedGadget.MaxUses} usage restant");
+//			Debug.Log($"{selectedGadget.Name} is used : {selectedGadget.CurrentUses}/{selectedGadget.MaxUses} usage restant");
 		}
 	}
 

@@ -2919,7 +2919,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: -10
-      value: 15
+      value: 20
       inSlope: -4.290011
       outSlope: -4.290011
       tangentMode: 0
@@ -2936,13 +2936,13 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.73611104
     - serializedVersion: 3
-      time: 15
-      value: 15
-      inSlope: 2.3345664
-      outSlope: 2.3345664
+      time: 10
+      value: 20
+      inSlope: 5.5559196
+      outSlope: 5.5559196
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.4791667
+      inWeight: 0.21084337
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -2952,13 +2952,13 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: -10
-      value: 0.02
-      inSlope: -0.0054623014
-      outSlope: -0.0054623014
+      value: 0.005
+      inSlope: -0.0019438292
+      outSlope: -0.0019438292
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.375
+      outWeight: 0.42891565
     - serializedVersion: 3
       time: 0
       value: 0
@@ -2970,12 +2970,12 @@ MonoBehaviour:
       outWeight: 0.5833334
     - serializedVersion: 3
       time: 10
-      value: 0.02
-      inSlope: 0.004960609
-      outSlope: 0.004960609
+      value: 0.005
+      inSlope: 0.0013124899
+      outSlope: 0.0013124899
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.28333336
+      inWeight: 0.37283865
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -2984,6 +2984,12 @@ MonoBehaviour:
   headBobFrequency: 0
   isGrounded: 0
   velocityDebug: 0
+  movementTimer: 0
+  stopTimer: 0
+  horizontalInput: 0
+  verticalInput: 0
+  isMovementActive: 0
+  isOnJump: 0
   fallTimer: 0
 --- !u!4 &2082189380
 Transform:
@@ -3042,6 +3048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   player: {fileID: 2082189379}
+  handledObject: {fileID: 0}
 --- !u!114 &2082189383
 MonoBehaviour:
   m_ObjectHideFlags: 0

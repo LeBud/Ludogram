@@ -64,16 +64,17 @@ namespace Player {
         Transform cameraTransform;
 
         //MOVEMENTS
-        float movementTimer;
-        float stopTimer;
-        float horizontalInput;
-        float verticalInput;
+        public float movementTimer;
+        public float stopTimer;
+        public float horizontalInput;
+        public float verticalInput;
+        public bool  isMovementActive;
 
         //JUMP
-        int currentJumpNumber;
-        float jumpTimer;
-        bool isOnJump;
-        bool canStopJump;
+        int        currentJumpNumber;
+        float      jumpTimer;
+        public bool isOnJump;
+        bool       canStopJump;
 
         //FALL
         public float fallTimer;
@@ -111,7 +112,8 @@ namespace Player {
             }
             else Debug.LogError("PlayerInput not found");
 
-            if (TryGetComponent(out GadgetPickup g)) {
+            if (TryGetComponent(out GadgetPickup g))
+            {
                 g.Initialize(this);
             }
         }
@@ -210,6 +212,7 @@ namespace Player {
             Keyframe[] keyframes = decelerationSpeedCurve.keys;
             keyframes[0].value = movementSpeedCurve.Evaluate(movementTimer);
             decelerationSpeedCurve.keys = keyframes;
+            if(isMovementActive) PlayerStateMachine.ChangeState(ControlerState.Moving);
             //movementTimer = 0;
         }
 
@@ -243,13 +246,15 @@ namespace Player {
             // }
         }
 
-        void IdleLateUpdate() {
+        void IdleLateUpdate()
+        {
             CameraMovement();
         }
 
-        void IdleExit() {
-            horizontalInput = 0;
-            verticalInput = 0;
+        void IdleExit() 
+        {
+            //horizontalInput = 0;
+            //verticalInput = 0;
         }
 
         #endregion
@@ -330,6 +335,11 @@ namespace Player {
 
         void JumpEnter() {
             if (bufferJumpCoroutine != null) StopCoroutine(bufferJumpCoroutine);
+            if (!isMovementActive)
+            {
+                horizontalInput = 0;
+                verticalInput = 0;
+            }
             isOnJump = true;
             canStopJump = false;
             jumpTimer = 0;
@@ -432,9 +442,12 @@ namespace Player {
             if (IsGrounded() && !isOnJump) PlayerStateMachine.ChangeState(ControlerState.Moving);
             horizontalInput = context.ReadValue<Vector2>().x;
             verticalInput = context.ReadValue<Vector2>().y;
+            isMovementActive = true;
         }
 
-        void ResetPlayerMovementInputs() {
+        void ResetPlayerMovementInputs()
+        {
+            isMovementActive = false;
             if (IsGrounded() && !isOnJump) {
                 PlayerStateMachine.ChangeState(ControlerState.Idle);
             }
