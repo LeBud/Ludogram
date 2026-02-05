@@ -269,21 +269,21 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 28.16071
-      outSlope: 28.16071
+      value: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.072289154
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 10
-      inSlope: 0.26155594
-      outSlope: 0.26155594
+      value: 7
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.40963858
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -301,13 +301,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.072289154
     - serializedVersion: 3
-      time: 1
-      value: 10
-      inSlope: 0.26155594
-      outSlope: 0.26155594
+      time: 0.98095703
+      value: 8.020943
+      inSlope: -0.30922458
+      outSlope: -0.30922458
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.40963858
+      inWeight: 0.46602193
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -365,7 +365,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 15
+      value: 10
       inSlope: 0.24117012
       outSlope: 0.24117012
       tangentMode: 0
@@ -373,8 +373,8 @@ MonoBehaviour:
       inWeight: 0.86901736
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.19858052
-      value: 14.130338
+      time: 0.3164394
+      value: 7.867097
       inSlope: -13.345349
       outSlope: -13.345349
       tangentMode: 0
@@ -393,13 +393,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minJumpTime: 0.2
-  maxJumpTime: 0.5
+  minJumpTime: 0.1
+  maxJumpTime: 0.1
   maxJumpNumber: 2
   coyoteTime: 0.2
   bufferTime: 0.5
   cameraSpeed: 15
-  lookSensitivity: 1
+  lookSensitivity: 0.8
   verticalLimit: 80
   headBobSmoothSpeed: 15
   headBobFrequencyCurve:
@@ -668,6 +668,42 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: c7b5b438-8b36-45ea-80bf-db4376b4d7a0
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Steering:
+    m_Name: Steering
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e8cad331-0005-4610-af14-f1fd17f44c73
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Throttle:
+    m_Name: Throttle
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 784dbaee-77fc-466e-b7e7-9f74ad76cf3c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Brake:
+    m_Name: Brake
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 87e77390-ff55-4ac2-9abe-75054e840b86
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  LeaveCar:
+    m_Name: Leave Car
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: eff2ddbd-1468-4018-bc2d-150a87afaf1a
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
