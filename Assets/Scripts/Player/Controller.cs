@@ -6,20 +6,23 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player {
-    public class Controller : MonoBehaviour {
+namespace Player
+{
+    public class Controller : MonoBehaviour
+    {
         //InputSystem_Actions playerInputActions;
         private InputsBrain pInput;
 
         [Header("General Settings")] [SerializeField]
         TMP_Text currentStateTxt;
 
-        [SerializeField] Rigidbody rb;
-        [SerializeField] public Camera playerCamera;
-        [SerializeField] Transform playerTransform;
-        [SerializeField] Transform cameraTarget;
-        [SerializeField] Transform groundRayPosition;
-        [SerializeField] LayerMask groundLayerMask;
+        [SerializeField]        Rigidbody rb;
+        [SerializeField] public Camera    playerCamera;
+        [SerializeField]        Transform playerTransform;
+        [SerializeField]        Transform cameraTarget;
+        [SerializeField]        Transform groundRayPosition;
+        [SerializeField]        Transform footRayPosition;
+        [SerializeField]        LayerMask groundLayerMask;
 
         [Header("Movement State Settings")] [SerializeField]
         AnimationCurve movementSpeedCurve;
@@ -35,7 +38,7 @@ namespace Player {
 
         [SerializeField] float minJumpTime = 0.2f;
         [SerializeField] float maxJumpTime = 0.5f;
-        [SerializeField] int maxJumpNumber;
+        [SerializeField] int   maxJumpNumber;
         [SerializeField] float coyoteTime;
         [SerializeField] float bufferTime;
 
@@ -43,7 +46,7 @@ namespace Player {
         float cameraSpeed;
 
         [SerializeField] float lookSensitivity = 2f;
-        [SerializeField] float verticalLimit = 80f;
+        [SerializeField] float verticalLimit   = 80f;
 
         [Header("Head Bob Settings")] [SerializeField]
         float headBobSmoothSpeed;
@@ -58,7 +61,7 @@ namespace Player {
         public float headBobFrequency;
 
 
-        public bool isGrounded;
+        public bool  isGrounded;
         public float velocityDebug;
 
         Transform cameraTransform;
@@ -66,14 +69,15 @@ namespace Player {
         //MOVEMENTS
         float movementTimer;
         float stopTimer;
-        float horizontalInput;
-        float verticalInput;
+        public float horizontalInput;
+        public float verticalInput;
+        public bool  isMovementActive;
 
         //JUMP
-        int currentJumpNumber;
-        float jumpTimer;
-        bool isOnJump;
-        bool canStopJump;
+        public int         currentJumpNumber;
+        public float       jumpTimer;
+        public bool isOnJump;
+        public bool        canStopJump;
 
         //FALL
         public float fallTimer;
@@ -96,7 +100,8 @@ namespace Player {
 
         [Header("State Machine")] public StateMachine<ControlerState> PlayerStateMachine = new();
 
-        public enum ControlerState {
+        public enum ControlerState
+        {
             Idle,
             Moving,
             Falling,
@@ -104,39 +109,46 @@ namespace Player {
             Driving
         }
 
-        private void Awake() {
-            if (TryGetComponent(out pInput)) {
+        private void Awake()
+        {
+            if (TryGetComponent(out pInput))
+            {
                 pInput.Initialize();
                 Debug.Log("Found PLAYER INPUT");
             }
             else Debug.LogError("PlayerInput not found");
 
-            if (TryGetComponent(out GadgetPickup g)) {
+            if (TryGetComponent(out GadgetPickup g))
+            {
                 g.Initialize(this);
             }
         }
 
-        private void Start() {
+        private void Start()
+        {
             Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            cameraTransform = playerCamera.transform;
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            Cursor.visible   = false;
+            cameraTransform  = playerCamera.transform;
+            rb.constraints   = RigidbodyConstraints.FreezeRotation;
 
             CreateState();
             AssignActions();
             SubscribeInputSystemActions();
-            
+
             GetInputs().DisableCarInput();
         }
 
-        private void OnEnable() {
+        private void OnEnable()
+        {
         }
 
-        private void OnDisable() {
+        private void OnDisable()
+        {
             UnsubscribeInputSystemActions();
         }
 
-        void CreateState() {
+        void CreateState()
+        {
             //IDLE
             PlayerStateMachine.Add(new State<ControlerState>(
                 ControlerState.Idle,
@@ -160,6 +172,7 @@ namespace Player {
             PlayerStateMachine.Add(new State<ControlerState>(
                 ControlerState.Jumping,
                 _onEnter: JumpEnter,
+                _onUpdate: JumpUpdate,
                 _onFixedUpdate: JumpFixedUpdate,
                 _onLateUpdate: JumpLateUpdate,
                 _onExit: JumpExit
@@ -188,16 +201,19 @@ namespace Player {
 
         #region FUNCTION CALL
 
-        void Update() {
+        void Update()
+        {
             PlayerStateMachine?.Update();
             DebugStateMachine();
         }
 
-        void FixedUpdate() {
+        void FixedUpdate()
+        {
             PlayerStateMachine?.FixedUpdate();
         }
 
-        void LateUpdate() {
+        void LateUpdate()
+        {
             PlayerStateMachine?.LateUpdate();
         }
 
@@ -205,85 +221,96 @@ namespace Player {
 
         #region IDLE
 
-        void IdleEnter() {
+        void IdleEnter()
+        {
             stopTimer = 0;
             Keyframe[] keyframes = decelerationSpeedCurve.keys;
-            keyframes[0].value = movementSpeedCurve.Evaluate(movementTimer);
+            keyframes[0].value          = movementSpeedCurve.Evaluate(movementTimer);
             decelerationSpeedCurve.keys = keyframes;
+            if (isMovementActive) PlayerStateMachine.ChangeState(ControlerState.Moving);
             //movementTimer = 0;
         }
 
-        void IdleUpdate() {
-            // if (!IsGrounded() && !isOnJump)
-            // {
-            //     PlayerStateMachine.ChangeState(ControlerState.Falling);
-            // }
+        void IdleUpdate()
+        {
+            if (!IsGrounded() && !isOnJump)
+            {
+                PlayerStateMachine.ChangeState(ControlerState.Falling);
+            }
         }
 
-        void IdleFixedUpdate() {
+        void IdleFixedUpdate()
+        {
             stopTimer += Time.fixedDeltaTime;
-            if (horizontalInput == 0 && verticalInput == 0) {
+            if (horizontalInput == 0 && verticalInput == 0)
+            {
                 movementTimer = 0;
                 return;
             }
 
             Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
+            Vector3    forward        = targetRotation * Vector3.forward;
+            Vector3    right          = targetRotation * Vector3.right;
 
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
+            Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
             Vector3 velocity = move * decelerationSpeedCurve.Evaluate(stopTimer);
             velocity.y = rb.linearVelocity.y;
 
             playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
+            rb.linearVelocity       = velocity;
             // if (rb.linearVelocity.magnitude > 0.01f)
             // {
             //     movementTimer = 0;
             // }
         }
 
-        void IdleLateUpdate() {
+        void IdleLateUpdate()
+        {
             CameraMovement();
         }
 
-        void IdleExit() {
-            horizontalInput = 0;
-            verticalInput = 0;
+        void IdleExit()
+        {
+            //horizontalInput = 0;
+            //verticalInput = 0;
         }
 
         #endregion
 
         #region MOVING
 
-        void MoveEnter() {
+        void MoveEnter()
+        {
             stopTimer = 0;
         }
 
-        void MoveUpdate() {
-            CameraUpdate();
-
-            if (!IsGrounded()) {
+        void MoveUpdate()
+        {
+            CheckFoot();
+            if (!IsGrounded())
+            {
                 PlayerStateMachine?.ChangeState(ControlerState.Falling);
             }
         }
 
-        void MoveFixedUpdate() {
+        void MoveFixedUpdate()
+        {
             movementTimer += Time.fixedDeltaTime;
 
             Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
+            Vector3    forward        = targetRotation * Vector3.forward;
+            Vector3    right          = targetRotation * Vector3.right;
 
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
+            Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
             Vector3 velocity = move * movementSpeedCurve.Evaluate(movementTimer);
             velocity.y = rb.linearVelocity.y;
 
             playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
+            rb.linearVelocity       = velocity;
         }
 
-        void MoveLateUpdate() {
+        void MoveLateUpdate()
+        {
             CameraMovement();
         }
 
@@ -291,36 +318,43 @@ namespace Player {
 
         #region FALLING
 
-        void FallEnter() {
+        void FallEnter()
+        {
             Keyframe[] keyframes = fallSpeedCurve.keys;
-            keyframes[0].value = -jumpSpeedCurve.Evaluate(jumpTimer);
+            keyframes[0].value  = -jumpSpeedCurve.Evaluate(jumpTimer);
             fallSpeedCurve.keys = keyframes;
         }
 
-        void FallUpdate() {
-            if (IsGrounded()) {
-                isOnJump = false;
+        void FallUpdate()
+        {
+            if (IsGrounded())
+            {
+                isOnJump          = false;
                 currentJumpNumber = 0;
                 PlayerStateMachine.ChangeState(ControlerState.Idle);
             }
+
+            CheckFoot();
         }
 
-        void FallFixedUpdate() {
-            fallTimer += Time.fixedDeltaTime;
+        void FallFixedUpdate()
+        {
+            fallTimer     += Time.fixedDeltaTime;
             movementTimer += Time.fixedDeltaTime;
             Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
+            Vector3    forward        = targetRotation * Vector3.forward;
+            Vector3    right          = targetRotation * Vector3.right;
 
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
+            Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
             Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
             velocity.y += -fallSpeedCurve.Evaluate(fallTimer);
 
             playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
+            rb.linearVelocity       = velocity;
         }
 
-        void FallLateUpdate() {
+        void FallLateUpdate()
+        {
             CameraMovement();
         }
 
@@ -328,44 +362,71 @@ namespace Player {
 
         #region JUMPING
 
-        void JumpEnter() {
+        void JumpEnter()
+        {
             if (bufferJumpCoroutine != null) StopCoroutine(bufferJumpCoroutine);
-            isOnJump = true;
+            if (!isMovementActive)
+            {
+                horizontalInput = 0;
+                verticalInput   = 0;
+            }
+
+            isOnJump    = true;
             canStopJump = false;
-            jumpTimer = 0;
-            fallTimer = 0;
+            jumpTimer   = 0;
+            fallTimer   = 0;
         }
 
-        void JumpFixedUpdate() {
+        void JumpUpdate()
+        {
+            CheckFoot();
+        }
+
+        void JumpFixedUpdate()
+        {
             jumpTimer += Time.fixedDeltaTime;
-            movementTimer += Time.fixedDeltaTime;
+            
+            if (!isMovementActive)
+            {
+                horizontalInput = 0;
+                verticalInput   = 0;
+            }
+            else
+            {
+                movementTimer += Time.fixedDeltaTime;
+            }
+           
+
 
             Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
+            Vector3    forward        = targetRotation * Vector3.forward;
+            Vector3    right          = targetRotation * Vector3.right;
 
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
+            Vector3 move     = (forward * verticalInput + right * horizontalInput).normalized;
             Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
+
             velocity.y += jumpSpeedCurve.Evaluate(jumpTimer);
 
             playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
+            rb.linearVelocity       = velocity;
 
-            if (jumpTimer > minJumpTime && canStopJump) {
+            if (jumpTimer > minJumpTime && canStopJump)
+            {
                 PlayerStateMachine.ChangeState(ControlerState.Falling);
             }
 
-            if (jumpTimer > maxJumpTime) {
+            if (jumpTimer > maxJumpTime)
+            {
                 PlayerStateMachine.ChangeState(ControlerState.Falling);
             }
-
         }
 
-        void JumpExit() {
-
+        void JumpExit()
+        {
         }
 
-        void JumpLateUpdate() {
+        void JumpLateUpdate()
+        {
             CameraMovement();
         }
 
@@ -373,18 +434,21 @@ namespace Player {
 
         #region Driving
 
-        private void EnterDriving() {
+        private void EnterDriving()
+        {
             //Bind les inputs au véhicules
             currentCar.BindInput(pInput, this);
             GetInputs().DisablePlayerInput();
             GetInputs().EnableCarInput();
         }
 
-        private void UpdateDriving() {
+        private void UpdateDriving()
+        {
             CameraMovement();
         }
 
-        private void ExitDriving() {
+        private void ExitDriving()
+        {
             //Unbind
             GetInputs().DisableCarInput();
             GetInputs().EnablePlayerInput();
@@ -396,7 +460,8 @@ namespace Player {
 
         #region INPUT SYSTEM SETUP
 
-        void SubscribeInputSystemActions() {
+        void SubscribeInputSystemActions()
+        {
             pInput.jump.started += _ => onJump?.Invoke();
 
             pInput.move.performed += onMove;
@@ -406,15 +471,17 @@ namespace Player {
             pInput.jump.canceled += _ => stopJump?.Invoke();
         }
 
-        void AssignActions() {
-            onMove += PlayerMovementInputs;
-            onLook += CameraMovementsInputs;
+        void AssignActions()
+        {
+            onMove   += PlayerMovementInputs;
+            onLook   += CameraMovementsInputs;
             stopMove += ResetPlayerMovementInputs;
-            onJump += JumpInput;
+            onJump   += JumpInput;
             stopJump += StopJumpInput;
         }
 
-        void UnsubscribeInputSystemActions() {
+        void UnsubscribeInputSystemActions()
+        {
             pInput.jump.started -= _ => onJump?.Invoke();
 
             pInput.move.performed -= onMove;
@@ -428,49 +495,63 @@ namespace Player {
 
         #region INPUT FUNCTIONS
 
-        void PlayerMovementInputs(InputAction.CallbackContext context) {
+        void PlayerMovementInputs(InputAction.CallbackContext context)
+        {
             if (IsGrounded() && !isOnJump) PlayerStateMachine.ChangeState(ControlerState.Moving);
-            horizontalInput = context.ReadValue<Vector2>().x;
-            verticalInput = context.ReadValue<Vector2>().y;
+            horizontalInput  = context.ReadValue<Vector2>().x;
+            verticalInput    = context.ReadValue<Vector2>().y;
+            isMovementActive = true;
         }
 
-        void ResetPlayerMovementInputs() {
-            if (IsGrounded() && !isOnJump) {
+        void ResetPlayerMovementInputs()
+        {
+            isMovementActive = false;
+            if (IsGrounded() && !isOnJump)
+            {
                 PlayerStateMachine.ChangeState(ControlerState.Idle);
             }
         }
 
-        void CameraMovementsInputs(InputAction.CallbackContext context) {
+        void CameraMovementsInputs(InputAction.CallbackContext context)
+        {
             cameraHorizontalInput = context.ReadValue<Vector2>().x;
-            cameraVerticalInput = context.ReadValue<Vector2>().y;
+            cameraVerticalInput   = context.ReadValue<Vector2>().y;
         }
 
-        void JumpInput() {
+        void JumpInput()
+        {
             if (IsGrounded() || currentJumpNumber < maxJumpNumber ||
-                (fallTimer < coyoteTime && currentJumpNumber == 0)) {
+                (fallTimer < coyoteTime && currentJumpNumber == 0))
+            {
                 currentJumpNumber++;
-                if (isOnJump) {
+                if (isOnJump)
+                {
                     jumpTimer = 0;
                 }
-                else {
+                else
+                {
                     PlayerStateMachine.ChangeState(ControlerState.Jumping);
                 }
             }
-            else {
+            else
+            {
                 if (bufferJumpCoroutine != null) StopCoroutine(bufferJumpCoroutine);
                 bufferJumpCoroutine = StartCoroutine(BufferJump());
             }
         }
 
-        void StopJumpInput() {
+        void StopJumpInput()
+        {
             if (IsGrounded()) return;
             canStopJump = true;
             if (jumpTimer < minJumpTime) return;
             isOnJump = false;
-            if (!IsGrounded()) {
+            if (!IsGrounded())
+            {
                 PlayerStateMachine.ChangeState(ControlerState.Falling);
             }
-            else {
+            else
+            {
                 PlayerStateMachine.ChangeState(ControlerState.Idle);
             }
         }
@@ -479,17 +560,13 @@ namespace Player {
 
         #region CAMERA
 
-        void CameraUpdate() {
-
-
-        }
-
-        void CameraMovement() {
-            yaw += cameraHorizontalInput * lookSensitivity;
-            pitch -= cameraVerticalInput * lookSensitivity;
-            pitch = Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
-            headBobAmmount = headBobAmplitudeCurve.Evaluate(rb.linearVelocity.magnitude);
-            headBobFrequency = headBobFrequencyCurve.Evaluate(rb.linearVelocity.magnitude);
+        void CameraMovement()
+        {
+            yaw              += cameraHorizontalInput * lookSensitivity;
+            pitch            -= cameraVerticalInput   * lookSensitivity;
+            pitch            =  Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
+            headBobAmmount   =  headBobAmplitudeCurve.Evaluate(rb.linearVelocity.magnitude);
+            headBobFrequency =  headBobFrequencyCurve.Evaluate(rb.linearVelocity.magnitude);
             HeadBobMovement();
             cameraTransform.position = cameraTarget.position;
             cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, Quaternion.Euler(pitch, yaw, 0),
@@ -500,49 +577,64 @@ namespace Player {
 
         #region GROUND
 
-        bool IsGrounded() {
+        bool IsGrounded()
+        {
             Ray ray = new Ray(groundRayPosition.position, -groundRayPosition.up);
-            return Physics.Raycast(ray, out RaycastHit ground, 0.5f, groundLayerMask);
+            return Physics.SphereCast(ray, 0.45f, out RaycastHit ground, 0.15f, groundLayerMask);
+        }
+
+        void CheckFoot()
+        {
+            Ray ray = new Ray(footRayPosition.position, playerTransform.forward);
+            if (Physics.Raycast(ray, out RaycastHit ground, 0.5f, groundLayerMask))
+            {
+                rb.AddForce(transform.up * 2, ForceMode.Impulse);
+            }
         }
 
         #endregion
 
-        void DebugStateMachine() {
+        void DebugStateMachine()
+        {
             if (currentStateTxt)
                 currentStateTxt.text = PlayerStateMachine.currentState.iD.ToString();
             isGrounded = IsGrounded();
             Debug.DrawRay(groundRayPosition.position, -groundRayPosition.up * 0.5f, Color.red);
+            Debug.DrawRay(footRayPosition.position, playerTransform.forward * 0.5f, Color.red);
             velocityDebug = rb.linearVelocity.magnitude;
         }
 
-        IEnumerator BufferJump() {
+        IEnumerator BufferJump()
+        {
             float elapsedTime = 0;
-            while (elapsedTime < bufferTime) {
+            while (elapsedTime < bufferTime)
+            {
                 elapsedTime += Time.deltaTime;
                 if (IsGrounded()) PlayerStateMachine.ChangeState(ControlerState.Jumping);
                 yield return null;
             }
-
         }
 
 
-        void HeadBobMovement() {
+        void HeadBobMovement()
+        {
             Vector3 pos = Vector3.zero;
             pos.x = Mathf.Lerp(pos.x, Mathf.Sin(Time.time * headBobFrequency) * headBobAmmount * 1.4f,
-                Time.deltaTime * headBobSmoothSpeed);
+                Time.deltaTime                                                * headBobSmoothSpeed);
             pos.y = Mathf.Lerp(pos.y, Mathf.Sin(Time.time * headBobFrequency / 2) * headBobAmmount * 1.6f,
-                Time.deltaTime * headBobSmoothSpeed);
-            pos.z = 0;
+                Time.deltaTime                                                    * headBobSmoothSpeed);
+            pos.z                      =  0;
             cameraTarget.localPosition += pos;
         }
 
-        public void SetCarController(CarController car) {
+        public void SetCarController(CarController car)
+        {
             currentCar = car;
         }
 
-        public InputsBrain GetInputs() {
+        public InputsBrain GetInputs()
+        {
             return pInput;
         }
-
     }
 }
