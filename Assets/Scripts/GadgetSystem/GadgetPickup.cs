@@ -5,12 +5,11 @@ using UnityEngine.Serialization;
 
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
-        
-        private                                                            Controller       player;
-        [FormerlySerializedAs("playerInventory")] [SerializeField] private GadgetController playerController;
-        [SerializeField]                                           private Transform        gadgetTransform;
-        [SerializeField]                                           private LayerMask        interactableLayerMask;
-        [SerializeField]                                           private float            pickupRange = 2f;
+        private                  Controller       player;
+        [SerializeField] private GadgetController playerController;
+        [SerializeField] private Transform        gadgetTransform;
+        [SerializeField] private LayerMask        interactableLayerMask;
+        [SerializeField] private float            pickupRange = 2f;
 
         private const int MAX_PICKUP_COUNT = 5;
         private Collider[] hitColliders;
@@ -54,7 +53,7 @@ namespace GadgetSystem {
             //         gadget = closestObj.GetComponent<IGadget>();
             //     }
             // }
-
+            Debug.Log("Used");
             //Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
             Ray baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
             Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);

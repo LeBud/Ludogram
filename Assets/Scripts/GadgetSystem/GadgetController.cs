@@ -19,12 +19,13 @@ public class GadgetController : MonoBehaviour
 	
 	public bool AddGadget(IGadget gadget)
 	{
-		Debug.Log("Add Gadget");
+		//Debug.Log("Add Gadget");
 		//if (selectedGadget == gadget) return false;
 		if (selectedGadget != null)
 		{
-			selectedGadget.Drop();
-			selectedGadget = null;
+			// selectedGadget.Drop();
+			// selectedGadget = null;
+			return false;
 		}
 		selectedGadget          =  gadget;
 		return true; 
@@ -48,7 +49,6 @@ public class GadgetController : MonoBehaviour
 		gadgetObject = null;
 	}
 	
-	
 	#region INPUT SYSTEM
 
 	void OnEnable()
@@ -56,14 +56,14 @@ public class GadgetController : MonoBehaviour
 		useGadgetAction += _ => UseGadget();
 		dropGadget += _ => DropGadget();
 		player.GetInputs().use.started += useGadgetAction;
-		player.GetInputs().drop.started += dropGadget;
+		player.GetInputs().drop.canceled += dropGadget;
 	}
 	
 	void OnDisable()
 	{
 		//TEMP input assignation
-		player.GetInputs().use.started -= useGadgetAction;
-		player.GetInputs().use.started -= dropGadget;
+		player.GetInputs().use.started     -= useGadgetAction;
+		player.GetInputs().drop.canceled -= dropGadget;
 	}
 	
 	#endregion

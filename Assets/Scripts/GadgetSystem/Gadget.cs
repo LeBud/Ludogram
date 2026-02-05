@@ -36,7 +36,7 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		if (IsInfinite) return;
         
 		currentUses--;
-        
+        Debug.Log(Name + " used " + currentUses);
 		if (currentUses <= 0) HandleDepletion();
 	}
 	
@@ -68,5 +68,11 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		Debug.Log(name + " is depleted");
 	}
 
-	
+	private void OnDestroy()
+	{
+		if(GadgetController.selectedGadget == GetComponent<IGadget>())
+		{
+			GadgetController.selectedGadget = null;
+		}
+	}
 }

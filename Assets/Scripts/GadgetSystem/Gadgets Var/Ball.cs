@@ -12,7 +12,7 @@ public class Ball :  Gadget
         transform.SetParent(null);
         rb.isKinematic = false;
         isUsed = true;
-        Debug.Log($"{name} : {isUsed}");
+//        Debug.Log($"{name} : {isUsed}");
         rb.AddForce(transform.forward * speed, ForceMode.Impulse);
     }
     
@@ -31,9 +31,7 @@ public class Ball :  Gadget
 
     public override void Drop()
     {
-        if(transform.parent != null) transform.SetParent(null);
-        rb.isKinematic = false;
-        rb.AddForce(transform.up * 4f, ForceMode.Impulse);
+        OnUse();
     }
 
 
