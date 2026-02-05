@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f6a8e1f2736e76149901b30a7e080010, type: 3}
       propertyPath: m_Name
-      value: SM_RoadCorner
+      value: RoadCorner
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -58,15 +58,15 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f6a8e1f2736e76149901b30a7e080010, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3770778490233055089}
+      addedObject: {fileID: 1892246835945862443}
   m_SourcePrefab: {fileID: 100100000, guid: f6a8e1f2736e76149901b30a7e080010, type: 3}
 --- !u!1 &6219955434905680272 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f6a8e1f2736e76149901b30a7e080010, type: 3}
   m_PrefabInstance: {fileID: 6525946012532278465}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &3770778490233055089
-BoxCollider:
+--- !u!64 &1892246835945862443
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -83,6 +83,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 15, y: 0.20189895, z: 15}
-  m_Center: {x: 7.5, y: 0.10094947, z: -7.5}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6559898771270912758, guid: f6a8e1f2736e76149901b30a7e080010, type: 3}
