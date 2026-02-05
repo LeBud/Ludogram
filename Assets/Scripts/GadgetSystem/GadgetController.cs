@@ -18,11 +18,7 @@ public class GadgetController : MonoBehaviour
 	
 	private Action<InputAction.CallbackContext> dropGadget;
 	private Action<InputAction.CallbackContext> useGadgetAction;
-
-	void Start()
-	{
-		concernedPlayerCamera = player.playerCamera;
-	}
+	
 	
 	public bool AddGadget(IGadget gadget)
 	{
@@ -56,17 +52,17 @@ public class GadgetController : MonoBehaviour
 	
 	#region INPUT SYSTEM
 
-	void OnEnable()
+	void Start()
 	{
-		useGadgetAction += _ => UseGadget();
-		dropGadget += _ => DropGadget();
-		player.GetInputs().use.started += useGadgetAction;
+		concernedPlayerCamera            =  player.playerCamera;
+		useGadgetAction                  += _ => UseGadget();
+		dropGadget                       += _ => DropGadget();
+		player.GetInputs().use.started   += useGadgetAction;
 		player.GetInputs().drop.canceled += dropGadget;
 	}
 	
 	void OnDisable()
 	{
-		//TEMP input assignation
 		player.GetInputs().use.started     -= useGadgetAction;
 		player.GetInputs().drop.canceled -= dropGadget;
 	}

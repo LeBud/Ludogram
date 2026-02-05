@@ -53,7 +53,7 @@ namespace GadgetSystem {
             //         gadget = closestObj.GetComponent<IGadget>();
             //     }
             // }
-            Debug.Log("Used");
+//            Debug.Log("Used");
             //Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
             Ray baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
             Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);

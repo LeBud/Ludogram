@@ -7,11 +7,16 @@ public class StickGadget : Gadget
     [SerializeField] float     setback;
     [SerializeField] float     range;
     [SerializeField] float     movementTime;
+    [SerializeField] float     cooldown;
+
+    private bool canUse = true;
     
     //COOLDOWN
     
     protected override void OnUse()
     {
+        if (!canUse) return;
+        StartCoroutine(Cooldown());
         StartCoroutine(AnimateGadget());
         Ray baseCast = new Ray(GadgetController.concernedPlayerCamera.transform.position, GadgetController.concernedPlayerCamera.transform.forward);
         RaycastHit[] target = Physics.SphereCastAll(baseCast, 0.25f, range);
@@ -22,6 +27,13 @@ public class StickGadget : Gadget
                 hit.rigidbody.AddForce(-hit.normal * setback, ForceMode.Impulse);
             }
         }
+    }
+
+    IEnumerator Cooldown()
+    {
+        canUse = false;
+        yield return new WaitForSeconds(cooldown);
+        canUse = true;
     }
 
     IEnumerator AnimateGadget()
