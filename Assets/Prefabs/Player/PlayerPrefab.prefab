@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 782020925049167144}
   - component: {fileID: 2405901545352257737}
   - component: {fileID: 5206288737376482847}
+  - component: {fileID: 7411679023416586555}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -672,6 +673,54 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  Steering:
+    m_Name: Steering
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 6cf360df-aa81-4188-b81e-00b3c77d0e4e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Throttle:
+    m_Name: Throttle
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 6b044c01-82c8-48eb-a190-8e1b3996d937
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Brake:
+    m_Name: Brake
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e447a311-7e4c-492f-89ef-e3df77bb1da4
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  LeaveCar:
+    m_Name: Leave Car
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 57c291d6-ade6-448c-a3ec-3e5f76cbc799
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+--- !u!114 &7411679023416586555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866246092938327545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f9c6a87fd104190b7468caabfb1bf13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.ApplyVehiculePhysics
 --- !u!1 &6054382211423205853
 GameObject:
   m_ObjectHideFlags: 0

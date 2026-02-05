@@ -53,7 +53,9 @@ namespace Player {
 
 
         private CarController currentCar;
-
+        private ApplyVehiculePhysics carPhys;
+        private FixedJoint fixedJoint;
+        
         public float headBobAmmount;
         public float headBobFrequency;
 
@@ -114,6 +116,9 @@ namespace Player {
             if (TryGetComponent(out GadgetPickup g)) {
                 g.Initialize(this);
             }
+
+            if(TryGetComponent(out carPhys)) Debug.Log($"Found VehiculePhysics");
+            else Debug.LogError("VehiculePhysics not found");
         }
 
         private void Start() {
@@ -374,18 +379,29 @@ namespace Player {
         #region Driving
 
         private void EnterDriving() {
-            //Bind les inputs au véhicules
             currentCar.BindInput(pInput, this);
+            carPhys.SetTracker(currentCar.motionTracker);
+            
+            UnbindLook();
+            GetInputs().SetLookCar(true);
+            RebindLook();
+            
             GetInputs().DisablePlayerInput();
             GetInputs().EnableCarInput();
         }
 
         private void UpdateDriving() {
+            rb.linearVelocity = currentCar.GetRB().linearVelocity;
             CameraMovement();
         }
 
         private void ExitDriving() {
-            //Unbind
+            carPhys.RemoveTracker();
+            
+            UnbindLook();
+            GetInputs().SetLookCar(false);
+            RebindLook();
+            
             GetInputs().DisableCarInput();
             GetInputs().EnablePlayerInput();
         }
@@ -405,7 +421,7 @@ namespace Player {
             pInput.move.canceled += _ => stopMove?.Invoke();
             pInput.jump.canceled += _ => stopJump?.Invoke();
         }
-
+        
         void AssignActions() {
             onMove += PlayerMovementInputs;
             onLook += CameraMovementsInputs;
@@ -414,6 +430,14 @@ namespace Player {
             stopJump += StopJumpInput;
         }
 
+        private void UnbindLook() {
+            pInput.look.performed -= onLook;
+        }
+
+        private void RebindLook() {
+            pInput.look.performed += onLook;
+        }
+        
         void UnsubscribeInputSystemActions() {
             pInput.jump.started -= _ => onJump?.Invoke();
 
@@ -544,5 +568,8 @@ namespace Player {
             return pInput;
         }
 
+        public Rigidbody GetRB() {
+            return rb;
+        }
     }
 }

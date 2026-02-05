@@ -105,6 +105,7 @@ namespace CarScripts {
         //float wheelRPM => carRb.linearVelocity.magnitude / (2 * Mathf.PI * wheelRadius) * 60f;
         
         private Dictionary<Transform, WheelContact> wheelsContact = new();
+        [HideInInspector] public CarMotionTracker motionTracker;
         
         private float steering;
         private float currentSteering;
@@ -134,6 +135,9 @@ namespace CarScripts {
             
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
             else Debug.LogWarning($"RigidBody Not Found");
+            
+            if(TryGetComponent(out motionTracker)) Debug.Log($"Motion Tracker Assigned");
+            else Debug.LogWarning($"Motion Tracker Not Found");
             
             SetupCar();
         }
@@ -366,6 +370,10 @@ namespace CarScripts {
             }
 
             return true;
+        }
+
+        public Rigidbody GetRB() {
+            return carRb;
         }
     }
 
