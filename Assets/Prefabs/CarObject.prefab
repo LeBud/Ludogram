@@ -1011,7 +1011,8 @@ GameObject:
   - component: {fileID: 6206072431550848154}
   - component: {fileID: 6283278119965211736}
   - component: {fileID: 1354607841546809854}
-  m_Layer: 0
+  - component: {fileID: 16878177697582555}
+  m_Layer: 7
   m_Name: CarObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1141,15 +1142,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  ShiftGear:
-    m_Name: Shift Gear
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 6bb0f756-9d89-40eb-9e8e-138a3a16d686
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   Brake:
     m_Name: Brake
     m_Type: 0
@@ -1189,6 +1181,27 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 8245011284803956466}
+--- !u!65 &16878177697582555
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7948800197669867479}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.934896, y: 1.9513623, z: 4.1610665}
+  m_Center: {x: 0, y: 0.47568113, z: 0}
 --- !u!1 &8284387209669753133
 GameObject:
   m_ObjectHideFlags: 0
