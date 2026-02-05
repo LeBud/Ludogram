@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class GadgetController : MonoBehaviour
 {
 	//public static GadgetInventory     instance;
 	[SerializeField] private Controller          player;
 	public static            IGadget             selectedGadget;
-	public                   GameObject          handledObject;
+	public                   GameObject          gadgetObject;
 	private                  InputSystem_Actions playerActions;
 	
 	
@@ -44,6 +45,7 @@ public class GadgetController : MonoBehaviour
 	{
 		selectedGadget?.Drop();
 		selectedGadget = null;
+		gadgetObject = null;
 	}
 	
 	

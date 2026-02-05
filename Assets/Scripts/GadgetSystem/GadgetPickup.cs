@@ -71,11 +71,11 @@ namespace GadgetSystem {
             
             Transform hitted = hit.collider.transform;
             if (playerController.AddGadget(hit.collider.GetComponent<IGadget>()) 
-                && hit.collider.gameObject != playerController.handledObject) 
+                && hit.collider.gameObject != playerController.gadgetObject) 
             {
                 hitted.position = gadgetTransform.position;
                 hitted.forward = gadgetTransform.forward;
-                playerController.handledObject = hitted.gameObject;
+                playerController.gadgetObject = hitted.gameObject;
                 hitted.SetParent(gadgetTransform);
                 hitted.GetComponent<Gadget>().OnPickup();
                 //Debug.Log("Ramassé:" + gadget.Name);
