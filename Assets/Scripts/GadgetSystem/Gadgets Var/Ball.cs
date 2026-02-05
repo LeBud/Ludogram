@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Ball :  Gadget
 {
-    bool             isUsed = false;
+    //bool             isUsed = false;
     public float     speed;
     public Rigidbody rb;
 
@@ -11,8 +11,8 @@ public class Ball :  Gadget
     {
         transform.SetParent(null);
         rb.isKinematic = false;
-        isUsed = true;
-//        Debug.Log($"{name} : {isUsed}");
+        //isUsed = true;
+        //Debug.Log($"{name} : {isUsed}");
         rb.AddForce(transform.forward * speed, ForceMode.Impulse);
     }
     
@@ -31,7 +31,9 @@ public class Ball :  Gadget
 
     public override void Drop()
     {
-        OnUse();
+        transform.SetParent(null);
+        rb.isKinematic = false;
+        rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 
 

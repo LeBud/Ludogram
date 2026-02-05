@@ -12,10 +12,17 @@ public class GadgetController : MonoBehaviour
 	public static            IGadget             selectedGadget;
 	public                   GameObject          gadgetObject;
 	private                  InputSystem_Actions playerActions;
+	public static            Camera              concernedPlayerCamera;
+	
 	
 	
 	private Action<InputAction.CallbackContext> dropGadget;
 	private Action<InputAction.CallbackContext> useGadgetAction;
+
+	void Start()
+	{
+		concernedPlayerCamera = player.playerCamera;
+	}
 	
 	public bool AddGadget(IGadget gadget)
 	{
@@ -23,8 +30,6 @@ public class GadgetController : MonoBehaviour
 		//if (selectedGadget == gadget) return false;
 		if (selectedGadget != null)
 		{
-			// selectedGadget.Drop();
-			// selectedGadget = null;
 			return false;
 		}
 		selectedGadget          =  gadget;
