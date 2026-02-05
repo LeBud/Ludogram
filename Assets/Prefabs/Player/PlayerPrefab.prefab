@@ -213,9 +213,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1669332673481670361}
+  - {fileID: 2454918127572103366}
   - {fileID: 9138199446019686272}
   - {fileID: 4291023348392666640}
-  - {fileID: 2454918127572103366}
   m_Father: {fileID: 2879783144811796167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &8766724885081356388
@@ -263,6 +264,7 @@ MonoBehaviour:
   playerTransform: {fileID: 4291023348392666640}
   cameraTarget: {fileID: 8919701885988151080}
   groundRayPosition: {fileID: 2454918127572103366}
+  footRayPosition: {fileID: 0}
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 55
@@ -474,6 +476,13 @@ MonoBehaviour:
   headBobFrequency: 0
   isGrounded: 0
   velocityDebug: 0
+  horizontalInput: 0
+  verticalInput: 0
+  isMovementActive: 0
+  currentJumpNumber: 0
+  jumpTimer: 0
+  isOnJump: 0
+  canStopJump: 0
   fallTimer: 0
 --- !u!114 &4874822598099800987
 MonoBehaviour:
@@ -487,9 +496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64f81b3129387d342befb7f62d85dcaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
-  maxSlots: 5
-  gadgetsNames: []
-  currentSlot: 0
+  player: {fileID: 0}
+  gadgetObject: {fileID: 0}
 --- !u!114 &782020925049167144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,7 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c60dec95e4e81478d061fb1e6ece96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GadgetPickup
-  playerInventory: {fileID: 4874822598099800987}
+  playerController: {fileID: 0}
   gadgetTransform: {fileID: 1003655180821783272}
   interactableLayerMask:
     serializedVersion: 2
@@ -670,6 +678,24 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: c7b5b438-8b36-45ea-80bf-db4376b4d7a0
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  use:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1317ab0a-1a73-4113-a60b-98f86dd178c6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  drop:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 2d922733-8a01-41df-9db4-fbb958623015
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -993,6 +1019,37 @@ Transform:
   - {fileID: 2983150451699638338}
   - {fileID: 5082856441508044443}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8224893273882028794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1669332673481670361}
+  m_Layer: 0
+  m_Name: FootRay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1669332673481670361
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8224893273882028794}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5082856441508044443}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8091893834609067271
 PrefabInstance:
