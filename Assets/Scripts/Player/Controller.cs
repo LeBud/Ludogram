@@ -51,9 +51,14 @@ namespace Player {
         [SerializeField] AnimationCurve headBobFrequencyCurve;
         [SerializeField] AnimationCurve headBobAmplitudeCurve;
 
-
+        [Header("Driving Settings")] 
+        [SerializeField] public float maxSpeedInsideVehicle = 4f;
+        
         private CarController currentCar;
-
+        private CarSeat seat;
+        private ApplyVehiculePhysics carPhys;
+        private FixedJoint fixedJoint;
+        
         public float headBobAmmount;
         public float headBobFrequency;
 
@@ -101,7 +106,8 @@ namespace Player {
             Moving,
             Falling,
             Jumping,
-            Driving
+            Driving,
+            Seated
         }
 
         private void Awake() {
@@ -114,6 +120,9 @@ namespace Player {
             if (TryGetComponent(out GadgetPickup g)) {
                 g.Initialize(this);
             }
+
+            if(TryGetComponent(out carPhys)) Debug.Log($"Found VehiculePhysics");
+            else Debug.LogError("VehiculePhysics not found");
         }
 
         private void Start() {
@@ -136,6 +145,7 @@ namespace Player {
             UnsubscribeInputSystemActions();
         }
 
+        #region CreateState
         void CreateState() {
             //IDLE
             PlayerStateMachine.Add(new State<ControlerState>(
@@ -181,8 +191,16 @@ namespace Player {
                 _onExit: ExitDriving
             ));
 
+            PlayerStateMachine.Add(new State<ControlerState>(
+                ControlerState.Seated,
+                _onEnter: EnterSeated,
+                _onUpdate: UpdateSeated,
+                _onExit: ExitDriving
+                ));
+            
             PlayerStateMachine.ChangeState(ControlerState.Idle);
         }
+        #endregion
 
         #region STATE-MACHINE
 
@@ -374,18 +392,50 @@ namespace Player {
         #region Driving
 
         private void EnterDriving() {
-            //Bind les inputs au véhicules
             currentCar.BindInput(pInput, this);
+            //Parent l'objet au vehicule
+            //Désactive le rigidbody
+            //Je met la caméra au bon endroit
+            
+            UnbindLook();
+            GetInputs().SetLookCar(true);
+            RebindLook();
+            
             GetInputs().DisablePlayerInput();
             GetInputs().EnableCarInput();
         }
 
+        private void EnterSeated() {
+            UnbindLook();
+            GetInputs().SetLookCar(true);
+            RebindLook();
+            
+            GetInputs().DisablePlayerInput();
+            GetInputs().EnableCarInput();
+        }
+        
         private void UpdateDriving() {
+            //rb.linearVelocity = currentCar.GetRB().linearVelocity;
             CameraMovement();
         }
 
+        private void UpdateSeated() {
+            //rb.linearVelocity = currentCar.GetRB().linearVelocity;
+            CameraMovement();
+            if(GetInputs().LeaveCar.WasPressedThisFrame())
+                PlayerStateMachine.ChangeState(ControlerState.Idle);
+        }
+        
         private void ExitDriving() {
-            //Unbind
+            seat?.UnSeatDriver();
+            
+            currentCar = null;
+            seat = null;
+            
+            UnbindLook();
+            GetInputs().SetLookCar(false);
+            RebindLook();
+            
             GetInputs().DisableCarInput();
             GetInputs().EnablePlayerInput();
         }
@@ -405,7 +455,7 @@ namespace Player {
             pInput.move.canceled += _ => stopMove?.Invoke();
             pInput.jump.canceled += _ => stopJump?.Invoke();
         }
-
+        
         void AssignActions() {
             onMove += PlayerMovementInputs;
             onLook += CameraMovementsInputs;
@@ -414,6 +464,14 @@ namespace Player {
             stopJump += StopJumpInput;
         }
 
+        private void UnbindLook() {
+            pInput.look.performed -= onLook;
+        }
+
+        private void RebindLook() {
+            pInput.look.performed += onLook;
+        }
+        
         void UnsubscribeInputSystemActions() {
             pInput.jump.started -= _ => onJump?.Invoke();
 
@@ -536,13 +594,17 @@ namespace Player {
             cameraTarget.localPosition += pos;
         }
 
-        public void SetCarController(CarController car) {
+        public void SetCarController(CarController car, CarSeat seat) {
             currentCar = car;
+            this.seat = seat;
         }
 
         public InputsBrain GetInputs() {
             return pInput;
         }
 
+        public Rigidbody GetRB() {
+            return rb;
+        }
     }
 }

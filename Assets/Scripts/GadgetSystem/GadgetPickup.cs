@@ -58,9 +58,10 @@ namespace GadgetSystem {
             
             //Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
 
-            if (hit.collider.TryGetComponent(out CarController car)) {
-                player.SetCarController(car);
-                player.PlayerStateMachine.ChangeState(Controller.ControlerState.Driving);
+            if(!hit.collider) return;
+            
+            if (hit.collider.TryGetComponent(out CarSeat seat) && !seat.playerAlreadySeated) {
+                seat.SetDriver(player);
                 return;
             }
             
