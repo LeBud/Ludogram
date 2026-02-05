@@ -5,12 +5,13 @@ using UnityEngine.InputSystem;
 
 public class GadgetInventory : MonoBehaviour
 {
-	public  int                 maxSlots = 5;
-	private IGadget[]           gadgets;
-	public List<string>         gadgetsNames = new();
-	public  int                 currentSlot = 0;
-	private IGadget             selectedGadget;
-	private InputSystem_Actions playerActions;
+	public static GadgetInventory     instance;
+	public        int                 maxSlots = 5;
+	public        List<IGadget>       gadgets;
+	public        List<string>        gadgetsNames = new();
+	public        int                 currentSlot  = 0;
+	private       IGadget             selectedGadget;
+	private       InputSystem_Actions playerActions;
 	
 	private Action<InputAction.CallbackContext> onNextGadgetAction;
 	private Action<InputAction.CallbackContext> onPreviousGadgetAction;
@@ -19,8 +20,13 @@ public class GadgetInventory : MonoBehaviour
 	
 	private void Awake()
 	{
-		gadgets = new IGadget[maxSlots];
+		gadgets      = new List<IGadget>();
 		gadgetsNames = new List<string>();
+
+		if (instance == null)
+		{
+			instance = this;
+		}
 	}
 	
 	public int MaxSlots 
@@ -29,35 +35,22 @@ public class GadgetInventory : MonoBehaviour
 		set 
 		{
 			maxSlots = Mathf.Max(1, value);
-			ResizeInventory();
 		}
 	}
     
-	private void ResizeInventory()
-	{
-		var newGadgets = new IGadget[maxSlots];
-		if (gadgets != null)
-		{
-			int copyCount = Mathf.Min(gadgets.Length, maxSlots);
-			Array.Copy(gadgets, newGadgets, copyCount);
-		}
-		gadgets = newGadgets;
-	}
 	
 	public bool AddGadget(IGadget gadget)
 	{
-		for (int i = 0; i < gadgets.Length; i++)
+		Debug.Log("Add");
+		if (gadgets.Count < maxSlots)
 		{
-			if (gadgets[i] == null)
-			{
-				gadgets[i] = gadget;
-				gadgetsNames.Insert(i, gadgets[i].Name);
-				selectedGadget = gadget;
-				currentSlot = i;
-				gadget.OnGadgetDepleted += OnGadgetDepleted;
-				gadget.OnUsesChanged += OnGadgetUsesChanged;
-				return true;
-			}
+			gadgets.Add(gadget);
+			gadgetsNames.Add(gadget.Name);
+			selectedGadget          =  gadget;
+			currentSlot             =  gadgets.Count;
+			gadget.OnGadgetDepleted += OnGadgetDepleted;
+			gadget.OnUsesChanged    += OnGadgetUsesChanged;
+			return true;
 		}
 		return false; 
 	}
@@ -69,6 +62,12 @@ public class GadgetInventory : MonoBehaviour
 		if (selectedGadget.CanUse())
 		{
 			selectedGadget.Use();
+			if (selectedGadget.IsLaunchable)
+			{
+				gadgets[currentSlot] = null;
+				gadgetsNames.RemoveAt(currentSlot);
+				
+			}
 		}
 	}
 
@@ -77,10 +76,16 @@ public class GadgetInventory : MonoBehaviour
 		if (selectedGadget == gadget) return;
 		selectedGadget.Select();
 	}
+	
+	void UnselectGadget(IGadget gadget)
+	{
+		if (selectedGadget == gadget) return;
+		selectedGadget.Unselect();
+	}
 
 	public void ReplaceGadgetAt(int slotIndex, IGadget gadget)
 	{
-		if (slotIndex >= 0 && slotIndex < gadgets.Length)
+		if (slotIndex >= 0 && slotIndex < gadgets.Count)
 		{
 			gadgets[slotIndex] = null;
 		}
@@ -88,19 +93,19 @@ public class GadgetInventory : MonoBehaviour
     
 	public IGadget GetGadget(int slotIndex)
 	{
-		if (slotIndex < 0 || slotIndex >= gadgets.Length) return null;
+		if (slotIndex < 0 || slotIndex >= gadgets.Count) return null;
 		return gadgets[slotIndex];
 	}
     
-	public bool IsSlotEmpty(int slotIndex)
-	{
-		if (slotIndex < 0 || slotIndex >= gadgets.Length) return true;
-		return gadgets[slotIndex] == null;
-	}
+	// public bool IsSlotEmpty(int slotIndex)
+	// {
+	// 	if (slotIndex < 0 || slotIndex >= gadgets.Count) return true;
+	// 	return gadgets[slotIndex] == null;
+	// }
 	
 	private void OnGadgetDepleted(Gadget gadget)
 	{
-		for (int i = 0; i < gadgets.Length; i++)
+		for (int i = 0; i < gadgets.Count; i++)
 		{
 			if (gadgets[i].Name == gadget.Name)
 			{
@@ -120,13 +125,23 @@ public class GadgetInventory : MonoBehaviour
 	
 	void NextGadget()
 	{
+		UnselectGadget(GetGadget(currentSlot));
 		currentSlot++;
+		if (currentSlot > maxSlots)
+		{
+			currentSlot = 0;
+		}
 		SelectGadget(GetGadget(currentSlot));
 	}
 	
 	void PreviousGadget()
 	{
+		UnselectGadget(GetGadget(currentSlot));
 		currentSlot--;
+		if (currentSlot < 0)
+		{
+			currentSlot = maxSlots;
+		}
 		SelectGadget(GetGadget(currentSlot));
 	}
 
