@@ -6,8 +6,6 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[SerializeField] protected string gadgetName;
 	[SerializeField] protected Sprite icon;
 	[SerializeField] protected int    maxUses = 1;
-	[SerializeField] protected bool   isLaunchable;
-	
 	protected int currentUses;
     
 	public string Name         => gadgetName;
@@ -17,7 +15,6 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	public bool   IsHandled    { get; }
 	public bool   IsInfinite   => maxUses == -1;
 	public bool   IsDepleted   => !IsInfinite && currentUses <= 0;
-	public bool   IsLaunchable =>  isLaunchable;
 
 	protected virtual void Awake() => currentUses = maxUses;
 

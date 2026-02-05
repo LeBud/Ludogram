@@ -67,17 +67,17 @@ namespace Player
         Transform cameraTransform;
 
         //MOVEMENTS
-        public float movementTimer;
-        public float stopTimer;
+        float movementTimer;
+        float stopTimer;
         public float horizontalInput;
         public float verticalInput;
         public bool  isMovementActive;
 
         //JUMP
-        int         currentJumpNumber;
-        float       jumpTimer;
+        public int         currentJumpNumber;
+        public float       jumpTimer;
         public bool isOnJump;
-        bool        canStopJump;
+        public bool        canStopJump;
 
         //FALL
         public float fallTimer;
@@ -233,10 +233,10 @@ namespace Player
 
         void IdleUpdate()
         {
-            // if (!IsGrounded() && !isOnJump)
-            // {
-            //     PlayerStateMachine.ChangeState(ControlerState.Falling);
-            // }
+            if (!IsGrounded() && !isOnJump)
+            {
+                PlayerStateMachine.ChangeState(ControlerState.Falling);
+            }
         }
 
         void IdleFixedUpdate()
@@ -385,14 +385,17 @@ namespace Player
         void JumpFixedUpdate()
         {
             jumpTimer += Time.fixedDeltaTime;
-            if (isMovementActive)
+            
+            if (!isMovementActive)
             {
-                movementTimer += Time.fixedDeltaTime;
+                horizontalInput = 0;
+                verticalInput   = 0;
             }
             else
             {
-                movementTimer = 0;
+                movementTimer += Time.fixedDeltaTime;
             }
+           
 
 
             Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);

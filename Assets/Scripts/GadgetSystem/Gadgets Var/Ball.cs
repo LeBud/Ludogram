@@ -16,13 +16,13 @@ public class Ball :  Gadget
         rb.AddForce(transform.forward * speed, ForceMode.Impulse);
     }
     
-    void OnCollisionEnter(Collision collision)
-    {
-        if (!isUsed)return;
-        
-        Debug.Log(collision.gameObject.name);
-        Destroy(gameObject);
-    }
+    // void OnCollisionEnter(Collision collision)
+    // {
+    //     if (!isUsed)return;
+    //     
+    //     Debug.Log(collision.gameObject.name);
+    //     Destroy(gameObject);
+    // }
 
     public override void OnPickup()
     {
