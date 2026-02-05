@@ -162,8 +162,6 @@ namespace CarScripts {
         }
 
         void Update() {
-            if(inputs == null) return;
-            
             MyInputs();
             WheelsSteering();
             HandleWheelsGrip();
@@ -199,6 +197,13 @@ namespace CarScripts {
         }
 
         void MyInputs() {
+            if (inputs == null) {
+                steering = 0;
+                throttle = 0;
+                brake = 0;
+                return;
+            }
+            
             steering = inputs.Steering.ReadValue<float>();
             throttle = inputs.Throttle.ReadValue<float>();
             brake = inputs.Brake.ReadValue<float>();

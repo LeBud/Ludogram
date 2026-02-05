@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4291023348392666640}
   - component: {fileID: 940520348176344635}
   - component: {fileID: 6123370327367144183}
-  - component: {fileID: 4664514508454079273}
   m_Layer: 0
   m_Name: PlayerObj
   m_TagString: Untagged
@@ -92,29 +91,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4664514508454079273
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510381821477823303}
-  m_Material: {fileID: 13400000, guid: 87948d2332c671748999a50136fdd5ec, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1720648450889265859
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,9 +169,10 @@ GameObject:
   - component: {fileID: 2405901545352257737}
   - component: {fileID: 5206288737376482847}
   - component: {fileID: 7411679023416586555}
-  m_Layer: 0
+  - component: {fileID: 4397980005844040933}
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -469,6 +446,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  maxSpeedInsideVehicle: 6
   headBobAmmount: 0
   headBobFrequency: 0
   isGrounded: 0
@@ -721,6 +699,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9c6a87fd104190b7468caabfb1bf13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.ApplyVehiculePhysics
+--- !u!136 &4397980005844040933
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866246092938327545}
+  m_Material: {fileID: 13400000, guid: 87948d2332c671748999a50136fdd5ec, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6054382211423205853
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +732,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2983150451699638338}
   - component: {fileID: 3892443573441345474}
-  - component: {fileID: 934497872252660080}
   - component: {fileID: 363460805805663721}
   m_Layer: 0
   m_Name: Main Camera
@@ -807,14 +807,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &934497872252660080
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6054382211423205853}
-  m_Enabled: 1
 --- !u!114 &363460805805663721
 MonoBehaviour:
   m_ObjectHideFlags: 0

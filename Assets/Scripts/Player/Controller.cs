@@ -51,8 +51,11 @@ namespace Player {
         [SerializeField] AnimationCurve headBobFrequencyCurve;
         [SerializeField] AnimationCurve headBobAmplitudeCurve;
 
-
+        [Header("Driving Settings")] 
+        [SerializeField] public float maxSpeedInsideVehicle = 4f;
+        
         private CarController currentCar;
+        private CarSeat seat;
         private ApplyVehiculePhysics carPhys;
         private FixedJoint fixedJoint;
         
@@ -103,7 +106,8 @@ namespace Player {
             Moving,
             Falling,
             Jumping,
-            Driving
+            Driving,
+            Seated
         }
 
         private void Awake() {
@@ -141,6 +145,7 @@ namespace Player {
             UnsubscribeInputSystemActions();
         }
 
+        #region CreateState
         void CreateState() {
             //IDLE
             PlayerStateMachine.Add(new State<ControlerState>(
@@ -186,8 +191,16 @@ namespace Player {
                 _onExit: ExitDriving
             ));
 
+            PlayerStateMachine.Add(new State<ControlerState>(
+                ControlerState.Seated,
+                _onEnter: EnterSeated,
+                _onUpdate: UpdateSeated,
+                _onExit: ExitDriving
+                ));
+            
             PlayerStateMachine.ChangeState(ControlerState.Idle);
         }
+        #endregion
 
         #region STATE-MACHINE
 
@@ -380,7 +393,9 @@ namespace Player {
 
         private void EnterDriving() {
             currentCar.BindInput(pInput, this);
-            carPhys.SetTracker(currentCar.motionTracker);
+            //Parent l'objet au vehicule
+            //Désactive le rigidbody
+            //Je met la caméra au bon endroit
             
             UnbindLook();
             GetInputs().SetLookCar(true);
@@ -390,13 +405,32 @@ namespace Player {
             GetInputs().EnableCarInput();
         }
 
+        private void EnterSeated() {
+            UnbindLook();
+            GetInputs().SetLookCar(true);
+            RebindLook();
+            
+            GetInputs().DisablePlayerInput();
+            GetInputs().EnableCarInput();
+        }
+        
         private void UpdateDriving() {
-            rb.linearVelocity = currentCar.GetRB().linearVelocity;
+            //rb.linearVelocity = currentCar.GetRB().linearVelocity;
             CameraMovement();
         }
 
+        private void UpdateSeated() {
+            //rb.linearVelocity = currentCar.GetRB().linearVelocity;
+            CameraMovement();
+            if(GetInputs().LeaveCar.WasPressedThisFrame())
+                PlayerStateMachine.ChangeState(ControlerState.Idle);
+        }
+        
         private void ExitDriving() {
-            carPhys.RemoveTracker();
+            seat?.UnSeatDriver();
+            
+            currentCar = null;
+            seat = null;
             
             UnbindLook();
             GetInputs().SetLookCar(false);
@@ -560,8 +594,9 @@ namespace Player {
             cameraTarget.localPosition += pos;
         }
 
-        public void SetCarController(CarController car) {
+        public void SetCarController(CarController car, CarSeat seat) {
             currentCar = car;
+            this.seat = seat;
         }
 
         public InputsBrain GetInputs() {

@@ -1,4 +1,4 @@
-using System;
+using Player;
 using UnityEngine;
 
 namespace CarScripts {
@@ -9,9 +9,8 @@ namespace CarScripts {
         public Vector3 AngularVelocity{ get; private set; }
 
         private void Awake() {
-            if (TryGetComponent(out carController)) {
-            }
-            else Debug.LogError("No CarController found!");
+            if (TryGetComponent(out carController)) Debug.Log($"Car Controller Assigned");
+            else Debug.LogWarning($"Car Controller Not Found");
         }
 
         private void FixedUpdate() {
@@ -21,6 +20,22 @@ namespace CarScripts {
 
         public Rigidbody GetRB() {
             return carController.GetRB();
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            if (!other.CompareTag("Player"))return;
+
+            if (other.TryGetComponent(out ApplyVehiculePhysics physics)) {
+                physics.SetTracker(this);
+            }else Debug.Log("No physics found!");
+        }
+
+        private void OnTriggerExit(Collider other) {
+            if(!other.CompareTag("Player")) return;
+            
+            if (other.TryGetComponent(out ApplyVehiculePhysics physics)) {
+                physics.RemoveTracker();
+            }else Debug.Log("No physics found!");
         }
     }
 }
