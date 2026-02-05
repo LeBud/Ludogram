@@ -38,6 +38,13 @@ namespace Player
             }
         }
 
+        public void SetLookCar(bool onCar) {
+            if(onCar)
+                look = carMap.FindAction("Look");
+            else
+                look = playerMap.FindAction("Look");
+        }
+
         public void DisablePlayerInput() {
             playerMap.Disable();
         }
