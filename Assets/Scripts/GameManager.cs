@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
     
     HashSet<PlayerInput> players = new();
     
-    private void Awake() {
+    private void Start() {
         PlayerInputManager.instance.onPlayerJoined += HandlePlayerJoining;
     }
 
