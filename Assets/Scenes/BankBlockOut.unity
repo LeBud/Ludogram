@@ -1698,16 +1698,28 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 211685135309647303, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 355503734234527062, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: maxJumpTime
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: minJumpTime
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: maxJumpNumber
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
+      propertyPath: lookSensitivity
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
@@ -1719,16 +1731,20 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
+      propertyPath: jumpSpeedCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: jumpSpeedCurve.m_Curve.Array.data[1].time
-      value: 0.22864033
+      value: 0.29887652
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: jumpSpeedCurve.m_Curve.Array.data[0].value
-      value: 12.874344
+      value: 10.076721
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: jumpSpeedCurve.m_Curve.Array.data[1].value
-      value: 9.336553
+      value: 8.7148485
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: movementSpeedCurve.m_Curve.Array.data[0].time
@@ -1768,7 +1784,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: airMovementSpeedCurve.m_Curve.Array.data[2].time
-      value: 0.9934082
+      value: 0.9981384
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: movementSpeedCurve.m_Curve.Array.data[0].inSlope
@@ -1792,7 +1808,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: airMovementSpeedCurve.m_Curve.Array.data[2].value
-      value: 3.6981354
+      value: 3.0200691
       objectReference: {fileID: 0}
     - target: {fileID: 3499769114390358919, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: movementSpeedCurve.m_Curve.Array.data[0].inWeight
@@ -1884,7 +1900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4870103581808972806, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.996
+      value: 1.22
       objectReference: {fileID: 0}
     - target: {fileID: 4870103581808972806, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1925,7 +1941,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2829594105718655392, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1038719178}
   m_SourcePrefab: {fileID: 100100000, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
 --- !u!1 &25951813
 GameObject:
@@ -10290,6 +10309,32 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1016847781}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1038719173 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2829594105718655392, guid: c5cfa495e3310aa45a44058aba50092e, type: 3}
+  m_PrefabInstance: {fileID: 25742640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1038719178
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038719173}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1.118351, y: 2.0201063, z: 1}
+  m_Center: {x: -0.01900673, y: -0.010053158, z: 0}
 --- !u!1 &1042824393
 GameObject:
   m_ObjectHideFlags: 0
@@ -37584,7 +37629,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1056605548}
+  m_Mesh: {fileID: 1535518068}
 --- !u!33 &1756100616
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -64168,7 +64213,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 285210311}
+  m_Mesh: {fileID: 2058935337}
 --- !u!33 &2059722008
 MeshFilter:
   m_ObjectHideFlags: 10
