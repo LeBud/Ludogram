@@ -6,7 +6,7 @@ namespace StateMachine.BaseState_class
 {
 	public class MovementState : BaseState
 	{
-		public MovementState(ControllerV2 player) : base(player) {
+		public MovementState(Controller player) : base(player) {
 		}
 		
 		public override void OnEnter() {

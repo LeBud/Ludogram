@@ -5,7 +5,7 @@ namespace StateMachine.BaseState_class
 {
 	public class StunState : BaseState
 	{
-		public StunState(ControllerV2 player) : base(player)
+		public StunState(Controller player) : base(player)
 		{
 		}
 	}

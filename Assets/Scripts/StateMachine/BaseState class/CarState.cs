@@ -5,7 +5,7 @@ namespace StateMachine.BaseState_class
 {
 	public class CarState : BaseState
 	{
-		public CarState(ControllerV2 player) : base(player) { }
+		public CarState(Controller player) : base(player) { }
 
 		public override void OnEnter()
 		{

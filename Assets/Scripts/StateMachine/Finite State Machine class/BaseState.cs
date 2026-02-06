@@ -5,9 +5,9 @@ namespace StateMachine.Finite_State_Machine_class
 {
 	public class BaseState : IState
 	{
-		protected readonly ControllerV2 player;
+		protected readonly Controller player;
 
-		protected BaseState(ControllerV2 player)
+		protected BaseState(Controller player)
 		{
 			this.player = player;
 		}

@@ -425,6 +425,8 @@ GameObject:
   - component: {fileID: 203090794}
   - component: {fileID: 203090790}
   - component: {fileID: 203090789}
+  - component: {fileID: 203090796}
+  - component: {fileID: 203090795}
   m_Layer: 3
   m_Name: PlayerV2
   m_TagString: Untagged
@@ -546,6 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45208c4aa18d43f1810a52fdb5257975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.ControllerV2
+  pInput: {fileID: 203090789}
   playerCamera: {fileID: 813662668}
   rb: {fileID: 203090792}
   modelTransform: {fileID: 284164495}
@@ -605,10 +608,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementTime: 0
-  decelerationTime: 1
-  decelerationTimer: 0
-  isDecelerating: 0
-  lastMovementVelocity: {x: 0, y: 0, z: 0}
+  decelerationTime: 0.25
   jumpForceOverTime:
     serializedVersion: 2
     m_Curve:
@@ -634,16 +634,22 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   minJumpTime: 0.25
-  jumpTime: 0
-  maxJumpTime: 0
   canReleaseJump: 0
   isJumping: 0
+  jumpTime: 0
+  maxJumpTime: 0
+  fallTime: 0
+  isGrounded: 0
   lookSensitivity: 1
   lookVerticalLimit: 80
   cameraSpeed: 15
-  isGrounded: 0
-  fallTime: 0
-  velocity: {x: 0, y: 0, z: 0}
+  enableHeadbob: 1
+  headbobFrequency: 2
+  headbobHorizontalAmplitude: 0.05
+  headbobVerticalAmplitude: 0.08
+  headbobSmoothness: 10
+  isInCar: 0
+  currentCar: {fileID: 0}
 --- !u!136 &203090791
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -741,6 +747,38 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &203090795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203090788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c60dec95e4e81478d061fb1e6ece96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GadgetSystem.GadgetPickup
+  playerController: {fileID: 203090796}
+  gadgetTransform: {fileID: 443902918}
+  interactableLayerMask:
+    serializedVersion: 2
+    m_Bits: 192
+  pickupRange: 3
+--- !u!114 &203090796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203090788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64f81b3129387d342befb7f62d85dcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GadgetController
+  player: {fileID: 203090790}
+  gadgetObject: {fileID: 0}
 --- !u!1 &284164494
 GameObject:
   m_ObjectHideFlags: 0
@@ -3241,71 +3279,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1636041282
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.06
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -11.19
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2879783144811796167, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3720520647000269177, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: currentStateTxt
-      value: 
-      objectReference: {fileID: 1897580047}
-    - target: {fileID: 7129435150401850108, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_Name
-      value: PlayerPrefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129435150401850108, guid: 92529e894e09842429fc94a026337ee0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 92529e894e09842429fc94a026337ee0, type: 3}
 --- !u!1001 &1688714571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3725,6 +3698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9971a0fb4f1e427438b70d21c062ef65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  pInput: {fileID: 0}
   currentStateTxt: {fileID: 1897580047}
   rb: {fileID: 2082189381}
   playerCamera: {fileID: 813662668}
@@ -3733,13 +3707,10 @@ MonoBehaviour:
   groundRayPosition: {fileID: 888008578}
   footRayPosition: {fileID: 508232817}
   groundLayerMask:
-    serializedVersion: 2
     m_Bits: 55
   movementSpeedCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 1
       inSlope: 22.37745
       outSlope: 22.37745
@@ -3747,8 +3718,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0.08192771
-    - serializedVersion: 3
-      time: 1
+    - time: 1
       value: 7.5
       inSlope: 0.26155594
       outSlope: 0.26155594
@@ -3760,10 +3730,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   airMovementSpeedCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 1
       inSlope: 24.793175
       outSlope: 24.793175
@@ -3771,8 +3739,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0.27916667
-    - serializedVersion: 3
-      time: 1
+    - time: 1
       value: 10
       inSlope: 0.26155594
       outSlope: 0.26155594
@@ -3784,10 +3751,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   decelerationSpeedCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 5
       inSlope: -82.34125
       outSlope: -82.34125
@@ -3795,8 +3760,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0.08192773
-    - serializedVersion: 3
-      time: 0.15
+    - time: 0.15
       value: 0
       inSlope: -5.5749125
       outSlope: -5.5749125
@@ -3808,10 +3772,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   fallSpeedCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 0
       inSlope: 125.71428
       outSlope: 125.71428
@@ -3819,8 +3781,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0.05
-    - serializedVersion: 3
-      time: 0.5
+    - time: 0.5
       value: 20
       inSlope: -0.020910414
       outSlope: -0.020910414
@@ -3832,10 +3793,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   jumpSpeedCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 15
       inSlope: 0.24117012
       outSlope: 0.24117012
@@ -3843,8 +3802,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0.86901736
       outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.19858052
+    - time: 0.19858052
       value: 14.130338
       inSlope: -13.345349
       outSlope: -13.345349
@@ -3852,8 +3810,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5
+    - time: 0.5
       value: 1
       inSlope: -83.78945
       outSlope: -83.78945
@@ -3874,10 +3831,8 @@ MonoBehaviour:
   verticalLimit: 80
   headBobSmoothSpeed: 15
   headBobFrequencyCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: -10
+    - time: -10
       value: 20
       inSlope: -4.290011
       outSlope: -4.290011
@@ -3885,8 +3840,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0.34375006
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 0
       inSlope: -0.010551919
       outSlope: -0.010551919
@@ -3894,8 +3848,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.73611104
-    - serializedVersion: 3
-      time: 10
+    - time: 10
       value: 20
       inSlope: 5.5559196
       outSlope: 5.5559196
@@ -3907,10 +3860,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   headBobAmplitudeCurve:
-    serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
-      time: -10
+    - time: -10
       value: 0.005
       inSlope: -0.0019438292
       outSlope: -0.0019438292
@@ -3918,8 +3869,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0.42891565
-    - serializedVersion: 3
-      time: 0
+    - time: 0
       value: 0
       inSlope: -0.00009770731
       outSlope: -0.00009770731
@@ -3927,8 +3877,7 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0.59166664
       outWeight: 0.5833334
-    - serializedVersion: 3
-      time: 10
+    - time: 10
       value: 0.005
       inSlope: 0.0013124899
       outSlope: 0.0013124899
@@ -3939,10 +3888,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  currentCar: {fileID: 0}
   headBobAmmount: 0
   headBobFrequency: 0
   isGrounded: 0
   velocityDebug: 0
+  cameraTransform: {fileID: 0}
+  movementTimer: 0
+  stopTimer: 0
   horizontalInput: 0
   verticalInput: 0
   isMovementActive: 0
@@ -3951,6 +3904,10 @@ MonoBehaviour:
   isOnJump: 0
   canStopJump: 0
   fallTimer: 0
+  cameraHorizontalInput: 0
+  cameraVerticalInput: 0
+  yaw: 0
+  pitch: 0
 --- !u!4 &2082189380
 Transform:
   m_ObjectHideFlags: 0
@@ -4379,7 +4336,6 @@ SceneRoots:
   - {fileID: 55377427}
   - {fileID: 813662669}
   - {fileID: 2082189380}
-  - {fileID: 1636041282}
   - {fileID: 525823766}
   - {fileID: 913425019}
   - {fileID: 1111606949}
