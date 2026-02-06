@@ -107,7 +107,8 @@ namespace Player {
             Falling,
             Jumping,
             Driving,
-            Seated
+            Seated,
+            InCar
         }
 
         private void Awake() {
@@ -198,8 +199,17 @@ namespace Player {
                 _onExit: ExitDriving
                 ));
             
+            PlayerStateMachine.Add(new State<ControlerState>(
+                ControlerState.InCar,
+                //_onEnter: MoveEnter,
+                _onUpdate: MoveUpdate,
+                _onFixedUpdate: MoveInCar,
+                _onLateUpdate: MoveLateUpdate
+            ));
+            
             PlayerStateMachine.ChangeState(ControlerState.Idle);
         }
+
         #endregion
 
         #region STATE-MACHINE
@@ -207,6 +217,9 @@ namespace Player {
         #region FUNCTION CALL
 
         void Update() {
+            if(carPhys.tracker)
+                PlayerStateMachine.ChangeState(ControlerState.InCar);
+            
             PlayerStateMachine?.Update();
             DebugStateMachine();
         }
@@ -423,7 +436,7 @@ namespace Player {
             //rb.linearVelocity = currentCar.GetRB().linearVelocity;
             CameraMovement();
             if(GetInputs().LeaveCar.WasPressedThisFrame())
-                PlayerStateMachine.ChangeState(ControlerState.Idle);
+                PlayerStateMachine.ChangeState(ControlerState.InCar);
         }
         
         private void ExitDriving() {
@@ -438,6 +451,24 @@ namespace Player {
             
             GetInputs().DisableCarInput();
             GetInputs().EnablePlayerInput();
+        }
+        
+        private void MoveInCar() {
+            if(carPhys.tracker == null)
+                PlayerStateMachine.ChangeState(ControlerState.Idle);
+            
+            movementTimer += Time.fixedDeltaTime;
+            
+            var targetRotation = Quaternion.Euler(0, yaw, 0);
+            var forward = targetRotation * Vector3.forward;
+            var right = targetRotation * Vector3.right;
+            
+            var move = (forward * verticalInput + right * horizontalInput).normalized;
+            var velocity = move * movementSpeedCurve.Evaluate(movementTimer);
+            velocity.y = rb.linearVelocity.y;
+            
+            playerTransform.forward = forward;
+            rb.linearVelocity = velocity - (carPhys.CalculateVel() + carPhys.CalculateAngular());
         }
 
         #endregion
