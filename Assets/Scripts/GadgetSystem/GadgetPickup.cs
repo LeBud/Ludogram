@@ -38,12 +38,10 @@ namespace GadgetSystem {
             
             if(!hit.collider) return;
             
-            // if (hit.collider.TryGetComponent(out CarSeat car))
-            // {
-            //     player.SetCarController(car);
-            //     player.isInCar = true;
-            //     return;
-            // }
+            if (hit.collider.TryGetComponent(out CarSeat seat) && !seat.playerAlreadySeated) {
+                seat.SetDriver(player);
+                return;
+            }
             
             var hitted = hit.collider.transform;
             if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
