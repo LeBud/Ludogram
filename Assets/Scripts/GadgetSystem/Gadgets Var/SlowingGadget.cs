@@ -5,18 +5,33 @@ namespace GadgetSystem.Gadgets_Var
     public class SlowingGadget : Gadget
     {
         [SerializeField] private Rigidbody rb;
+        
+        [SerializeField] private LayerMask surfaceLayer;
         [SerializeField] private float     slowFactor;
+        [SerializeField] private GameObject slowZone;
+        [SerializeField] private float     launchSpeed;
+        private                  bool      isUsed;
         
         protected override void OnUse()
         {
-            
+            isUsed = true;
+            transform.SetParent(null);
+            rb.isKinematic                  = false;
+            GadgetController.selectedGadget = null;
+            rb.AddForce((Vector3.up + transform.forward) * launchSpeed, ForceMode.Impulse);
         }
-    
-    
-        public override void Release()
+
+        public void OnCollisionEnter(Collision collision)
         {
-            
+            if (!isUsed) return;
+            Debug.Log("Collision");
+            if (collision.gameObject.layer == surfaceLayer)
+            {
+                Debug.Log("Create SlowZone");
+            }
+            Destroy(gameObject);
         }
+        
     
         public override void OnPickup()
         {
