@@ -336,10 +336,11 @@ namespace Player
 			}
 		}
 		
-		void HandleCamera()
-		{
-			// if (isSeated || isDriving) 
-			// 	yaw = yaw + transform.parent.rotation.y;
+		void HandleCamera() {
+			var orientation = 0f;
+			if (isSeated || isDriving) {
+				orientation = transform.parent.eulerAngles.y;
+			}
 			
 			yaw   += lookInput.x * lookSensitivity;
 		    pitch -= lookInput.y * lookSensitivity;
@@ -348,7 +349,7 @@ namespace Player
 		    playerCameraTransform.position = cameraPosition.position;
 		    playerCameraTransform.rotation = Quaternion.Lerp(
 		        playerCameraTransform.rotation, 
-		        Quaternion.Euler(pitch, yaw, 0), 
+		        Quaternion.Euler(pitch, orientation + yaw, 0), 
 		        Time.deltaTime * cameraSpeed
 		    );
 		}
