@@ -1,12 +1,11 @@
 using CarScripts;
 using Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
         private                  Controller       player;
-        [SerializeField] private GadgetController playerController;
+        [SerializeField] private GadgetController gadgetController;
         [SerializeField] private Transform        gadgetTransform;
         [SerializeField] private LayerMask        interactableLayerMask;
         [SerializeField] private float            pickupRange = 2f;
@@ -58,7 +57,8 @@ namespace GadgetSystem {
             Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);
             
             //Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
-            //Debug.Log(hit.collider.gameObject.name);
+
+            if(!hit.collider) return;
             
             if (hit.collider.TryGetComponent(out CarController car))
             {
@@ -68,18 +68,15 @@ namespace GadgetSystem {
             }
             
             Transform hitted = hit.collider.transform;
-            if (playerController.AddGadget(hit.collider.GetComponent<IGadget>()) 
-                && hit.collider.gameObject != playerController.gadgetObject) 
-            {
+            if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
                 hitted.position = gadgetTransform.position;
                 hitted.forward = gadgetTransform.forward;
-                playerController.gadgetObject = hitted.gameObject;
                 hitted.SetParent(gadgetTransform);
                 hitted.GetComponent<Gadget>().OnPickup();
                 //Debug.Log("Ramassé:" + gadget.Name);
             }
             else {
-                Debug.Log("vous possedez dez déjà cet objet !");
+                Debug.Log("Inventaire plein !");
             }
         }
 
@@ -89,8 +86,6 @@ namespace GadgetSystem {
             Gizmos.color = Color.red;
             //Gizmos.DrawWireSphere(gadgetTransform.position, 0.5f);
             Gizmos.DrawWireCube(gadgetTransform.position, Vector3.one);
-            Gizmos.color = Color.green;
-            if(player != null )Gizmos.DrawRay(player.playerCamera.transform.position, player.playerCamera.transform.forward * pickupRange);
         }
     }
 }

@@ -26,7 +26,6 @@ namespace Player
 
 		[Header("Move Settings")]
 		[SerializeField]  private float          groundCheckDistance    = 0.2f;
-		[SerializeField]  private float          groundSphereCastRadius = 0.5f;
 		[SerializeField]  public  AnimationCurve gravityForceOverTime;
 		[SerializeField]  private AnimationCurve movementSpeedOverTime;
 		[HideInInspector] public  float          movementTime;
@@ -44,12 +43,12 @@ namespace Player
 		[Header("Jump Settings")]
 		public AnimationCurve jumpForceOverTime;
 		[SerializeField]  private float minJumpTime;
-		[HideInInspector] public  bool  canReleaseJump;
-		[HideInInspector] public  bool  isJumping;
-		[HideInInspector] public  float jumpTime;
-		[HideInInspector] public  float maxJumpTime;
-		[HideInInspector] public  float fallTime;
-		[HideInInspector] public  bool  isGrounded;
+		public  bool  canReleaseJump;
+		public  bool  isJumping;
+		public  float jumpTime;
+		public  float maxJumpTime;
+		public  float fallTime;
+		public  bool  isGrounded;
 		
 		[Header("Camera Settings")]
 		[SerializeField] private float lookSensitivity;
@@ -72,8 +71,10 @@ namespace Player
 		private Vector2 lookInput;
 		
 		
-		private bool isknockedOut;
-		public  bool isInCar = false;
+		private bool          isknockedOut;
+
+		[HideInInspector] public bool          isInCar = false;
+		[HideInInspector] public CarController currentCar;
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
@@ -81,7 +82,9 @@ namespace Player
 		private Action        onJump;
 		private Action        stopJump;
 		private Action        stopMove;
-		public CarController currentCar;
+
+		public float debugFall;
+		
 		
 		void Awake()
 		{
@@ -260,6 +263,7 @@ namespace Player
 			{
 				fallTime        += Time.fixedDeltaTime;
 				finalVelocity.y =  -gravityForceOverTime.Evaluate(fallTime);
+				debugFall       =  -gravityForceOverTime.Evaluate(fallTime);
 			}
 			else
 			{
@@ -273,7 +277,7 @@ namespace Player
 
 		public void HandleJump()
 		{
-			Debug.Log(maxJumpTime);
+			Debug.Log("JUMP");
 			if (jumpTime >= minJumpTime)
 			{
 				canReleaseJump = true;
@@ -294,6 +298,10 @@ namespace Player
 			if (isGrounded)
 			{
 				fallTime = 0;
+				Keyframe[] keyframes = gravityForceOverTime.keys;
+				keyframes[0].value               = 0;
+				gravityForceOverTime.keys = keyframes;
+				jumpTime                  = 0f;
 			}
 		}
 		
@@ -379,7 +387,6 @@ namespace Player
 		void LateUpdate()
 		{
 			HandleCamera();
-			
 			stateMachine.LateUpdate();
 		}
 		
@@ -407,7 +414,11 @@ namespace Player
 		}
 
 		#endregion
-		
-		
+
+		private void OnDrawGizmos()
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
+		}
 	}
 }

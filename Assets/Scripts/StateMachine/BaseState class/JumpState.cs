@@ -35,6 +35,7 @@ namespace StateMachine.BaseState_class
 			player.canReleaseJump = false;
 			player.fallTime       = 0;
 			player.isJumping = false;
+			
 		}
 	}
 }

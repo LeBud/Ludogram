@@ -13,7 +13,6 @@ namespace StateMachine.BaseState_class
 			player.GetInputs().DisablePlayerInput();
 			player.GetInputs().EnableCarInput();
 		}
-		
 		public override void OnExit()
 		{
 			player.GetInputs().DisableCarInput();
