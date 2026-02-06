@@ -78,9 +78,16 @@ MonoBehaviour:
   icon: {fileID: 0}
   maxUses: -1
   rb: {fileID: 64572172139850108}
+  hitLayerMask:
+    serializedVersion: 2
+    m_Bits: 247
   setback: 10
   range: 3
   movementTime: 1
+  cooldown: 0
+  heavyStick: 0
+  maxLoadTime: 0
+  maxLoadForce: 0
 --- !u!136 &7012630038945383938
 CapsuleCollider:
   m_ObjectHideFlags: 0
