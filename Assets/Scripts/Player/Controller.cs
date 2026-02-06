@@ -30,6 +30,7 @@ namespace Player
 		[SerializeField]  private AnimationCurve movementSpeedOverTime;
 		[HideInInspector] public  float          movementTime;
 		private                   Vector2        movementInput;
+		private Vector3 groundNormal;
 		
 		[Header("Deceleration Settings")]
 		[SerializeField] private float decelerationTime = 0.3f;
@@ -291,14 +292,15 @@ namespace Player
 			var    forward        = targetRotation * Vector3.forward;
 			var    right          = targetRotation * Vector3.right;
 
-			var move = (forward * movementInput.y + right * movementInput.x).normalized;
+			Vector3 move         = (forward * movementInput.y + right * movementInput.x).normalized;
+			Vector3 orientedMove = Vector3.ProjectOnPlane(move, groundNormal);
 			Vector3 horizontalVelocity;
 			modelTransform.forward =  forward;
 			
 			if (movementInput.magnitude > 0.01f)
 			{
-				movementTime           += Time.fixedDeltaTime;
-				horizontalVelocity     =  move * movementSpeedOverTime.Evaluate(movementTime);
+				movementTime       += Time.fixedDeltaTime;
+				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime);
 			}
 			else if (isDecelerating && decelerationTimer < decelerationTime)
 			{
@@ -355,9 +357,11 @@ namespace Player
 
 		public void CheckGround()
 		{
-			isGrounded = Physics.Raycast(groundRayPosition.position, Vector3.down, groundCheckDistance, groundLayerMask);
+			isGrounded = Physics.Raycast(groundRayPosition.position, Vector3.down, out var hit, groundCheckDistance, groundLayerMask);
+			
 			if (isGrounded)
 			{
+				groundNormal =  hit.normal;
 				if(bufferTimer > bufferTime) havePressedJump = false;
 				bufferTimer   = 0;
 				canCoyoteJump = true;
@@ -366,6 +370,10 @@ namespace Player
 				keyframes[0].value               = 0;
 				gravityForceOverTime.keys = keyframes;
 				jumpTime                  = 0f;
+			}
+			else
+			{
+				groundNormal = Vector3.up;
 			}
 		}
 		
