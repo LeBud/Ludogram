@@ -209,7 +209,7 @@ namespace CarScripts {
             brake = inputs.Brake.ReadValue<float>();
 
             if (inputs.LeaveCar.WasPressedThisFrame()) {
-                player.PlayerStateMachine.ChangeState(Controller.ControlerState.Idle);
+                player.isDriving = false;
                 BindInput(null);
             }
         }
@@ -281,7 +281,6 @@ namespace CarScripts {
             var springDir = Vector3.up;
             if(wheelsContact[suspension].hit.normal != Vector3.up)
                 springDir = wheelsContact[suspension].hit.normal.normalized;
-            //Prohect on plane pour les pentes
             
             if (transform.eulerAngles.z > 45 && transform.eulerAngles.z < 315) {
                 if (transform.eulerAngles.z < 60) { //Pousser a droite
