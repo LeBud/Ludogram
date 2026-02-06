@@ -280,6 +280,7 @@ GameObject:
   - component: {fileID: 1432589740226359693}
   - component: {fileID: 424766025125358269}
   - component: {fileID: 1664221753916381289}
+  - component: {fileID: 7708984246566989306}
   m_Layer: 3
   m_Name: PlayerV2
   m_TagString: Untagged
@@ -406,7 +407,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 247
   groundCheckDistance: 0.2
-  groundSphereCastRadius: 0.25
   gravityForceOverTime:
     serializedVersion: 2
     m_Curve:
@@ -496,8 +496,10 @@ MonoBehaviour:
   headbobHorizontalAmplitude: 0.05
   headbobVerticalAmplitude: 0.08
   headbobSmoothness: 10
-  isInCar: 0
+  isDriving: 0
+  isSeated: 0
   currentCar: {fileID: 0}
+  debugFall: 0
 --- !u!114 &1432589740226359693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,12 +628,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c60dec95e4e81478d061fb1e6ece96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GadgetSystem.GadgetPickup
-  playerController: {fileID: 424766025125358269}
+  gadgetController: {fileID: 0}
   gadgetTransform: {fileID: 916862714566091920}
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 192
   pickupRange: 3
+--- !u!114 &7708984246566989306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4528880029191460453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f9c6a87fd104190b7468caabfb1bf13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.ApplyVehiculePhysics
 --- !u!1 &7523587435861852068
 GameObject:
   m_ObjectHideFlags: 0
