@@ -342,6 +342,8 @@ namespace Player
 				orientation = transform.parent.eulerAngles.y;
 			}
 			
+			//Test
+			
 			yaw   += lookInput.x * lookSensitivity;
 		    pitch -= lookInput.y * lookSensitivity;
 		    pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
