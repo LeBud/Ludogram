@@ -5,6 +5,7 @@ namespace CarScripts {
     public class CarSeat : MonoBehaviour {
         [SerializeField] private CarController carController;
         [SerializeField] private bool driverSeat = false;
+        [SerializeField] private Transform playerPos;
         
         public bool playerAlreadySeated { get; private set; }
         
@@ -16,14 +17,18 @@ namespace CarScripts {
             if (driverSeat) {
                 player.SetCarController(carController, this);
                 playerAlreadySeated = true;
-                player.isInCar      = true;
+                player.isDriving      = true;
             }
             else {
                 player.SetCarController(carController, this);
                 playerAlreadySeated = true;
-                player.isInCar      = true;
+                player.isSeated      = true;
             }
             
+        }
+
+        public Transform GetPlayerPos() {
+            return playerPos;
         }
 
         public void UnSeatDriver() {

@@ -209,7 +209,7 @@ namespace CarScripts {
             brake = inputs.Brake.ReadValue<float>();
 
             if (inputs.LeaveCar.WasPressedThisFrame()) {
-                player.isInCar = false;
+                player.isDriving = false;
                 BindInput(null);
             }
         }
@@ -376,7 +376,7 @@ namespace CarScripts {
             return true;
         }
 
-        public Rigidbody GetRB() {
+        public Rigidbody GetRb() {
             return carRb;
         }
     }

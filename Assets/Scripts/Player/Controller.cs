@@ -15,7 +15,7 @@ namespace Player
 	public class Controller : MonoBehaviour
 	{
 		private FiniteStateMachine stateMachine;
-		public InputsBrain        pInput;
+		private InputsBrain        pInput;
 
 		public Camera playerCamera;
 		[SerializeField] private Rigidbody rb;
@@ -63,20 +63,23 @@ namespace Player
 		[SerializeField] private float headbobSmoothness          = 10f;   
 
 		
-		Transform       playerCameraTransform;
+		public Transform       playerCameraTransform { get; private set; }
 		private float   yaw;
 		private float   pitch;
 		private float   headbobTimer;
 		private Vector3 headbobOffset;
 		private Vector2 lookInput;
-		
+
+		public Transform originalParent { get; private set; }
 		
 		private bool          isknockedOut;
 
-		[HideInInspector] public bool          isInCar = false;
+		[HideInInspector] public bool          isDriving = false;
+		[HideInInspector] public bool          isSeated = false;
 		[HideInInspector] public CarController currentCar;
-		private CarSeat seat;
+		public CarSeat seat { get; private set; }
 		private ApplyVehiculePhysics vehiclePhysics;
+		private Collider collider;
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
@@ -84,6 +87,7 @@ namespace Player
 		private Action        onJump;
 		private Action        stopJump;
 		private Action        stopMove;
+		private Action        leaveCar;
 
 		public float debugFall;
 		
@@ -118,23 +122,33 @@ namespace Player
 				Debug.Log("Found GADGET INPUT and reference this as Controller");
 				g.Initialize(this);
 			}
+			
+			originalParent = transform.parent;
+			
+			if(TryGetComponent(out collider)) Debug.Log("Found collider");
+			else Debug.LogError("Collider not found");
 		}
 
 		void SetupStateMachine()
 		{
 			stateMachine = new FiniteStateMachine();
 
-			MovementState movementState = new MovementState(this);
-			JumpState     jumpState     = new JumpState(this);
-			StunState     stunState     = new StunState(this);
-			CarState      carState      = new CarState(this);
+			var movementState = new MovementState(this);
+			var     jumpState     = new JumpState(this);
+			var     stunState     = new StunState(this);
+			var      carState      = new CarState(this);
+			var seatedState = new SeatedState(this);
 			
 			At(movementState, jumpState, new FuncPredicate(() => isJumping && isGrounded));
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
 			//Any(movementState, new FuncPredicate(GoToMovementState));
 			Any(stunState, new FuncPredicate(()=> isknockedOut));
-			Any(carState, new FuncPredicate(()=> isInCar));
-			At(carState, movementState, new FuncPredicate(()=> !isInCar));
+			
+			Any(carState, new FuncPredicate(()=> isDriving));
+			Any(seatedState, new FuncPredicate(()=> isSeated));
+			
+			At(carState, movementState, new FuncPredicate(()=> !isDriving));
+			At(seatedState, movementState, new FuncPredicate(()=> !isSeated));
 			
 			stateMachine.SetState(movementState);
 		}
@@ -157,6 +171,7 @@ namespace Player
 
 			pInput.move.canceled += _ => stopMove?.Invoke();
 			pInput.jump.canceled += _ => stopJump?.Invoke();
+			pInput.LeaveCar.started += _ => leaveCar?.Invoke();
 		}
 
 		void AssignActions()
@@ -166,6 +181,7 @@ namespace Player
 			stopMove += ResetPlayerMovementInputs;
 			onJump   += JumpInput;
 			stopJump += StopJumpInput;
+			leaveCar += LeaveCar;
 		}
 
 		void UnsubscribeInputSystemActions()
@@ -177,13 +193,14 @@ namespace Player
 
 			pInput.move.canceled -= _ => stopMove?.Invoke();
 			pInput.jump.canceled -= _ => onJump?.Invoke();
+			pInput.LeaveCar.started -= _ => leaveCar?.Invoke();
 		}
 
-		private void UnbindLook() {
+		public void UnbindLook() {
 			pInput.look.performed -= onLook;
 		}
 
-		private void RebindLook() {
+		public void RebindLook() {
 			pInput.look.performed += onLook;
 		}
 		
@@ -229,6 +246,10 @@ namespace Player
 		private void JumpInput()
 		{
 			if(isGrounded)isJumping = true;
+		}
+
+		private void LeaveCar() {
+			if (isSeated) isSeated = false;
 		}
 		
 		#endregion
@@ -317,7 +338,10 @@ namespace Player
 		
 		void HandleCamera()
 		{
-		    yaw   += lookInput.x * lookSensitivity;
+			// if (isSeated || isDriving) 
+			// 	yaw = yaw + transform.parent.rotation.y;
+			
+			yaw   += lookInput.x * lookSensitivity;
 		    pitch -= lookInput.y * lookSensitivity;
 		    pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
 		    
@@ -417,6 +441,14 @@ namespace Player
 		{
 			currentCar = car;
 			seat = carSeat;
+		}
+
+		public void EnableCollider() {
+			collider.enabled = true;
+		}
+		
+		public void DisableCollider() {
+			collider.enabled = false;
 		}
 		
 		public InputsBrain GetInputs()
