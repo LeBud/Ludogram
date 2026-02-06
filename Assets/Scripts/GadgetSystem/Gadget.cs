@@ -6,35 +6,26 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[SerializeField] protected string gadgetName;
 	[SerializeField] protected Sprite icon;
 	[SerializeField] protected int    maxUses = 1;
-	[SerializeField] protected bool   isLaunchable;
-    
 	protected int currentUses;
-    
-	// Events pour notifier l'extérieur
-	public event Action<Gadget> OnGadgetDepleted;
-	public event Action<Gadget> OnUsesChanged;
     
 	public string Name         => gadgetName;
 	public Sprite Icon         => icon;
 	public int    CurrentUses  => currentUses;
 	public int    MaxUses      => maxUses;
+	public bool   IsHandled    { get; }
 	public bool   IsInfinite   => maxUses == -1;
 	public bool   IsDepleted   => !IsInfinite && currentUses <= 0;
-	public bool   IsLaunchable =>  isLaunchable;
 
 	protected virtual void Awake() => currentUses = maxUses;
 
 	public void Use()
 	{
 		if (!CanUse()) return;
-        
 		OnUse();
-        
 		ConsumeUse();
 	}
 
 	
-
 	protected abstract void OnUse();
 	
 	private void ConsumeUse()
@@ -42,24 +33,20 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		if (IsInfinite) return;
         
 		currentUses--;
-		OnUsesChanged?.Invoke(this);
-        
+        Debug.Log(Name + " used " + currentUses);
 		if (currentUses <= 0) HandleDepletion();
 	}
 	
 	private void HandleDepletion()
 	{
 		OnDepleted();
-		OnGadgetDepleted?.Invoke(this);
 	}
-	
-	protected virtual void OnDepleted()
+
+	public virtual void Release()
 	{
-		//Destroy(gameObject);
-		Debug.Log("Depleted");
-	}
-	
-	
+		
+	}	
+
 	public virtual bool CanUse()
 	{
 		return IsInfinite || currentUses > 0;
@@ -70,23 +57,22 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		Debug.Log(this.name);
 	}
 	
-	public virtual void OnDrop()
+	public virtual void Drop() 
 	{
-		Debug.Log(this.name);
+		Debug.Log(name + " is dropped");
 	}
 	
-	public virtual void Select()
+	public virtual void OnDepleted()
 	{
-		gameObject.SetActive(true);
+		GadgetController.selectedGadget = null;
+		Debug.Log(name + " is depleted");
 	}
-	
-	public virtual void Unselect()
+
+	private void OnDestroy()
 	{
-		gameObject.SetActive(false);
-	}
-	
-	public void Drop()
-	{
-		
+		if(GadgetController.selectedGadget == GetComponent<IGadget>())
+		{
+			GadgetController.selectedGadget = null;
+		}
 	}
 }

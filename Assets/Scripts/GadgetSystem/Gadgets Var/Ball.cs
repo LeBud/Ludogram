@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Ball :  Gadget
 {
-    bool             isUsed = false;
+    //bool             isUsed = false;
     public float     speed;
     public Rigidbody rb;
 
@@ -11,21 +11,34 @@ public class Ball :  Gadget
     {
         transform.SetParent(null);
         rb.isKinematic = false;
-        isUsed = true;
-        Debug.Log($"{name} : {isUsed}");
+        //isUsed = true;
+        //Debug.Log($"{name} : {isUsed}");
         rb.AddForce(transform.forward * speed, ForceMode.Impulse);
     }
     
-    void OnCollisionEnter(Collision collision)
-    {
-        if (!isUsed)return;
-        
-        Debug.Log(collision.gameObject.name);
-        Destroy(gameObject);
-    }
+    // void OnCollisionEnter(Collision collision)
+    // {
+    //     if (!isUsed)return;
+    //     
+    //     Debug.Log(collision.gameObject.name);
+    //     Destroy(gameObject);
+    // }
 
     public override void OnPickup()
     {
         rb.isKinematic = true;
+    }
+
+    public override void Drop()
+    {
+        transform.SetParent(null);
+        rb.isKinematic = false;
+        rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
+    }
+
+
+    public override void OnDepleted()
+    {
+        base.OnDepleted();
     }
 }

@@ -60,6 +60,8 @@ namespace CarScripts {
         private float engineResponse = 5f;
         [SerializeField, Tooltip("This value is at which rate the engine will loose power once the throttle is release. So how mush the car will loose speed")] 
         private float engineBrakeTorque = 50f;
+        [SerializeField, Tooltip("This value is at which rate the engine will loose power once no one is driving")] 
+        private float brakeMultNoDriver = 6f;
         [SerializeField, Tooltip("Define the wheel radius wich participate in the speed calculation, low value mean less force and so less speed, higher value mean more force")] 
         private float wheelRadius = 0.3f;
         [SerializeField, Tooltip("Define the final drive ratio of the engine, lower value mean less force, higher value mean more force")] 
@@ -105,7 +107,6 @@ namespace CarScripts {
         //float wheelRPM => carRb.linearVelocity.magnitude / (2 * Mathf.PI * wheelRadius) * 60f;
         
         private Dictionary<Transform, WheelContact> wheelsContact = new();
-        [HideInInspector] public CarMotionTracker motionTracker;
         
         private float steering;
         private float currentSteering;
@@ -127,17 +128,9 @@ namespace CarScripts {
         private Vector3 dragForce => -airDrag * carRb.linearVelocity * carRb.linearVelocity.magnitude;
         private Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
         
-        //TODO Ajouter une condition pour dire si il freine en allant en avant ou en reculant pour le engineTorque qu'il s'incrémente que lorsque il va dans la bonne direction
-        
         void Start() {
-            // if (TryGetComponent(out _carInputs)) Debug.Log($"Inputs Assigned");
-            // else Debug.LogWarning($"Inputs Not Found");
-            
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
             else Debug.LogWarning($"RigidBody Not Found");
-            
-            if(TryGetComponent(out motionTracker)) Debug.Log($"Motion Tracker Assigned");
-            else Debug.LogWarning($"Motion Tracker Not Found");
             
             SetupCar();
         }
@@ -209,13 +202,13 @@ namespace CarScripts {
             brake = inputs.Brake.ReadValue<float>();
 
             if (inputs.LeaveCar.WasPressedThisFrame()) {
-                player.PlayerStateMachine.ChangeState(Controller.ControlerState.Idle);
+                player.isDriving = false;
                 BindInput(null);
             }
         }
         
         void LateUpdate() {
-            speedTxt.text = $"Car Speed: {carRb.linearVelocity.magnitude:F0}\nengineTorque: {currentEngineTorque:F0}";
+            speedTxt.text = $"{carRb.linearVelocity.magnitude:F0} KM/H\n{currentEngineTorque * 10:F0} RPM";
         }
         
         void FixedUpdate() {
@@ -281,7 +274,6 @@ namespace CarScripts {
             var springDir = Vector3.up;
             if(wheelsContact[suspension].hit.normal != Vector3.up)
                 springDir = wheelsContact[suspension].hit.normal.normalized;
-            //Prohect on plane pour les pentes
             
             if (transform.eulerAngles.z > 45 && transform.eulerAngles.z < 315) {
                 if (transform.eulerAngles.z < 60) { //Pousser a droite
@@ -338,17 +330,19 @@ namespace CarScripts {
                 wheelTorque = currentEngineTorque * (-gearRatio / 2) * finalDrive * transmissionEfficiency;
             }
             
-            
-            
             var driveForce = wheelTorque / wheelRadius;
             
             if (throttle < 0.01f && forwardSpeed > 0f) driveForce -= engineBrakeTorque * forwardSpeed;
+
+            if (inputs == null) {
+                if (forwardSpeed > 0) driveForce -= engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
+                else if (forwardSpeed < 0) driveForce += engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
+            }
             
             var driveWheelCount = wheelDriveMode == WheelDriveMode.AWD ? 4 : 2;
             driveForce /= driveWheelCount;
             
             carRb.AddForceAtPosition(accelDir * driveForce, suspension.position);
-            
             Debug.DrawRay(suspension.position, accelDir * driveForce, Color.blue);
         }
 
@@ -363,9 +357,9 @@ namespace CarScripts {
             
             if(forwardSpeed > 0f)
                 carRb.AddForceAtPosition(-suspension.forward * brakeForceAtWheel, suspension.position);
-            else if (throttle > 0.01f && forwardSpeed < 0f) {
+            else if (throttle > 0.01f && forwardSpeed < 0f)
                 carRb.AddForceAtPosition(suspension.forward * brakeForceAtWheel, suspension.position);
-            }
+            
         }
         
         bool AllTireToucheGround() {
@@ -377,7 +371,7 @@ namespace CarScripts {
             return true;
         }
 
-        public Rigidbody GetRB() {
+        public Rigidbody GetRb() {
             return carRb;
         }
     }

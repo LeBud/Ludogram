@@ -9,17 +9,11 @@ public interface IGadget
 	int    MaxUses     { get; }
 	bool   IsInfinite  { get; }
 	bool   IsDepleted  { get; }
-	bool   IsLaunchable { get; }
     
-	//effect when use
+	
 	void Use();
-	//
 	void Drop();
-	void Select();
-	void Unselect();
+	void OnDepleted();
 	bool CanUse();
-    
-	event Action<Gadget> OnGadgetDepleted;
-	event Action<Gadget> OnUsesChanged;
 
 }
