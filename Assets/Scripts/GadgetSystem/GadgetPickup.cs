@@ -14,7 +14,7 @@ namespace GadgetSystem {
         
         public void Initialize(Controller p) {
             player = p;
-            player.GetInputs().pickUp.started += _ => TryPickupNearbyGadget();
+            player.GetInputs().pickUp.performed += _ => TryPickupNearbyGadget();
         }
 
 
@@ -25,14 +25,14 @@ namespace GadgetSystem {
         }
 
         void OnDisable() {
-            player.GetInputs().pickUp.started -= _ => TryPickupNearbyGadget();
+            player.GetInputs().pickUp.performed -= _ => TryPickupNearbyGadget();
         }
 
         #endregion
 
-
-        [ContextMenu("Pickup")]
+        
         private void TryPickupNearbyGadget() {
+            Debug.Log("Try picking up nearby gadget");
             var baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
             Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);
             

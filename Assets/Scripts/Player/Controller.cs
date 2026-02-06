@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 
 namespace Player
 {
-	public class Controller : MonoBehaviour
+	public class Controller : MonoBehaviour, IKnockable
 	{
 		private FiniteStateMachine stateMachine;
 		private InputsBrain        pInput;
@@ -79,7 +79,9 @@ namespace Player
 
 		public Transform originalParent { get; private set; }
 		
-		private bool          isknockedOut;
+		private bool  isknockedOut;
+		private float knockOutTime;
+		private float knockOutTimer;
 
 		[HideInInspector] public bool          isDriving = false;
 		[HideInInspector] public bool          isSeated = false;
@@ -150,8 +152,9 @@ namespace Player
 			
 			At(movementState, jumpState, new FuncPredicate(() => isJumping || (havePressedJump && isGrounded)));
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
-			//Any(movementState, new FuncPredicate(GoToMovementState));
+			
 			Any(stunState, new FuncPredicate(()=> isknockedOut));
+			At(stunState, movementState, new FuncPredicate(()=> !isknockedOut));
 			
 			Any(carState, new FuncPredicate(()=> isDriving));
 			Any(seatedState, new FuncPredicate(()=> isSeated));
@@ -488,6 +491,23 @@ namespace Player
 		{
 			Gizmos.color = Color.red;
 			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
+		}
+
+		public void KnockOut(float time)
+		{
+			if (isknockedOut) return;
+			isknockedOut  = true;
+			knockOutTime  = 0;
+			knockOutTimer = time;
+		}
+
+		public void HandleKnockTimer()
+		{
+			knockOutTime+= Time.deltaTime;
+			if (knockOutTime >= knockOutTimer)
+			{
+				isknockedOut =  false;
+			}
 		}
 	}
 }
