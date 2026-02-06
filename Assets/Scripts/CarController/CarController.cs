@@ -60,6 +60,8 @@ namespace CarScripts {
         private float engineResponse = 5f;
         [SerializeField, Tooltip("This value is at which rate the engine will loose power once the throttle is release. So how mush the car will loose speed")] 
         private float engineBrakeTorque = 50f;
+        [SerializeField, Tooltip("This value is at which rate the engine will loose power once no one is driving")] 
+        private float brakeMultNoDriver = 6f;
         [SerializeField, Tooltip("Define the wheel radius wich participate in the speed calculation, low value mean less force and so less speed, higher value mean more force")] 
         private float wheelRadius = 0.3f;
         [SerializeField, Tooltip("Define the final drive ratio of the engine, lower value mean less force, higher value mean more force")] 
@@ -328,17 +330,19 @@ namespace CarScripts {
                 wheelTorque = currentEngineTorque * (-gearRatio / 2) * finalDrive * transmissionEfficiency;
             }
             
-            
-            
             var driveForce = wheelTorque / wheelRadius;
             
             if (throttle < 0.01f && forwardSpeed > 0f) driveForce -= engineBrakeTorque * forwardSpeed;
+
+            if (inputs == null) {
+                if (forwardSpeed > 0) driveForce -= engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
+                else if (forwardSpeed < 0) driveForce += engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
+            }
             
             var driveWheelCount = wheelDriveMode == WheelDriveMode.AWD ? 4 : 2;
             driveForce /= driveWheelCount;
             
             carRb.AddForceAtPosition(accelDir * driveForce, suspension.position);
-            
             Debug.DrawRay(suspension.position, accelDir * driveForce, Color.blue);
         }
 
@@ -353,9 +357,9 @@ namespace CarScripts {
             
             if(forwardSpeed > 0f)
                 carRb.AddForceAtPosition(-suspension.forward * brakeForceAtWheel, suspension.position);
-            else if (throttle > 0.01f && forwardSpeed < 0f) {
+            else if (throttle > 0.01f && forwardSpeed < 0f)
                 carRb.AddForceAtPosition(suspension.forward * brakeForceAtWheel, suspension.position);
-            }
+            
         }
         
         bool AllTireToucheGround() {
