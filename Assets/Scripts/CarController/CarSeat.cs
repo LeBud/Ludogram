@@ -6,6 +6,7 @@ namespace CarScripts {
         [SerializeField] private CarController carController;
         [SerializeField] private bool driverSeat = false;
         [SerializeField] private Transform playerPos;
+        [SerializeField] private Transform exitPos;
         
         public bool playerAlreadySeated { get; private set; }
         
@@ -29,6 +30,10 @@ namespace CarScripts {
 
         public Transform GetPlayerPos() {
             return playerPos;
+        }
+
+        public Transform GetExitPos() {
+            return exitPos;
         }
 
         public void UnSeatDriver() {
