@@ -73,7 +73,7 @@ namespace Player
 		
 		
 		private bool isknockedOut;
-		
+		public  bool isInCar;
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
@@ -128,6 +128,8 @@ namespace Player
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
 			//Any(movementState, new FuncPredicate(GoToMovementState));
 			Any(stunState, new FuncPredicate(()=> isknockedOut));
+			Any(carState, new FuncPredicate(()=> isInCar));
+			At(carState, movementState, new FuncPredicate(()=> !isInCar));
 			
 			stateMachine.SetState(movementState);
 		}
@@ -397,6 +399,11 @@ namespace Player
 		void Any(IState to, IPredicate  condition)
 		{
 			stateMachine.AddAnyTransition(to, condition);
+		}
+		
+		public void SetCarController(CarController car)
+		{
+			currentCar = car;
 		}
 		
 		public InputsBrain GetInputs()
