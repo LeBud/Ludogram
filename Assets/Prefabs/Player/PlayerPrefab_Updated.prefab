@@ -397,7 +397,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45208c4aa18d43f1810a52fdb5257975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.ControllerV2
-  pInput: {fileID: 1432589740226359693}
   playerCamera: {fileID: 2963120311227464727}
   rb: {fileID: 7786145555891057595}
   modelTransform: {fileID: 1894068283738562458}
@@ -413,15 +412,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 25
-      outSlope: 25
+      inSlope: 60
+      outSlope: 60
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 25
+      value: 60
       inSlope: 0.5489397
       outSlope: 0.5489397
       tangentMode: 0
@@ -462,13 +461,22 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 10
+      value: 2
       inSlope: 0.01788829
       outSlope: 0.01788829
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0.31219956
+    - serializedVersion: 3
+      time: 0.9658896
+      value: 0.44000435
+      inSlope: -1.8154087
+      outSlope: -1.8154087
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 0
@@ -481,11 +489,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minJumpTime: 0.25
+  minJumpTime: 0.1
   canReleaseJump: 0
   isJumping: 0
-  jumpTime: 0
-  maxJumpTime: 0
+  jumpTime: 0.2
+  maxJumpTime: 0.2
   fallTime: 0
   isGrounded: 0
   lookSensitivity: 1
