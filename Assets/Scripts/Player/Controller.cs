@@ -15,7 +15,7 @@ namespace Player
 	public class Controller : MonoBehaviour
 	{
 		private FiniteStateMachine stateMachine;
-		public InputsBrain        pInput;
+		private InputsBrain        pInput;
 
 		public Camera playerCamera;
 		[SerializeField] private Rigidbody rb;
@@ -63,21 +63,23 @@ namespace Player
 		[SerializeField] private float headbobSmoothness          = 10f;   
 
 		
-		Transform       playerCameraTransform;
+		public Transform       playerCameraTransform { get; private set; }
 		private float   yaw;
 		private float   pitch;
 		private float   headbobTimer;
 		private Vector3 headbobOffset;
 		private Vector2 lookInput;
-		
+
+		public Transform originalParent { get; private set; }
 		
 		private bool          isknockedOut;
 
 		[HideInInspector] public bool          isDriving = false;
 		[HideInInspector] public bool          isSeated = false;
 		[HideInInspector] public CarController currentCar;
-		private CarSeat seat;
+		public CarSeat seat { get; private set; }
 		private ApplyVehiculePhysics vehiclePhysics;
+		private Collider collider;
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
@@ -85,6 +87,7 @@ namespace Player
 		private Action        onJump;
 		private Action        stopJump;
 		private Action        stopMove;
+		private Action        leaveCar;
 
 		public float debugFall;
 		
@@ -119,6 +122,11 @@ namespace Player
 				Debug.Log("Found GADGET INPUT and reference this as Controller");
 				g.Initialize(this);
 			}
+			
+			originalParent = transform.parent;
+			
+			if(TryGetComponent(out collider)) Debug.Log("Found collider");
+			else Debug.LogError("Collider not found");
 		}
 
 		void SetupStateMachine()
@@ -163,6 +171,7 @@ namespace Player
 
 			pInput.move.canceled += _ => stopMove?.Invoke();
 			pInput.jump.canceled += _ => stopJump?.Invoke();
+			pInput.LeaveCar.started += _ => leaveCar?.Invoke();
 		}
 
 		void AssignActions()
@@ -172,6 +181,7 @@ namespace Player
 			stopMove += ResetPlayerMovementInputs;
 			onJump   += JumpInput;
 			stopJump += StopJumpInput;
+			leaveCar += LeaveCar;
 		}
 
 		void UnsubscribeInputSystemActions()
@@ -183,6 +193,7 @@ namespace Player
 
 			pInput.move.canceled -= _ => stopMove?.Invoke();
 			pInput.jump.canceled -= _ => onJump?.Invoke();
+			pInput.LeaveCar.started -= _ => leaveCar?.Invoke();
 		}
 
 		public void UnbindLook() {
@@ -235,6 +246,10 @@ namespace Player
 		private void JumpInput()
 		{
 			if(isGrounded)isJumping = true;
+		}
+
+		private void LeaveCar() {
+			if (isSeated) isSeated = false;
 		}
 		
 		#endregion
@@ -321,16 +336,20 @@ namespace Player
 			}
 		}
 		
-		void HandleCamera()
-		{
-		    yaw   += lookInput.x * lookSensitivity;
+		void HandleCamera() {
+			var orientation = 0f;
+			if (isSeated || isDriving) {
+				orientation = transform.parent.eulerAngles.y;
+			}
+			
+			yaw   += lookInput.x * lookSensitivity;
 		    pitch -= lookInput.y * lookSensitivity;
 		    pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
 		    
 		    playerCameraTransform.position = cameraPosition.position;
 		    playerCameraTransform.rotation = Quaternion.Lerp(
 		        playerCameraTransform.rotation, 
-		        Quaternion.Euler(pitch, yaw, 0), 
+		        Quaternion.Euler(pitch, orientation + yaw, 0), 
 		        Time.deltaTime * cameraSpeed
 		    );
 		}
@@ -423,6 +442,14 @@ namespace Player
 		{
 			currentCar = car;
 			seat = carSeat;
+		}
+
+		public void EnableCollider() {
+			collider.enabled = true;
+		}
+		
+		public void DisableCollider() {
+			collider.enabled = false;
 		}
 		
 		public InputsBrain GetInputs()

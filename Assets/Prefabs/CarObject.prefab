@@ -123,6 +123,7 @@ Transform:
   m_Children:
   - {fileID: 575961581570113040}
   - {fileID: 2859968662696033973}
+  - {fileID: 1057988395608054874}
   m_Father: {fileID: 7775335749049617395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &8421606158680657625
@@ -160,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarScripts.CarSeat
   carController: {fileID: 6206072431550848154}
   driverSeat: 1
+  playerPos: {fileID: 1057988395608054874}
 --- !u!1 &273914571697159202
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,6 +274,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &437754671425194747
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1302223140885423576}
+  m_Layer: 7
+  m_Name: PlayerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1302223140885423576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437754671425194747}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6084817495039426899}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &693675982769328668
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,6 +490,37 @@ Transform:
   - {fileID: 9141358295302518841}
   - {fileID: 5736820938131137614}
   m_Father: {fileID: 7775335749049617395}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1492475911963599092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1057988395608054874}
+  m_Layer: 7
+  m_Name: PlayerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1057988395608054874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492475911963599092}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3332814433061119667}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1636310538152622012
 GameObject:
@@ -798,7 +862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5055544658984380417
 Transform:
   m_ObjectHideFlags: 0
@@ -2058,6 +2122,7 @@ Transform:
   m_Children:
   - {fileID: 635927337477998412}
   - {fileID: 2301427121922679752}
+  - {fileID: 1302223140885423576}
   m_Father: {fileID: 7775335749049617395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1833209935271519293
@@ -2095,6 +2160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarScripts.CarSeat
   carController: {fileID: 6206072431550848154}
   driverSeat: 0
+  playerPos: {fileID: 1302223140885423576}
 --- !u!1 &8284387209669753133
 GameObject:
   m_ObjectHideFlags: 0

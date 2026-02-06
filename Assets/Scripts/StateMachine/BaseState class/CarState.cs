@@ -1,5 +1,7 @@
+using CarScripts;
 using Player;
 using StateMachine.Finite_State_Machine_class;
+using UnityEngine;
 
 namespace StateMachine.BaseState_class
 {
@@ -9,7 +11,7 @@ namespace StateMachine.BaseState_class
 
 		public override void OnEnter()
 		{
-			player.currentCar.BindInput(player.pInput, player);
+			player.currentCar.BindInput(player.GetInputs(), player);
 			
 			player.UnbindLook();
 			player.GetInputs().SetLookCar(true);
@@ -17,6 +19,13 @@ namespace StateMachine.BaseState_class
 			
 			player.GetInputs().DisablePlayerInput();
 			player.GetInputs().EnableCarInput();
+			
+			player.transform.parent = player.currentCar.transform;
+			player.playerCameraTransform.parent = player.currentCar.transform;
+			player.DisableCollider();
+			player.GetRB().isKinematic = true;
+			player.GetRB().interpolation = RigidbodyInterpolation.None;
+			player.transform.position = player.seat.GetPlayerPos().position;
 		}
 		public override void OnExit()
 		{
@@ -26,6 +35,14 @@ namespace StateMachine.BaseState_class
 			
 			player.GetInputs().DisableCarInput();
 			player.GetInputs().EnablePlayerInput();
+			
+			player.transform.parent = player.originalParent;
+			player.playerCameraTransform.parent = player.originalParent;
+			player.GetRB().isKinematic = false;
+			player.GetRB().interpolation = RigidbodyInterpolation.Interpolate;
+			player.EnableCollider();
+			
+			player.seat.UnSeatDriver();
 		}
 	}
 }

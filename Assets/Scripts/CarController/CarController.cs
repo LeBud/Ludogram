@@ -376,7 +376,7 @@ namespace CarScripts {
             return true;
         }
 
-        public Rigidbody GetRB() {
+        public Rigidbody GetRb() {
             return carRb;
         }
     }
