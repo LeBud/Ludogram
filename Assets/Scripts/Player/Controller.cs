@@ -75,6 +75,8 @@ namespace Player
 
 		[HideInInspector] public bool          isInCar = false;
 		[HideInInspector] public CarController currentCar;
+		private CarSeat seat;
+		private ApplyVehiculePhysics vehiclePhysics;
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
@@ -403,9 +405,10 @@ namespace Player
 			stateMachine.AddAnyTransition(to, condition);
 		}
 		
-		public void SetCarController(CarController car)
+		public void SetCarController(CarController car, CarSeat carSeat)
 		{
 			currentCar = car;
+			seat = carSeat;
 		}
 		
 		public InputsBrain GetInputs()
