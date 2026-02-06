@@ -16,12 +16,12 @@ namespace CarScripts {
             if (driverSeat) {
                 player.SetCarController(carController, this);
                 playerAlreadySeated = true;
-                player.isInCar      = true;
+                player.isDriving      = true;
             }
             else {
                 player.SetCarController(carController, this);
                 playerAlreadySeated = true;
-                player.isInCar      = true;
+                player.isSeated      = true;
             }
             
         }

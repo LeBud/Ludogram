@@ -73,7 +73,8 @@ namespace Player
 		
 		private bool          isknockedOut;
 
-		[HideInInspector] public bool          isInCar = false;
+		[HideInInspector] public bool          isDriving = false;
+		[HideInInspector] public bool          isSeated = false;
 		[HideInInspector] public CarController currentCar;
 		private CarSeat seat;
 		private ApplyVehiculePhysics vehiclePhysics;
@@ -124,17 +125,22 @@ namespace Player
 		{
 			stateMachine = new FiniteStateMachine();
 
-			MovementState movementState = new MovementState(this);
-			JumpState     jumpState     = new JumpState(this);
-			StunState     stunState     = new StunState(this);
-			CarState      carState      = new CarState(this);
+			var movementState = new MovementState(this);
+			var     jumpState     = new JumpState(this);
+			var     stunState     = new StunState(this);
+			var      carState      = new CarState(this);
+			var seatedState = new SeatedState(this);
 			
 			At(movementState, jumpState, new FuncPredicate(() => isJumping && isGrounded));
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
 			//Any(movementState, new FuncPredicate(GoToMovementState));
 			Any(stunState, new FuncPredicate(()=> isknockedOut));
-			Any(carState, new FuncPredicate(()=> isInCar));
-			At(carState, movementState, new FuncPredicate(()=> !isInCar));
+			
+			Any(carState, new FuncPredicate(()=> isDriving));
+			Any(seatedState, new FuncPredicate(()=> isSeated));
+			
+			At(carState, movementState, new FuncPredicate(()=> !isDriving));
+			At(seatedState, movementState, new FuncPredicate(()=> !isSeated));
 			
 			stateMachine.SetState(movementState);
 		}

@@ -5,7 +5,7 @@ namespace StateMachine.BaseState_class
 {
     public class SeatedState : BaseState
     {
-        protected SeatedState(Controller player) : base(player)
+        public SeatedState(Controller player) : base(player)
         {
         }
 
