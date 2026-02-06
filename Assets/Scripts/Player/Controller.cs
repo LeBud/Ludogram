@@ -338,10 +338,10 @@ namespace Player
 		
 		void HandleCamera()
 		{
-			if (isSeated || isDriving) 
-				yaw += transform.parent.eulerAngles.y + lookInput.x * lookSensitivity;
-			else
-				yaw   += lookInput.x * lookSensitivity;
+			// if (isSeated || isDriving) 
+			// 	yaw = yaw + transform.parent.rotation.y;
+			
+			yaw   += lookInput.x * lookSensitivity;
 		    pitch -= lookInput.y * lookSensitivity;
 		    pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
 		    
