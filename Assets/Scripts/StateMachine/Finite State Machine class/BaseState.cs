@@ -12,29 +12,10 @@ namespace StateMachine.Finite_State_Machine_class
 			this.player = player;
 		}
 	
-		public void OnEnter()
-		{
-			//
-		}
-
-		public void Update()
-		{
-			//
-		}
-
-		public void FixedUpdate()
-		{
-			//
-		}
-
-		public void LateUpdate()
-		{
-			//
-		}
-
-		public void OnExit()
-		{
-			//
-		}
+		public virtual void OnEnter() { }
+		public virtual void Update() { }
+		public virtual void FixedUpdate() {}
+		public virtual void LateUpdate(){}
+		public virtual void OnExit(){}
 	}
 }

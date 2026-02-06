@@ -24,9 +24,8 @@ namespace Player
         [SerializeField]        Transform footRayPosition;
         [SerializeField]        LayerMask groundLayerMask;
 
-        [Header("Movement State Settings")] [SerializeField]
-        AnimationCurve movementSpeedCurve;
-
+        [Header("Movement State Settings")] 
+        [SerializeField] AnimationCurve movementSpeedCurve;
         [SerializeField] AnimationCurve airMovementSpeedCurve;
         [SerializeField] AnimationCurve decelerationSpeedCurve;
 
