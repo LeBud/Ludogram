@@ -24,6 +24,7 @@ namespace StateMachine.BaseState_class
             player.GetRB().interpolation = RigidbodyInterpolation.None;
             player.transform.position = player.seat.GetPlayerPos().position;
         }
+        
         public override void OnExit()
         {
             player.UnbindLook();
@@ -35,8 +36,9 @@ namespace StateMachine.BaseState_class
             
             player.transform.parent = player.originalParent;
             player.playerCameraTransform.parent = player.originalParent;
+            player.transform.position = player.seat.GetExitPos().position;
             player.GetRB().isKinematic = false;
-            player.GetRB().interpolation = RigidbodyInterpolation.Interpolate;
+            // player.GetRB().interpolation = RigidbodyInterpolation.Interpolate;
             player.EnableCollider();
 
             player.seat.UnSeatDriver();

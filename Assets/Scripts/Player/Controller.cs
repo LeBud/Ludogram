@@ -78,7 +78,6 @@ namespace Player
 		[HideInInspector] public bool          isSeated = false;
 		[HideInInspector] public CarController currentCar;
 		public CarSeat seat { get; private set; }
-		private ApplyVehiculePhysics vehiclePhysics;
 		private Collider collider;
 		
 		private Action<InputAction.CallbackContext> onMove;
@@ -91,6 +90,7 @@ namespace Player
 
 		public float debugFall;
 		
+		public bool inCar { get; private set; }
 		
 		void Awake()
 		{
@@ -256,13 +256,17 @@ namespace Player
 
 		#region METHODS
 		
-		public void HandleMovement()
-		{
-			Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-			Vector3    forward        = targetRotation * Vector3.forward;
-			Vector3    right          = targetRotation * Vector3.right;
+		public void HandleMovement() {
+			var orientation = 0f;
+			if (inCar) {
+				orientation = transform.parent.eulerAngles.y;
+			}
+			
+			var targetRotation = Quaternion.Euler(0,orientation + yaw, 0);
+			var    forward        = targetRotation * Vector3.forward;
+			var    right          = targetRotation * Vector3.right;
 
-			Vector3 move = (forward * movementInput.y + right * movementInput.x).normalized;
+			var move = (forward * movementInput.y + right * movementInput.x).normalized;
 			Vector3 horizontalVelocity;
 			modelTransform.forward =  forward;
 			
@@ -274,8 +278,8 @@ namespace Player
 			else if (isDecelerating && decelerationTimer < decelerationTime)
 			{
 				decelerationTimer += Time.fixedDeltaTime;
-				float normalizedTime = decelerationTimer / decelerationTime;
-				float curveValue     = decelerationCurve.Evaluate(normalizedTime);
+				var normalizedTime = decelerationTimer / decelerationTime;
+				var curveValue     = decelerationCurve.Evaluate(normalizedTime);
 				
 				horizontalVelocity = lastMovementDirection * (lastMovementSpeed * curveValue);
 				
@@ -288,7 +292,7 @@ namespace Player
 				isDecelerating     = false;
 			}
 			
-			Vector3 finalVelocity = horizontalVelocity;
+			var finalVelocity = horizontalVelocity;
     
 			if (!isGrounded && !isJumping)
 			{
@@ -338,7 +342,7 @@ namespace Player
 		
 		void HandleCamera() {
 			var orientation = 0f;
-			if (isSeated || isDriving) {
+			if (isSeated || isDriving || inCar) {
 				orientation = transform.parent.eulerAngles.y;
 			}
 			
@@ -419,10 +423,23 @@ namespace Player
 			stateMachine.FixedUpdate();
 		}
 		
-		void LateUpdate()
-		{
+		void LateUpdate() {
 			HandleCamera();
 			stateMachine.LateUpdate();
+		}
+
+		public void SetPlayerInCar(Transform newParent) {
+			transform.parent = newParent;
+			playerCameraTransform.parent = newParent;
+			inCar = true;
+			GetRB().interpolation = RigidbodyInterpolation.None;
+		}
+
+		public void RemovePlayerFromCar() {
+			transform.parent = originalParent;
+			playerCameraTransform.parent = originalParent;
+			inCar = false;
+			GetRB().interpolation = RigidbodyInterpolation.Interpolate;
 		}
 		
 		
