@@ -3111,80 +3111,52 @@ PrefabInstance:
       value: PlayerPrefab_Updated
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: jumpTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: isJumping
+      propertyPath: fallTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: maxJumpTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: minJumpTime
+      propertyPath: jumpTime
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: maxJumpTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: minJumpTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.size
-      value: 3
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: jumpForceOverTime.m_Curve.Array.data[0].time
+      value: 0.007160187
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[1].time
-      value: 0.5325705
+      value: 0.19954224
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[2].time
-      value: 1
+      value: 1.002381
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[0].value
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: jumpForceOverTime.m_Curve.Array.data[1].value
-      value: 4.576174
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[1].inSlope
-      value: -1.8154087
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: jumpForceOverTime.m_Curve.Array.data[2].inSlope
-      value: -24.891565
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: gravityForceOverTime.m_Curve.Array.data[1].value
-      value: 10
+      value: -111.32474
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[1].inWeight
-      value: 0.33333334
+      value: 0.112178415
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[1].outSlope
-      value: -1.8154087
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: jumpForceOverTime.m_Curve.Array.data[2].inWeight
-      value: 0.14308429
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: jumpForceOverTime.m_Curve.Array.data[2].outSlope
-      value: -24.891565
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: jumpForceOverTime.m_Curve.Array.data[1].outWeight
-      value: 0.33333334
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: gravityForceOverTime.m_Curve.Array.data[0].inSlope
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: gravityForceOverTime.m_Curve.Array.data[0].outSlope
-      value: 10
+      value: -111.32474
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
