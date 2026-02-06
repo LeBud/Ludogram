@@ -21,6 +21,7 @@ namespace StateMachine.BaseState_class
 			player.GetInputs().EnableCarInput();
 			
 			player.transform.parent = player.currentCar.transform;
+			player.playerCameraTransform.parent = player.currentCar.transform;
 			player.DisableCollider();
 			player.GetRB().isKinematic = true;
 			player.GetRB().interpolation = RigidbodyInterpolation.None;
@@ -35,7 +36,8 @@ namespace StateMachine.BaseState_class
 			player.GetInputs().DisableCarInput();
 			player.GetInputs().EnablePlayerInput();
 			
-			player.transform.parent = null;
+			player.transform.parent = player.originalParent;
+			player.playerCameraTransform.parent = player.originalParent;
 			player.GetRB().isKinematic = false;
 			player.GetRB().interpolation = RigidbodyInterpolation.Interpolate;
 			player.EnableCollider();
