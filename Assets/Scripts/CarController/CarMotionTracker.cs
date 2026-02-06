@@ -14,12 +14,12 @@ namespace CarScripts {
         }
 
         private void FixedUpdate() {
-            LinearVelocity = carController.GetRB().linearVelocity;
-            AngularVelocity = carController.GetRB().angularVelocity;
+            LinearVelocity = CarRb().linearVelocity;
+            AngularVelocity = CarRb().angularVelocity;
         }
 
-        public Rigidbody GetRB() {
-            return carController.GetRB();
+        public Rigidbody CarRb() {
+            return carController.GetRb();
         }
 
         private void OnTriggerEnter(Collider other) {

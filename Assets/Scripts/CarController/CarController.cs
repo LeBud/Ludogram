@@ -105,6 +105,7 @@ namespace CarScripts {
         //float wheelRPM => carRb.linearVelocity.magnitude / (2 * Mathf.PI * wheelRadius) * 60f;
         
         private Dictionary<Transform, WheelContact> wheelsContact = new();
+        [HideInInspector] public CarMotionTracker motionTracker;
         
         private float steering;
         private float currentSteering;
@@ -135,6 +136,9 @@ namespace CarScripts {
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
             else Debug.LogWarning($"RigidBody Not Found");
             
+            if(TryGetComponent(out motionTracker)) Debug.Log($"Motion Tracker Assigned");
+            else Debug.LogWarning($"Motion Tracker Not Found");
+            
             SetupCar();
         }
 
@@ -158,8 +162,6 @@ namespace CarScripts {
         }
 
         void Update() {
-            if(inputs == null) return;
-            
             MyInputs();
             WheelsSteering();
             HandleWheelsGrip();
@@ -195,6 +197,13 @@ namespace CarScripts {
         }
 
         void MyInputs() {
+            if (inputs == null) {
+                steering = 0;
+                throttle = 0;
+                brake = 0;
+                return;
+            }
+            
             steering = inputs.Steering.ReadValue<float>();
             throttle = inputs.Throttle.ReadValue<float>();
             brake = inputs.Brake.ReadValue<float>();
@@ -272,7 +281,6 @@ namespace CarScripts {
             var springDir = Vector3.up;
             if(wheelsContact[suspension].hit.normal != Vector3.up)
                 springDir = wheelsContact[suspension].hit.normal.normalized;
-            //Prohect on plane pour les pentes
             
             if (transform.eulerAngles.z > 45 && transform.eulerAngles.z < 315) {
                 if (transform.eulerAngles.z < 60) { //Pousser a droite
@@ -366,6 +374,10 @@ namespace CarScripts {
             }
 
             return true;
+        }
+
+        public Rigidbody GetRb() {
+            return carRb;
         }
     }
 

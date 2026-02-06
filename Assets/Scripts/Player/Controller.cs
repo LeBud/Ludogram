@@ -63,13 +63,14 @@ namespace Player
 		[SerializeField] private float headbobSmoothness          = 10f;   
 
 		
-		Transform       playerCameraTransform;
+		public Transform       playerCameraTransform { get; private set; }
 		private float   yaw;
 		private float   pitch;
 		private float   headbobTimer;
 		private Vector3 headbobOffset;
 		private Vector2 lookInput;
-		
+
+		public Transform originalParent { get; private set; }
 		
 		private bool          isknockedOut;
 
@@ -121,6 +122,8 @@ namespace Player
 				Debug.Log("Found GADGET INPUT and reference this as Controller");
 				g.Initialize(this);
 			}
+			
+			originalParent = transform.parent;
 			
 			if(TryGetComponent(out collider)) Debug.Log("Found collider");
 			else Debug.LogError("Collider not found");
@@ -335,7 +338,10 @@ namespace Player
 		
 		void HandleCamera()
 		{
-		    yaw   += lookInput.x * lookSensitivity;
+			if (isSeated || isDriving) 
+				yaw += transform.parent.eulerAngles.y + lookInput.x * lookSensitivity;
+			else
+				yaw   += lookInput.x * lookSensitivity;
 		    pitch -= lookInput.y * lookSensitivity;
 		    pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
 		    
