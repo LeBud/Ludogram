@@ -33,7 +33,7 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		if (IsInfinite) return;
         
 		currentUses--;
-        Debug.Log(Name + " used " + currentUses);
+//        Debug.Log(Name + " used " + currentUses);
 		if (currentUses <= 0) HandleDepletion();
 	}
 	
