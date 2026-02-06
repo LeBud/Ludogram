@@ -413,6 +413,11 @@ namespace Player
 			return pInput;
 		}
 
+		public Rigidbody GetRB()
+		{
+			return rb;
+		}
+
 		#endregion
 
 		private void OnDrawGizmos()
