@@ -42,7 +42,11 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		OnDepleted();
 	}
 
-	
+
+	public virtual void Release()
+	{
+		//
+	}
 
 	public virtual bool CanUse()
 	{
