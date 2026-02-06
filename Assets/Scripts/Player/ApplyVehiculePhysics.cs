@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Player {
     public class ApplyVehiculePhysics : MonoBehaviour {
         private Controller player;
-        public CarMotionTracker tracker { get; private set; }
+        private CarMotionTracker tracker;
 
         private Vector3 relativeVel;
 
@@ -17,7 +17,7 @@ namespace Player {
         public Vector3 CalculateAngular() {
             if(tracker == null) return Vector3.zero;
             
-            var relativePos = player.GetRB().position - tracker.GetRB().worldCenterOfMass;
+            var relativePos = player.GetRB().position - tracker.CarRb().worldCenterOfMass;
             var rotationalVel = Vector3.Cross(tracker.AngularVelocity, relativePos);
             
             return rotationalVel;
@@ -36,7 +36,7 @@ namespace Player {
         }
 
         public void RemoveTracker() {
-            var relativePos = player.GetRB().position - tracker.GetRB().worldCenterOfMass;
+            var relativePos = player.GetRB().position - tracker.CarRb().worldCenterOfMass;
             
             player.GetRB().linearVelocity -= tracker.LinearVelocity;
             player.GetRB().linearVelocity -= Vector3.Cross(tracker.AngularVelocity, relativePos);
