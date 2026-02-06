@@ -12,7 +12,7 @@ namespace Player
         [HideInInspector] public InputAction    move, look, jump, pickUp, use, drop;
         
         private                 InputActionMap carMap;
-        [HideInInspector] public InputAction    Steering, Throttle, Brake, LeaveCar;
+        [HideInInspector] public InputAction    Steering, Throttle, Reverse, LeaveCar, Brake;
 
         public void Initialize()
         {
@@ -30,6 +30,7 @@ namespace Player
                 
                 Steering = carMap.FindAction("Steering");
                 Throttle = carMap.FindAction("Throttle");
+                Reverse = carMap.FindAction("Reverse");
                 Brake = carMap.FindAction("Brake");
                 LeaveCar = carMap.FindAction("LeaveCar");
             }
