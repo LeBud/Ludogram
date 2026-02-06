@@ -14,7 +14,6 @@ namespace GadgetSystem {
         
         public void Initialize(Controller p) {
             player = p;
-            player.GetInputs().pickUp.started += _ => TryPickupNearbyGadget();
         }
 
 
@@ -32,7 +31,7 @@ namespace GadgetSystem {
 
 
         [ContextMenu("Pickup")]
-        private void TryPickupNearbyGadget() {
+        public void TryPickupNearbyGadget() {
             if(player.isSeated || player.isDriving) return;
             
             var baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);

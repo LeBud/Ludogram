@@ -79,6 +79,7 @@ namespace Player
 		[HideInInspector] public CarController currentCar;
 		public CarSeat seat { get; private set; }
 		private Collider collider;
+		private GadgetPickup pickUp;
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
@@ -86,11 +87,11 @@ namespace Player
 		private Action        onJump;
 		private Action        stopJump;
 		private Action        stopMove;
-		private Action        leaveCar;
 
 		public float debugFall;
-		
-		public bool inCar { get; private set; }
+
+		private bool inCar;
+		public float interactTimer;
 		
 		void Awake()
 		{
@@ -117,10 +118,10 @@ namespace Player
 			}
 			else Debug.LogError("PlayerInput not found");
 
-			if (TryGetComponent(out GadgetPickup g))
+			if (TryGetComponent(out pickUp))
 			{
 				Debug.Log("Found GADGET INPUT and reference this as Controller");
-				g.Initialize(this);
+				pickUp.Initialize(this);
 			}
 			
 			originalParent = transform.parent;
@@ -171,7 +172,9 @@ namespace Player
 
 			pInput.move.canceled += _ => stopMove?.Invoke();
 			pInput.jump.canceled += _ => stopJump?.Invoke();
-			pInput.LeaveCar.started += _ => leaveCar?.Invoke();
+			
+			pInput.LeaveCar.started += _ => Interaction();
+			pInput.pickUp.started += _ => Interaction();
 		}
 
 		void AssignActions()
@@ -181,7 +184,6 @@ namespace Player
 			stopMove += ResetPlayerMovementInputs;
 			onJump   += JumpInput;
 			stopJump += StopJumpInput;
-			leaveCar += LeaveCar;
 		}
 
 		void UnsubscribeInputSystemActions()
@@ -193,7 +195,9 @@ namespace Player
 
 			pInput.move.canceled -= _ => stopMove?.Invoke();
 			pInput.jump.canceled -= _ => onJump?.Invoke();
-			pInput.LeaveCar.started -= _ => leaveCar?.Invoke();
+			
+			pInput.LeaveCar.started -= _ => Interaction();
+			pInput.pickUp.started -= _ => Interaction();
 		}
 
 		public void UnbindLook() {
@@ -248,8 +252,12 @@ namespace Player
 			if(isGrounded)isJumping = true;
 		}
 
-		private void LeaveCar() {
-			if (isSeated) isSeated = false;
+		private void Interaction() {
+			if(interactTimer > 0) return;
+			interactTimer = 0.2f;
+			
+			if(isSeated) isSeated = false;
+			else pickUp.TryPickupNearbyGadget();
 		}
 		
 		#endregion
@@ -416,6 +424,9 @@ namespace Player
 		void Update()
 		{
 			stateMachine.Update();
+			
+			if(interactTimer > 0)
+				interactTimer -= Time.deltaTime;
 		}
 		
 		void FixedUpdate()
