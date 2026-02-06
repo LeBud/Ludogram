@@ -84,10 +84,10 @@ MonoBehaviour:
   setback: 10
   range: 3
   movementTime: 1
-  cooldown: 0
-  heavyStick: 0
-  maxLoadTime: 0
-  maxLoadForce: 0
+  cooldown: 3
+  heavyStick: 1
+  maxLoadTime: 1
+  maxLoadForce: 30
 --- !u!136 &7012630038945383938
 CapsuleCollider:
   m_ObjectHideFlags: 0
