@@ -1243,11 +1243,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!20 &813662668 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 2963120311227464727, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-  m_PrefabInstance: {fileID: 1467068544173678627}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &888008577
 GameObject:
   m_ObjectHideFlags: 0
@@ -3041,216 +3036,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9971a0fb4f1e427438b70d21c062ef65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  pInput: {fileID: 0}
-  currentStateTxt: {fileID: 1897580047}
-  rb: {fileID: 2082189381}
-  playerCamera: {fileID: 813662668}
-  playerTransform: {fileID: 1216840892}
-  cameraTarget: {fileID: 179595282}
-  groundRayPosition: {fileID: 888008578}
-  footRayPosition: {fileID: 508232817}
-  groundLayerMask:
-    m_Bits: 55
-  movementSpeedCurve:
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 22.37745
-      outSlope: 22.37745
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.08192771
-    - time: 1
-      value: 7.5
-      inSlope: 0.26155594
-      outSlope: 0.26155594
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.40963858
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  airMovementSpeedCurve:
-    m_Curve:
-    - time: 0
-      value: 1
-      inSlope: 24.793175
-      outSlope: 24.793175
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.27916667
-    - time: 1
-      value: 10
-      inSlope: 0.26155594
-      outSlope: 0.26155594
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.40963858
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  decelerationSpeedCurve:
-    m_Curve:
-    - time: 0
-      value: 5
-      inSlope: -82.34125
-      outSlope: -82.34125
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.08192773
-    - time: 0.15
-      value: 0
-      inSlope: -5.5749125
-      outSlope: -5.5749125
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.17083335
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  fallSpeedCurve:
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 125.71428
-      outSlope: 125.71428
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.05
-    - time: 0.5
-      value: 20
-      inSlope: -0.020910414
-      outSlope: -0.020910414
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.32741714
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  jumpSpeedCurve:
-    m_Curve:
-    - time: 0
-      value: 15
-      inSlope: 0.24117012
-      outSlope: 0.24117012
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.86901736
-      outWeight: 0.33333334
-    - time: 0.19858052
-      value: 14.130338
-      inSlope: -13.345349
-      outSlope: -13.345349
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - time: 0.5
-      value: 1
-      inSlope: -83.78945
-      outSlope: -83.78945
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.15833336
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  minJumpTime: 0.2
-  maxJumpTime: 0.5
-  maxJumpNumber: 2
-  coyoteTime: 0.2
-  bufferTime: 0.5
-  cameraSpeed: 12
-  lookSensitivity: 1
-  verticalLimit: 80
-  headBobSmoothSpeed: 15
-  headBobFrequencyCurve:
-    m_Curve:
-    - time: -10
-      value: 20
-      inSlope: -4.290011
-      outSlope: -4.290011
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.34375006
-    - time: 0
-      value: 0
-      inSlope: -0.010551919
-      outSlope: -0.010551919
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.73611104
-    - time: 10
-      value: 20
-      inSlope: 5.5559196
-      outSlope: 5.5559196
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.21084337
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  headBobAmplitudeCurve:
-    m_Curve:
-    - time: -10
-      value: 0.005
-      inSlope: -0.0019438292
-      outSlope: -0.0019438292
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.42891565
-    - time: 0
-      value: 0
-      inSlope: -0.00009770731
-      outSlope: -0.00009770731
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.59166664
-      outWeight: 0.5833334
-    - time: 10
-      value: 0.005
-      inSlope: 0.0013124899
-      outSlope: 0.0013124899
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.37283865
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  currentCar: {fileID: 0}
-  headBobAmmount: 0
-  headBobFrequency: 0
-  isGrounded: 0
-  velocityDebug: 0
-  cameraTransform: {fileID: 0}
-  movementTimer: 0
-  stopTimer: 0
-  horizontalInput: 0
-  verticalInput: 0
-  isMovementActive: 0
-  currentJumpNumber: 0
-  jumpTimer: 0
-  isOnJump: 0
-  canStopJump: 0
-  fallTimer: 0
-  cameraHorizontalInput: 0
-  cameraVerticalInput: 0
-  yaw: 0
-  pitch: 0
 --- !u!4 &2082189380
 Transform:
   m_ObjectHideFlags: 0
@@ -3556,6 +3341,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2485190632287867403, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3680400537923672243, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3599,6 +3388,30 @@ PrefabInstance:
     - target: {fileID: 7523587435861852068, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: m_Name
       value: PlayerPrefab_Updated
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: lookSensitivity
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: headbobFrequency
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: groundCheckDistance
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: headbobVerticalAmplitude
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: headbobHorizontalAmplitude
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962241914823199537, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.061
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
