@@ -179,6 +179,14 @@ namespace Player
 			pInput.jump.canceled -= _ => onJump?.Invoke();
 		}
 
+		private void UnbindLook() {
+			pInput.look.performed -= onLook;
+		}
+
+		private void RebindLook() {
+			pInput.look.performed += onLook;
+		}
+		
 		#endregion
 		
 		#region INPUTS METHODS
