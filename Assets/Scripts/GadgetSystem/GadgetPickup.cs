@@ -33,41 +33,19 @@ namespace GadgetSystem {
 
         [ContextMenu("Pickup")]
         private void TryPickupNearbyGadget() {
-            //Ray
-
-            // hitColliders = new Collider[MAX_PICKUP_COUNT];
-            // int numColliders =
-            //     Physics.OverlapSphereNonAlloc(transform.position, pickupRange, hitColliders, gadgetLayerMask);
-            //
-            // Transform closestObj = hitColliders[0].transform;
-            // IGadget gadget = closestObj ? closestObj.GetComponent<IGadget>() : null;
-            //
-            // for (int i = 0; i < numColliders; i++) {
-            //     if (closestObj == null) continue;
-            //     if (Vector3.Distance(transform.position, hitColliders[i].transform.position) <
-            //         Vector3.Distance(transform.position, closestObj.position)
-            //         && !playerInventory.gadgets.Contains(gadget)) {
-            //         closestObj = hitColliders[i].transform;
-            //         gadget = closestObj.GetComponent<IGadget>();
-            //     }
-            // }
-              Debug.Log("Used");
-            //Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
-            Ray baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
+            var baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
             Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);
             
-            //Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
-
             if(!hit.collider) return;
             
-            if (hit.collider.TryGetComponent(out CarController car))
-            {
-                player.SetCarController(car);
-                player.isInCar = true;
-                return;
-            }
+            // if (hit.collider.TryGetComponent(out CarSeat car))
+            // {
+            //     player.SetCarController(car);
+            //     player.isInCar = true;
+            //     return;
+            // }
             
-            Transform hitted = hit.collider.transform;
+            var hitted = hit.collider.transform;
             if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
                 hitted.position = gadgetTransform.position;
                 hitted.forward = gadgetTransform.forward;
