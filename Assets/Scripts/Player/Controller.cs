@@ -185,11 +185,11 @@ namespace Player
 			pInput.jump.canceled -= _ => onJump?.Invoke();
 		}
 
-		private void UnbindLook() {
+		public void UnbindLook() {
 			pInput.look.performed -= onLook;
 		}
 
-		private void RebindLook() {
+		public void RebindLook() {
 			pInput.look.performed += onLook;
 		}
 		

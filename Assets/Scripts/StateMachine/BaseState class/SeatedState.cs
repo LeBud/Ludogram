@@ -11,6 +11,10 @@ namespace StateMachine.BaseState_class
 
         public override void OnEnter()
         {
+            player.UnbindLook();
+            player.GetInputs().SetLookCar(true);
+            player.RebindLook();
+            
             player.GetInputs().DisablePlayerInput();
             player.GetInputs().EnableCarInput();
         }
