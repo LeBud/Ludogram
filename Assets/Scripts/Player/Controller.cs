@@ -43,12 +43,20 @@ namespace Player
 		[Header("Jump Settings")]
 		public AnimationCurve jumpForceOverTime;
 		[SerializeField]  private float minJumpTime;
-		public  bool  canReleaseJump;
-		public  bool  isJumping;
-		public  float jumpTime;
-		public  float maxJumpTime;
-		public  float fallTime;
-		public  bool  isGrounded;
+		[HideInInspector] public  bool  canReleaseJump;
+		[HideInInspector] public  bool  isJumping;
+		[HideInInspector] public  float jumpTime;
+		[HideInInspector] public  float maxJumpTime;
+		[HideInInspector] public  float fallTime;
+		[HideInInspector] public  bool  isGrounded;
+		
+		[Header("Coyote Settings")]
+		[SerializeField]  private float coyoteTime;
+		[SerializeField]  private float bufferTimer;
+		[HideInInspector] public  bool  havePressedJump;
+		private                   bool  canCoyoteJump;
+		private                   float bufferTime;
+		
 		
 		[Header("Camera Settings")]
 		[SerializeField] private float lookSensitivity;
@@ -96,6 +104,8 @@ namespace Player
 
 		private void Start()
 		{
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
 			playerCameraTransform = playerCamera.transform;
 			AssignActions();
 			SubscribeInputSystemActions();
@@ -129,7 +139,7 @@ namespace Player
 			StunState     stunState     = new StunState(this);
 			CarState      carState      = new CarState(this);
 			
-			At(movementState, jumpState, new FuncPredicate(() => isJumping && isGrounded));
+			At(movementState, jumpState, new FuncPredicate(() => isJumping || (havePressedJump && isGrounded)));
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
 			//Any(movementState, new FuncPredicate(GoToMovementState));
 			Any(stunState, new FuncPredicate(()=> isknockedOut));
@@ -215,12 +225,17 @@ namespace Player
 		
 		private void StopJumpInput()
 		{
-			isJumping = false;
+			isJumping     = false;
+			canCoyoteJump = false;
 		}
 
 		private void JumpInput()
 		{
-			if(isGrounded)isJumping = true;
+			if (fallTime != 0) havePressedJump = true;
+			if (isGrounded || (fallTime < coyoteTime && canCoyoteJump))
+			{
+				isJumping     = true;
+			}
 		}
 		
 		#endregion
@@ -264,6 +279,7 @@ namespace Player
 			if (!isGrounded && !isJumping)
 			{
 				fallTime        += Time.fixedDeltaTime;
+				if(havePressedJump) bufferTimer += Time.fixedDeltaTime;
 				finalVelocity.y =  -gravityForceOverTime.Evaluate(fallTime);
 				debugFall       =  -gravityForceOverTime.Evaluate(fallTime);
 			}
@@ -299,7 +315,10 @@ namespace Player
 			isGrounded = Physics.Raycast(groundRayPosition.position, Vector3.down, groundCheckDistance, groundLayerMask);
 			if (isGrounded)
 			{
-				fallTime = 0;
+				if(bufferTimer > bufferTime) havePressedJump = false;
+				bufferTimer   = 0;
+				canCoyoteJump = true;
+				fallTime      = 0;
 				Keyframe[] keyframes = gravityForceOverTime.keys;
 				keyframes[0].value               = 0;
 				gravityForceOverTime.keys = keyframes;
