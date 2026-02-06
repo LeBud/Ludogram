@@ -209,7 +209,7 @@ namespace CarScripts {
             brake = inputs.Brake.ReadValue<float>();
 
             if (inputs.LeaveCar.WasPressedThisFrame()) {
-                player.PlayerStateMachine.ChangeState(Controller.ControlerState.InCar);
+                player.isInCar = false;
                 BindInput(null);
             }
         }

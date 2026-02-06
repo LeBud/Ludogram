@@ -172,9 +172,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2381752257540927384}
-  m_Layer: 3
-  m_Name: CameraTarget
+  - component: {fileID: 2454918127572103366}
+  - component: {fileID: 1727765440296363806}
+  m_Layer: 0
+  m_Name: GroundRay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,12 +189,64 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3105431384768752510}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5082856441508044443}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1727765440296363806
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2902474091782392410}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.45
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3703019265382407636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4627574784773724913}
+  m_Layer: 0
+  m_Name: ViewPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4627574784773724913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3703019265382407636}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.214, z: 0.274}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9138199446019686272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5866246092938327545
 GameObject:
@@ -210,8 +263,6 @@ GameObject:
   - component: {fileID: 782020925049167144}
   - component: {fileID: 2405901545352257737}
   - component: {fileID: 5206288737376482847}
-  - component: {fileID: 7411679023416586555}
-  - component: {fileID: 4397980005844040933}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -280,7 +331,7 @@ MonoBehaviour:
   rb: {fileID: 8766724885081356388}
   playerCamera: {fileID: 3892443573441345474}
   playerTransform: {fileID: 9138199446019686272}
-  cameraTarget: {fileID: 2381752257540927384}
+  cameraTarget: {fileID: 4627574784773724913}
   groundRayPosition: {fileID: 2454918127572103366}
   groundLayerMask:
     serializedVersion: 2
@@ -427,11 +478,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      time: -10
+      value: 20
+      inSlope: -4.290011
+      outSlope: -4.290011
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
@@ -443,6 +494,15 @@ MonoBehaviour:
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
+      outWeight: 0.73611104
+    - serializedVersion: 3
+      time: 10
+      value: 20
+      inSlope: 5.5559196
+      outSlope: 5.5559196
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21084337
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -451,14 +511,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      time: -10
+      value: 0.005
+      inSlope: -0.0019438292
+      outSlope: -0.0019438292
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0.42891565
     - serializedVersion: 3
       time: 1
       value: 0
@@ -466,7 +526,16 @@ MonoBehaviour:
       outSlope: 0
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.59166664
+      outWeight: 0.5833334
+    - serializedVersion: 3
+      time: 10
+      value: 0.005
+      inSlope: 0.0013124899
+      outSlope: 0.0013124899
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.37283865
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -484,14 +553,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5866246092938327545}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64f81b3129387d342befb7f62d85dcaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
-  maxSlots: 5
-  gadgetsNames: []
-  currentSlot: 0
+  player: {fileID: 3720520647000269177}
+  gadgetObject: {fileID: 0}
 --- !u!114 &782020925049167144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -499,12 +567,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5866246092938327545}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43c60dec95e4e81478d061fb1e6ece96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GadgetPickup
-  playerInventory: {fileID: 4874822598099800987}
+  playerController: {fileID: 4874822598099800987}
   gadgetTransform: {fileID: 1003655180821783272}
   interactableLayerMask:
     serializedVersion: 2
@@ -774,7 +842,7 @@ Transform:
   m_GameObject: {fileID: 6054382211423205853}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.46500003, z: 0.22159958}
+  m_LocalPosition: {x: 0, y: 0.214, z: 0.274}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -812,7 +880,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.15
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -886,7 +954,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2879783144811796167}
   m_Layer: 0
-  m_Name: PlayerPrefab
+  m_Name: OBSOLETE1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1101,7 +1169,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1053078612835613319, guid: 49cda4099ddb89142b823f5cff149b80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4627574784773724913}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49cda4099ddb89142b823f5cff149b80, type: 3}
 --- !u!4 &9138199446019686272 stripped

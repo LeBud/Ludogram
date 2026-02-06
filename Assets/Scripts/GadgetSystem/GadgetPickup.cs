@@ -4,16 +4,14 @@ using UnityEngine;
 
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
+        private                  Controller       player;
+        [SerializeField] private GadgetController gadgetController;
+        [SerializeField] private Transform        gadgetTransform;
+        [SerializeField] private LayerMask        interactableLayerMask;
+        [SerializeField] private float            pickupRange = 2f;
         
-        private Controller player;
-        [SerializeField] private GadgetInventory playerInventory;
-        [SerializeField] private Transform gadgetTransform;
-        [SerializeField] private LayerMask interactableLayerMask;
-        [SerializeField] private float pickupRange = 2f;
-
-        private const int MAX_PICKUP_COUNT = 5;
         private Collider[] hitColliders;
-
+        
         public void Initialize(Controller p) {
             player = p;
             player.GetInputs().pickUp.started += _ => TryPickupNearbyGadget();
@@ -53,20 +51,24 @@ namespace GadgetSystem {
             //         gadget = closestObj.GetComponent<IGadget>();
             //     }
             // }
-
-            Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
+              Debug.Log("Used");
+            //Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
+            Ray baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
+            Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);
             
             //Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
 
             if(!hit.collider) return;
             
-            if (hit.collider.TryGetComponent(out CarSeat seat) && !seat.playerAlreadySeated) {
-                seat.SetDriver(player);
+            if (hit.collider.TryGetComponent(out CarController car))
+            {
+                player.SetCarController(car);
+                player.isInCar = true;
                 return;
             }
             
             Transform hitted = hit.collider.transform;
-            if (playerInventory.AddGadget(hit.collider.GetComponent<IGadget>())) {
+            if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
                 hitted.position = gadgetTransform.position;
                 hitted.forward = gadgetTransform.forward;
                 hitted.SetParent(gadgetTransform);
