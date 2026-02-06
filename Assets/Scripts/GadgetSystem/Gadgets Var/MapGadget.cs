@@ -29,6 +29,7 @@ public class MapGadget : Gadget
 
     public override void Drop()
     {
+        if(readState != null) StopCoroutine(readState);
         transform.SetParent(null);
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);

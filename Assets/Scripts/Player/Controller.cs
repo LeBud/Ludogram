@@ -50,13 +50,12 @@ namespace Player
 		[HideInInspector] public  float fallTime;
 		[HideInInspector] public  bool  isGrounded;
 		
-		[Header("Coyote Settings")]
-		[SerializeField]  private float coyoteTime;
-		[SerializeField]  private float bufferTimer;
-		[HideInInspector] public  bool  havePressedJump;
-		private                   bool  canCoyoteJump;
-		private                   float bufferTime;
-		
+		[Header("Coyote Settings")] 
+		[SerializeField] private float coyoteTime;
+		[SerializeField] private float bufferTime;
+		private                  float bufferTimer;
+		public                   bool  havePressedJump;
+		private                  bool  canCoyoteJump;
 		
 		[Header("Camera Settings")]
 		[SerializeField] private float lookSensitivity;
