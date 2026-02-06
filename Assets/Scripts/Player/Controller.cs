@@ -429,6 +429,8 @@ namespace Player
 		}
 
 		public void SetPlayerInCar(Transform newParent) {
+			yaw -= newParent.eulerAngles.y;
+			
 			transform.parent = newParent;
 			playerCameraTransform.parent = newParent;
 			inCar = true;
@@ -436,6 +438,8 @@ namespace Player
 		}
 
 		public void RemovePlayerFromCar() {
+			yaw += transform.parent.eulerAngles.y;
+			
 			transform.parent = originalParent;
 			playerCameraTransform.parent = originalParent;
 			inCar = false;
