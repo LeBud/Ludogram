@@ -5,8 +5,19 @@ namespace StateMachine.BaseState_class
 {
 	public class CarState : BaseState
 	{
-		public CarState(ControllerV2 player) : base(player)
+		public CarState(ControllerV2 player) : base(player) { }
+
+		public override void OnEnter()
 		{
+			player.currentCar.BindInput(player.pInput, player);
+			player.GetInputs().DisablePlayerInput();
+			player.GetInputs().EnableCarInput();
+		}
+		
+		public override void OnExit()
+		{
+			player.GetInputs().DisableCarInput();
+			player.GetInputs().EnablePlayerInput();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using CarScripts;
 using GadgetSystem;
 using StateMachine.BaseState_class;
 using StateMachine.Finite_State_Machine_class;
@@ -14,7 +15,7 @@ namespace Player
 	public class ControllerV2 : MonoBehaviour
 	{
 		private FiniteStateMachine stateMachine;
-		private InputsBrain        pInput;
+		public InputsBrain        pInput;
 
 		[SerializeField] private Camera playerCamera;
 		[SerializeField] private Rigidbody rb;
@@ -24,52 +25,63 @@ namespace Player
 		[SerializeField] private LayerMask groundLayerMask;
 
 		[Header("Move Settings")]
-		[SerializeField] private float          groundCheckDistance    = 0.2f;
-		[SerializeField] private float          groundSphereCastRadius = 0.5f;
-		[SerializeField] public AnimationCurve gravityForceOverTime;
-		[SerializeField] private AnimationCurve movementSpeedOverTime;
-		public                   float          movementTime;
+		[SerializeField]  private float          groundCheckDistance    = 0.2f;
+		[SerializeField]  private float          groundSphereCastRadius = 0.5f;
+		[SerializeField]  public  AnimationCurve gravityForceOverTime;
+		[SerializeField]  private AnimationCurve movementSpeedOverTime;
+		[HideInInspector] public  float          movementTime;
+		private                   Vector2        movementInput;
+		
+		[Header("Deceleration Settings")]
+		[SerializeField] private float decelerationTime = 0.3f;
+		private AnimationCurve decelerationCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+		private                  float          decelerationTimer;
+		private                  bool           isDecelerating;
+		private                  Vector3        lastMovementDirection; 
+		private                  float          lastMovementSpeed;     
+
 		
 		[Header("Jump Settings")]
-		[Tooltip("le temps max de jump est celui de la courbe")]
 		public AnimationCurve jumpForceOverTime;
 		[SerializeField]  private float minJumpTime;
-		public  float jumpTime;
+		[HideInInspector] public  bool  canReleaseJump;
+		[HideInInspector] public  bool  isJumping;
+		[HideInInspector] public  float jumpTime;
 		[HideInInspector] public  float maxJumpTime;
-		public  bool  canReleaseJump;
-		public                    bool  isJumping;
-
-		[SerializeField] private float decelerationTime;
+		[HideInInspector] public  float fallTime;
+		[HideInInspector] public  bool  isGrounded;
+		
+		[Header("Camera Settings")]
 		[SerializeField] private float lookSensitivity;
 		[SerializeField] private float lookVerticalLimit;
 		[SerializeField] private float cameraSpeed;
 		
-		Transform playerCameraTransform;
+		[Header("Headbob Settings")]
+		[SerializeField] private bool enableHeadbob = true;
+		[SerializeField] private float headbobFrequency           = 2f;    
+		[SerializeField] private float headbobHorizontalAmplitude = 0.05f; 
+		[SerializeField] private float headbobVerticalAmplitude   = 0.08f; 
+		[SerializeField] private float headbobSmoothness          = 10f;   
 
 		
-		
-		private float yaw;
-		private float pitch;
-		
-		
-		public  bool  isGrounded;
-		public float fallTime;
-		
-		
-		private bool isStuned;
-		
-		public Vector3 velocity;
-		
-		private Vector2 movementInput;
+		Transform       playerCameraTransform;
+		private float   yaw;
+		private float   pitch;
+		private float   headbobTimer;
+		private Vector3 headbobOffset;
 		private Vector2 lookInput;
+		
+		
+		private bool isknockedOut;
 		
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
 
-		private Action onJump;
-		private Action stopJump;
-		private Action stopMove;
+		private Action        onJump;
+		private Action        stopJump;
+		private Action        stopMove;
+		public CarController currentCar;
 		
 		void Awake()
 		{
@@ -115,7 +127,7 @@ namespace Player
 			At(movementState, jumpState, new FuncPredicate(() => isJumping && isGrounded));
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
 			//Any(movementState, new FuncPredicate(GoToMovementState));
-			Any(stunState, new FuncPredicate(()=> isStuned));
+			Any(stunState, new FuncPredicate(()=> isknockedOut));
 			
 			stateMachine.SetState(movementState);
 		}
@@ -167,13 +179,25 @@ namespace Player
 		private void PlayerMovementInputs(InputAction.CallbackContext ctx)
 		{
 			movementInput = ctx.ReadValue<Vector2>();
+			if (movementInput.magnitude > 0.01f)
+			{
+				isDecelerating    = false;
+				decelerationTimer = 0f;
+			}
 		}
-		
+
 		private void ResetPlayerMovementInputs()
 		{
+			if (!isDecelerating && rb.linearVelocity.magnitude > 0.1f)
+			{
+				Vector3 currentVel = rb.linearVelocity;
+				lastMovementDirection = new Vector3(currentVel.x, 0, currentVel.z).normalized;
+				lastMovementSpeed     = new Vector3(currentVel.x, 0, currentVel.z).magnitude;
+				isDecelerating        = true;
+				decelerationTimer     = 0f;
+			}
+    
 			movementInput = Vector2.zero;
-			movementTime  = 0;
-			
 		}
 		
 		private void CameraMovementsInputs(InputAction.CallbackContext ctx)
@@ -198,23 +222,49 @@ namespace Player
 		
 		public void HandleMovement()
 		{
-			movementTime += Time.fixedDeltaTime;
-
 			Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
 			Vector3    forward        = targetRotation * Vector3.forward;
 			Vector3    right          = targetRotation * Vector3.right;
 
 			Vector3 move = (forward * movementInput.y + right * movementInput.x).normalized;
-			Vector3 velocity        = move * movementSpeedOverTime.Evaluate(movementTime);
-
-			if (!isGrounded && !isJumping)
+			Vector3 horizontalVelocity;
+			
+			if (movementInput.magnitude > 0.01f)
 			{
-				fallTime   += Time.deltaTime;
-				velocity.y =  -gravityForceOverTime.Evaluate(fallTime);
+				movementTime           += Time.fixedDeltaTime;
+				horizontalVelocity     =  move * movementSpeedOverTime.Evaluate(movementTime);
+				modelTransform.forward =  forward;
+			}
+			else if (isDecelerating && decelerationTimer < decelerationTime)
+			{
+				decelerationTimer += Time.fixedDeltaTime;
+				float normalizedTime = decelerationTimer / decelerationTime;
+				float curveValue     = decelerationCurve.Evaluate(normalizedTime);
+				
+				horizontalVelocity = lastMovementDirection * (lastMovementSpeed * curveValue);
+				
+				movementTime = Mathf.Lerp(movementTime, 0f, normalizedTime);
+			}
+			else
+			{
+				horizontalVelocity = Vector3.zero;
+				movementTime       = 0f;
+				isDecelerating     = false;
 			}
 			
-			rb.linearVelocity      = velocity;
-			modelTransform.forward = forward;
+			Vector3 finalVelocity = horizontalVelocity;
+    
+			if (!isGrounded && !isJumping)
+			{
+				fallTime        += Time.fixedDeltaTime;
+				finalVelocity.y =  -gravityForceOverTime.Evaluate(fallTime);
+			}
+			else
+			{
+				finalVelocity.y = rb.linearVelocity.y;
+			}
+
+			rb.linearVelocity = finalVelocity;
 		}
 
 		
@@ -247,17 +297,60 @@ namespace Player
 		
 		void HandleCamera()
 		{
-			yaw   += lookInput.x * lookSensitivity;
-			pitch -= lookInput.y   * lookSensitivity;
-			pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
-			
-			playerCameraTransform.position = cameraPosition.position;
-			playerCameraTransform.rotation = Quaternion.Lerp(playerCameraTransform.rotation, Quaternion.Euler(pitch, yaw, 0), Time.deltaTime * cameraSpeed);
+		    yaw   += lookInput.x * lookSensitivity;
+		    pitch -= lookInput.y * lookSensitivity;
+		    pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
+		    
+		    playerCameraTransform.position = cameraPosition.position;
+		    playerCameraTransform.rotation = Quaternion.Lerp(
+		        playerCameraTransform.rotation, 
+		        Quaternion.Euler(pitch, yaw, 0), 
+		        Time.deltaTime * cameraSpeed
+		    );
+		}
+
+		public void HandleHeadbob()
+		{
+		    Vector3 targetPosition = playerCameraTransform.position;
+		    
+		    if (enableHeadbob && isGrounded && movementInput.magnitude > 0.01f && !isJumping)
+		    {
+		        float currentSpeed    = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
+		        float speedMultiplier = Mathf.Clamp01(currentSpeed / movementSpeedOverTime.Evaluate(5f));
+		        
+		        headbobTimer += Time.deltaTime * headbobFrequency * speedMultiplier;
+		        
+		        float horizontalOffset = Mathf.Sin(headbobTimer) * headbobHorizontalAmplitude * speedMultiplier;
+		        float verticalOffset = Mathf.Abs(Mathf.Sin(headbobTimer * 2f)) * headbobVerticalAmplitude * speedMultiplier;
+		        
+		        Vector3 targetHeadbobOffset = new Vector3(horizontalOffset, verticalOffset, 0);
+		        headbobOffset = Vector3.Lerp(headbobOffset, targetHeadbobOffset, Time.deltaTime * headbobSmoothness);
+		        
+		        targetPosition += playerCameraTransform.right * headbobOffset.x;
+		        targetPosition += playerCameraTransform.up * headbobOffset.y;
+		    }
+		    else
+		    {
+		        headbobOffset = Vector3.Lerp(headbobOffset, Vector3.zero, Time.deltaTime * headbobSmoothness);
+		        
+		        targetPosition += playerCameraTransform.right * headbobOffset.x;
+		        targetPosition += playerCameraTransform.up * headbobOffset.y;
+		        
+		        headbobTimer = Mathf.Lerp(headbobTimer, 0f, Time.deltaTime * headbobSmoothness);
+		    }
+		    
+		    playerCameraTransform.position = targetPosition;
+		}
+
+		public void ResetHeadbob()
+		{
+		    headbobTimer = 0f;
+		    headbobOffset = Vector3.zero;
 		}
 		
 		void HandleCar()
 		{
-			//Je sais pas trop;
+			//Je sais po;
 		}
 		
 		#endregion
@@ -271,15 +364,13 @@ namespace Player
 
 		bool GoToMovementState()
 		{
-			return !isJumping && !isStuned;
+			return !isJumping && !isknockedOut;
 		}
 
 		#endregion
 		
-
 		void Update()
 		{
-			velocity = rb.linearVelocity;
 			stateMachine.Update();
 		}
 		

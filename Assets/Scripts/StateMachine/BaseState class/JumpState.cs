@@ -14,7 +14,7 @@ namespace StateMachine.BaseState_class
 		{
 			Debug.Log("EnterJump");
 			player.maxJumpTime = player.jumpForceOverTime.keys[player.jumpForceOverTime.length - 1].time;
-			
+			player.ResetHeadbob();
 		}
 
 		public override void Update()

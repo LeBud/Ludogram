@@ -25,6 +25,11 @@ namespace StateMachine.BaseState_class
 			player.HandleMovement();
 		}
 
+		public override void LateUpdate()
+		{
+			player.HandleHeadbob();
+		}
+
 		public override void OnExit()
 		{
 			Debug.Log("Movement State Exit");
