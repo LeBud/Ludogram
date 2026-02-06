@@ -32,7 +32,7 @@ namespace Player {
 
         public void SetTracker(CarMotionTracker tracker) {
             this.tracker = tracker;
-            player.PlayerStateMachine.ChangeState(Controller.ControlerState.InCar);
+            //player.PlayerStateMachine.ChangeState(Controller.ControlerState.InCar);
         }
 
         public void RemoveTracker() {
@@ -42,7 +42,7 @@ namespace Player {
             player.GetRB().linearVelocity -= Vector3.Cross(tracker.AngularVelocity, relativePos);
             
             tracker = null;
-            player.PlayerStateMachine.ChangeState(Controller.ControlerState.Idle);
+            //player.PlayerStateMachine.ChangeState(Controller.ControlerState.Idle);
         }
     }
 }
