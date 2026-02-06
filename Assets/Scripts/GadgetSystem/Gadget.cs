@@ -22,7 +22,7 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	{
 		if (!CanUse()) return;
 		OnUse();
-		ConsumeUse();
+		
 	}
 
 	
@@ -42,10 +42,11 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		OnDepleted();
 	}
 
+
 	public virtual void Release()
 	{
-		
-	}	
+		ConsumeUse();
+	}
 
 	public virtual bool CanUse()
 	{
