@@ -105,7 +105,6 @@ namespace CarScripts {
         //float wheelRPM => carRb.linearVelocity.magnitude / (2 * Mathf.PI * wheelRadius) * 60f;
         
         private Dictionary<Transform, WheelContact> wheelsContact = new();
-        [HideInInspector] public CarMotionTracker motionTracker;
         
         private float steering;
         private float currentSteering;
@@ -127,17 +126,9 @@ namespace CarScripts {
         private Vector3 dragForce => -airDrag * carRb.linearVelocity * carRb.linearVelocity.magnitude;
         private Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
         
-        //TODO Ajouter une condition pour dire si il freine en allant en avant ou en reculant pour le engineTorque qu'il s'incrémente que lorsque il va dans la bonne direction
-        
         void Start() {
-            // if (TryGetComponent(out _carInputs)) Debug.Log($"Inputs Assigned");
-            // else Debug.LogWarning($"Inputs Not Found");
-            
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
             else Debug.LogWarning($"RigidBody Not Found");
-            
-            if(TryGetComponent(out motionTracker)) Debug.Log($"Motion Tracker Assigned");
-            else Debug.LogWarning($"Motion Tracker Not Found");
             
             SetupCar();
         }
@@ -215,7 +206,7 @@ namespace CarScripts {
         }
         
         void LateUpdate() {
-            speedTxt.text = $"Car Speed: {carRb.linearVelocity.magnitude:F0}\nengineTorque: {currentEngineTorque:F0}";
+            speedTxt.text = $"{carRb.linearVelocity.magnitude:F0} KM/H\n{currentEngineTorque * 10:F0} RPM";
         }
         
         void FixedUpdate() {
