@@ -27,9 +27,10 @@ namespace GadgetSystem.Gadgets_Var
             Debug.Log("Collision");
             if (collision.gameObject.layer == surfaceLayer)
             {
+                Destroy(gameObject);
                 Debug.Log("Create SlowZone");
             }
-            Destroy(gameObject);
+            
         }
         
     

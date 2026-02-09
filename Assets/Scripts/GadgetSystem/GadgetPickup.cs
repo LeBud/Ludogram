@@ -24,7 +24,7 @@ namespace GadgetSystem {
         }
 
         void OnDisable() {
-            player.GetInputs().pickUp.started -= _ => TryPickupNearbyGadget();
+            player.GetInputs().pickUp.performed -= _ => TryPickupNearbyGadget();
         }
 
         #endregion
