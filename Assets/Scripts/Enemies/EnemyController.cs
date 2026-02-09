@@ -1,4 +1,3 @@
-using System;
 using Enemies;
 using EnemyStates;
 using Manager;
@@ -9,13 +8,19 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour, IKnockable {
     private FiniteStateMachine stateMachine;
-    public NavMeshAgent agent { get; private set; }
+    private NavMeshAgent agent { get; set; }
     public EnemyMovementController movement { get; private set; }
     public Rigidbody rigidbody { get; private set; }
+    
+    
+    [Header("Ai Settings")]
+    [SerializeField] private float moneyScanRadius = 5f;
+    
     
     private bool knockOut = false;
     public float knockOutTime { get; private set; }
     public Vector3 knockOutForce { get; private set; }
+    
     private void Awake() {
         Initialize();
         SetupStateMachine();
