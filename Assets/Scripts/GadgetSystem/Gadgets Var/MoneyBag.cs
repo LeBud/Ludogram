@@ -17,8 +17,9 @@ public class MoneyBag : Gadget
         rb.AddForce(transform.forward * launchSpeed, ForceMode.Impulse);
     }
 
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
+        gadgetController = gc;
         rb.isKinematic = true;
         isUsed         = false;
     }

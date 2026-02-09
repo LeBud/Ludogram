@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CarScripts;
 using GadgetSystem;
+using Manager;
 using StateMachine.BaseState_class;
 using StateMachine.Finite_State_Machine_class;
 using StateMachine.Finite_State_Machine_Interaces;
@@ -143,6 +144,8 @@ namespace Player
 			
 			if(TryGetComponent(out collider)) Debug.Log("Found collider");
 			else Debug.LogError("Collider not found");
+			
+			GameManager.instance.RegisterPlayer(this);
 		}
 
 		void SetupStateMachine()
@@ -477,7 +480,12 @@ namespace Player
 			stateMachine.LateUpdate();
 		}
 
+		private void OnDestroy() {
+			GameManager.instance.DeregisterPlayer(this);
+		}
+
 		public void SetPlayerInCar(Transform newParent) {
+			GameManager.instance.RegisterPlayerInCar(this);
 			yaw -= newParent.eulerAngles.y;
 			
 			transform.parent = newParent;
@@ -487,6 +495,7 @@ namespace Player
 		}
 
 		public void RemovePlayerFromCar() {
+			GameManager.instance.DeregisterPlayerInCar(this);
 			yaw += transform.parent.eulerAngles.y;
 			
 			transform.parent = originalParent;
@@ -540,7 +549,11 @@ namespace Player
 			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
 		}
 
-		public void KnockOut(float time)
+		public IGadget GetGadget() {
+			return pickUp.gadgetController.selectedGadget;
+		}
+
+		public void KnockOut(float time, Vector3 knockOutForce)
 		{
 			if (isknockedOut) return;
 			isknockedOut  = true;

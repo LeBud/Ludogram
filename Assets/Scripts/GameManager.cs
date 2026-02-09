@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,8 @@ namespace Manager {
         public EnemyManager enemyManager { get; private set; }
 
         private HashSet<PlayerInput> players = new();
+        private HashSet<Controller> playerInCar = new();
+        private List<Controller> playersRef = new();
 
         private void Awake() {
             if (instance == null) instance = this;
@@ -30,6 +33,24 @@ namespace Manager {
             enemyManager.UpdatePlayerList();
         }
 
+        public void RegisterPlayer(Controller player) {
+            playersRef.Add(player);
+        }
+
+        public void DeregisterPlayer(Controller player) {
+            playersRef.Remove(player);
+        }
+        
+        public void RegisterPlayerInCar(Controller player) {
+            playerInCar.Add(player);
+        }
+
+        public void DeregisterPlayerInCar(Controller player) {
+            playerInCar.Remove(player);
+        }
+        
+        public bool AllPlayerInCars => playerInCar.Count == players.Count;
+        
         private void SetupCamera() {
             Debug.Log($"SetupCamera, {players.Count} players connected");
 
@@ -59,8 +80,8 @@ namespace Manager {
             }
         }
 
-        public HashSet<PlayerInput> GetPlayers() {
-            return players;
+        public List<Controller> GetPlayers() {
+            return playersRef;
         }
     }
 }

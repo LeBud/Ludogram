@@ -5,17 +5,24 @@ using UnityEngine;
 
 namespace EnemyStates {
     public class EnemyPursuitState : EnemyBaseState {
-        private Transform closestPlayer;
+        private Controller closestPlayer;
         public EnemyPursuitState(EnemyController ia) : base(ia) {
         }
 
         public override void OnEnter() {
-            closestPlayer = SortClosestPlayer();
+            closestPlayer = SortClosestPlayerWithMoney();
         }
 
         public override void Update() {
-            ia.movement.MoveAt(closestPlayer.position, true);
+            //Check for player if he has money
+            //Else chase a money bag
 
+            //Checker si tout les joueurs sont dans une voiture
+            //Checker les sacs d'argents
+            
+            if(closestPlayer != null)
+                ia.movement.MoveAt(closestPlayer.transform.position, true);
+            
             if (GetDistanceToPlayer() > 10f) {
                 //Soit changer de cible joueur
                 //Soit abandonner la poursuite si il est trop loin
@@ -27,15 +34,33 @@ namespace EnemyStates {
         }
 
         public override void OnExit() {
-            
+            ia.movement.ResetMovement();
         }
 
         private float GetDistanceToPlayer() {
-            return Vector3.Distance(closestPlayer.position, ia.transform.position); 
+            return Vector3.Distance(closestPlayer.transform.position, ia.transform.position); 
         }
         
-        private Transform SortClosestPlayer() {
-            return ia.movement.playerInRange.OrderBy(player => Vector3.Distance(player.position, ia.transform.position)).First();
+        private Controller SortClosestPlayerWithMoney() {
+            var index = 0;
+            var distance = float.MaxValue;
+            var foundPlayerWithMoney = false;
+            
+            for (var i = 0; i < ia.movement.playerInRange.Count; i++) { //Surement revoir le Get pour le money Bag
+                if (ia.movement.playerInRange[i].GetGadget() as MoneyBag) {
+                    var dist = Vector3.Distance(ia.transform.position, ia.movement.playerInRange[i].transform.position);
+                    if (dist < distance) {
+                        distance = dist;
+                        index = i;
+                    }
+                    
+                    foundPlayerWithMoney = true;
+                }
+            }
+            
+            if (foundPlayerWithMoney) return ia.movement.playerInRange[index];
+            
+            return null;
         }
     }
 }

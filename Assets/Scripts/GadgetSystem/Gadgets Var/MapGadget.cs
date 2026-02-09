@@ -26,8 +26,9 @@ public class MapGadget : Gadget
         readState = StartCoroutine(Unread());
     }
     
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
+        gadgetController = gc;
         rb.isKinematic = true;
         transform.SetParent(GadgetPickup.gadgetStaticTransform);
         transform.position = GadgetPickup.gadgetStaticTransform.position;

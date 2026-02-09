@@ -17,8 +17,9 @@ public class Menottes : Gadget
         rb.AddForce(transform.forward * launchSpeed, ForceMode.Impulse);
     }
 
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
+        gadgetController = gc;
         rb.isKinematic = true;
         isUsed         = false;
     }
@@ -36,10 +37,10 @@ public class Menottes : Gadget
     {
         if (collision.gameObject.layer == enemisLayerMask)
         {
-            if (collision.gameObject.TryGetComponent(out Robber robber) && robber.isStunned)
-            {
-                Destroy(gameObject);
-            }
+            // if (collision.gameObject.TryGetComponent(out EnemyController robber) && robber.)
+            // {
+            //     Destroy(gameObject);
+            // }
         }
     }
     

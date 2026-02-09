@@ -17,7 +17,7 @@ namespace GadgetSystem.Gadgets_Var
             isUsed = true;
             transform.SetParent(null);
             rb.isKinematic                  = false;
-            GadgetController.selectedGadget = null;
+            gadgetController.selectedGadget = null;
             rb.AddForce((Vector3.up + transform.forward) * launchSpeed, ForceMode.Impulse);
         }
 
@@ -34,8 +34,8 @@ namespace GadgetSystem.Gadgets_Var
         }
         
     
-        public override void OnPickup()
-        {
+        public override void OnPickup(GadgetController gc) {
+            gadgetController = gc;
             rb.isKinematic = true;
         }
 
