@@ -4,7 +4,7 @@ using UnityEngine;
 namespace EnemyStates {
     public class EnemyKnockOutState : EnemyBaseState {
         private float timer = 0f;
-        public EnemyKnockOutState(Robber ia) : base(ia) {
+        public EnemyKnockOutState(EnemyController ia) : base(ia) {
         }
 
         public override void OnEnter() {

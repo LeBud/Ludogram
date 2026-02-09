@@ -6,7 +6,7 @@ using UnityEngine;
 namespace EnemyStates {
     public class EnemyPursuitState : EnemyBaseState {
         private Transform closestPlayer;
-        public EnemyPursuitState(Robber ia) : base(ia) {
+        public EnemyPursuitState(EnemyController ia) : base(ia) {
         }
 
         public override void OnEnter() {

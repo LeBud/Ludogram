@@ -7,7 +7,7 @@ using StateMachine.Finite_State_Machine_Interaces;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Robber : MonoBehaviour, IKnockable {
+public class EnemyController : MonoBehaviour, IKnockable {
     private FiniteStateMachine stateMachine;
     public NavMeshAgent agent { get; private set; }
     public EnemyMovementController movement { get; private set; }

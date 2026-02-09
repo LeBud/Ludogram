@@ -2,9 +2,9 @@ using StateMachine.Finite_State_Machine_Interaces;
 
 namespace StateMachine.Finite_State_Machine_class {
     public class EnemyBaseState : IState {
-        protected readonly Robber ia;
+        protected readonly EnemyController ia;
 
-        protected EnemyBaseState(Robber ia) {
+        protected EnemyBaseState(EnemyController ia) {
             this.ia = ia;
         }
 	

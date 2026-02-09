@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Manager {
     public class EnemyManager : MonoBehaviour {
-        private HashSet<Robber> enemies = new();
+        private HashSet<EnemyController> enemies = new();
 
-        public void RegisterEnemy(Robber newEnemy) {
+        public void RegisterEnemy(EnemyController newEnemy) {
             enemies.Add(newEnemy);
         }
 
-        public void DeregisterEnemy(Robber removedEnemy) {
+        public void DeregisterEnemy(EnemyController removedEnemy) {
             enemies.Remove(removedEnemy);
         }
 
