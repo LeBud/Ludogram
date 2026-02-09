@@ -14,6 +14,8 @@ namespace EnemyStates {
         }
 
         public override void Update() {
+            //If too far from a money bag -> Chase the car or a player if not all in the car - depend on what is the closest
+            
             //Check for player if he has money
             //Else chase a money bag
 

@@ -9,6 +9,7 @@ namespace Manager {
 
         public static GameManager instance { get; private set; }
         public EnemyManager enemyManager { get; private set; }
+        public MoneyManager moneyManager { get; private set; }
 
         private HashSet<PlayerInput> players = new();
         private HashSet<Controller> playerInCar = new();
@@ -20,6 +21,9 @@ namespace Manager {
 
             if (TryGetComponent(out EnemyManager enemy)) enemyManager = enemy;
             else Debug.LogError("No Enemy Manager found");
+            
+            if (TryGetComponent(out MoneyManager money)) moneyManager = money;
+            else Debug.LogError("No Money Manager found");
         }
 
         private void Start() {
@@ -38,7 +42,8 @@ namespace Manager {
         }
 
         public void DeregisterPlayer(Controller player) {
-            playersRef.Remove(player);
+            if(playersRef.Contains(player)) 
+                playersRef.Remove(player);
         }
         
         public void RegisterPlayerInCar(Controller player) {
@@ -46,7 +51,8 @@ namespace Manager {
         }
 
         public void DeregisterPlayerInCar(Controller player) {
-            playerInCar.Remove(player);
+            if(playerInCar.Contains(player))
+                playerInCar.Remove(player);
         }
         
         public bool AllPlayerInCars => playerInCar.Count == players.Count;

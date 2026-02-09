@@ -7,7 +7,6 @@ using UnityEngine.AI;
 namespace Enemies {
     public class EnemyMovementController : MonoBehaviour {
         private NavMeshAgent agent;
-        
         private MoneyBag moneyBag; //Réf pour avoir le money bag a attraper
 
         [Header("Movement")] 
@@ -39,7 +38,7 @@ namespace Enemies {
             }
         }
 
-        public void GetMoneyBag() {
+        public void SetMoneyBag() {
             
         }
 
