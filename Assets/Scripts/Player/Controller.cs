@@ -6,6 +6,7 @@ using StateMachine.BaseState_class;
 using StateMachine.Finite_State_Machine_class;
 using StateMachine.Finite_State_Machine_Interaces;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -29,8 +30,10 @@ namespace Player
 		[SerializeField]  public  AnimationCurve gravityForceOverTime;
 		[SerializeField]  private AnimationCurve movementSpeedOverTime;
 		[HideInInspector] public  float          movementTime;
-		private                   Vector2        movementInput;
-		private Vector3 groundNormal;
+		public                    Vector2        movementInput;
+		public                    Vector2        lastInput;
+		public                    Vector3        groundNormal;
+		public                    float          normalMagn;
 		
 		[Header("Deceleration Settings")]
 		[SerializeField] private float decelerationTime = 0.3f;
@@ -297,8 +300,17 @@ namespace Player
 			Vector3 horizontalVelocity;
 			modelTransform.forward =  forward;
 			
+			if (Vector3.Distance(movementInput, lastInput) > 0.8f)
+			{
+				Debug.Log(Vector3.Distance(movementInput, lastInput));
+				orientedMove = -orientedMove;
+				movementTime = 0;
+			}
+			lastInput =  movementInput;
+			
 			if (movementInput.magnitude > 0.01f)
 			{
+				rb.useGravity         =  true;
 				movementTime       += Time.fixedDeltaTime;
 				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime);
 			}
@@ -314,6 +326,10 @@ namespace Player
 			}
 			else
 			{
+				if (Vector3.Angle(groundNormal, Vector3.up) > 0)
+				{
+					rb.useGravity = false;
+				}
 				horizontalVelocity = Vector3.zero;
 				movementTime       = 0f;
 				isDecelerating     = false;
@@ -361,8 +377,8 @@ namespace Player
 			
 			if (isGrounded)
 			{
-				groundNormal =  hit.normal;
-				if(bufferTimer > bufferTime) havePressedJump = false;
+				groundNormal  = hit.normal;
+				if(bufferTimer            > bufferTime) havePressedJump = false;
 				bufferTimer   = 0;
 				canCoyoteJump = true;
 				fallTime      = 0;
@@ -373,7 +389,7 @@ namespace Player
 			}
 			else
 			{
-				groundNormal = Vector3.up;
+				groundNormal  = Vector3.up;
 			}
 		}
 		
@@ -442,18 +458,13 @@ namespace Player
 		{
 			return (!isJumping && canReleaseJump) || jumpTime >= maxJumpTime;
 		}
-
-		bool GoToMovementState()
-		{
-			return !isJumping && !isknockedOut;
-		}
+		
 
 		#endregion
 		
 		void Update()
 		{
 			stateMachine.Update();
-			
 			if(interactTimer > 0)
 				interactTimer -= Time.deltaTime;
 		}

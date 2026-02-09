@@ -47,10 +47,11 @@ namespace GadgetSystem {
             
             var hitted = hit.collider.transform;
             if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
-                hitted.position = gadgetTransform.position;
-                hitted.forward = gadgetTransform.forward;
-                hitted.SetParent(gadgetTransform);
-                hitted.GetComponent<Gadget>().OnPickup();
+                Gadget gadget = hitted.GetComponent<Gadget>();
+                //hitted.SetParent(gadgetTransform);
+                gadget.target            = gadgetTransform;
+                gadget.transform.forward = gadgetTransform.forward;
+                gadget.OnPickup();
                 //Debug.Log("Ramassé:" + gadget.Name);
             }
             else {
