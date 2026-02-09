@@ -99,9 +99,9 @@ public class StickGadget : Gadget
 
     IEnumerator AnimateGadget()
     {
-        transform.localRotation = Quaternion.Euler(90, 0, 0);
+        transform.rotation = Quaternion.Euler(transform.rotation.x + 90, transform.rotation.y, transform.rotation.z);
         yield return new WaitForSeconds(0.15f);
-        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.identity;
     }
 
     public override void IsTaken()
@@ -117,17 +117,18 @@ public class StickGadget : Gadget
 
     IEnumerator LoadForce()
     {
-        float baseForce = setback;
-        float elapsed   = 0;
+        float      baseForce   = setback;
+        float      elapsed     = 0;
+        Quaternion targetAngle = Quaternion.Euler(transform.rotation.x +  60, transform.rotation.z, transform.rotation.z) ;
         while (elapsed < maxLoadTime)
         {
             setback                 =  Mathf.Lerp(baseForce, maxLoadForce, elapsed / maxLoadTime);
-            transform.rotation =  Quaternion.Lerp(transform.rotation, Quaternion.Euler(60, 0, 0), elapsed / maxLoadTime);
+            transform.rotation =  Quaternion.Lerp(transform.rotation, targetAngle, elapsed / maxLoadTime);
             elapsed                 += Time.deltaTime;
             yield return null;
         }
 
-        transform.rotation = Quaternion.Euler(60, 0, 0);
+        transform.rotation = targetAngle;
     }
 
     public override void OnPickup()

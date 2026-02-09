@@ -32,7 +32,6 @@ namespace StateMachine.BaseState_class
 
 		public override void OnExit()
 		{
-			Debug.Log("Movement State Exit");
 		}
 	}
 }

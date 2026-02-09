@@ -355,7 +355,6 @@ namespace Player
 
 		public void HandleJump()
 		{
-			Debug.Log("JUMP");
 			if (jumpTime >= minJumpTime)
 			{
 				canReleaseJump = true;
