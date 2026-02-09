@@ -32,6 +32,11 @@ public class GadgetController : MonoBehaviour
 		selectedGadget          =  gadget;
 		return true; 
 	}
+
+	void Update()
+	{
+		selectedGadget.IsTaken();
+	}
     
 	public void UseGadget()
 	{

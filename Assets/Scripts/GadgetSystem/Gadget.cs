@@ -16,6 +16,13 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	public bool   IsInfinite   => maxUses == -1;
 	public bool   IsDepleted   => !IsInfinite && currentUses <= 0;
 
+	[Header("Follow Player")]
+	public Vector3 offset;
+	public float   smoothTime;
+	private Vector3 velref = Vector3.zero;
+
+	public Transform target;
+
 	protected virtual void Awake() => currentUses = maxUses;
 
 	public void Use()
@@ -24,8 +31,20 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		OnUse();
 		
 	}
-
 	
+	
+	public virtual void IsTaken()
+	{
+		if (target != null)
+		{
+			//transform.forward = target.forward;
+			Vector3 targetPos = target.position + offset;
+			transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velref, smoothTime);
+			transform.rotation = Quaternion.LookRotation(target.forward);
+		}
+	}
+
+
 	protected abstract void OnUse();
 	
 	private void ConsumeUse()
@@ -58,9 +77,9 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		Debug.Log(this.name);
 	}
 	
-	public virtual void Drop() 
+	public virtual void Drop()
 	{
-		Debug.Log(name + " is dropped");
+		target            = null;
 	}
 	
 	public virtual void OnDepleted()
