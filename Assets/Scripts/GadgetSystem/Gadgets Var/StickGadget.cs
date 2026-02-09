@@ -119,10 +119,10 @@ public class StickGadget : Gadget
 
     public override void Drop()
     {
+        base.Drop();
         transform.SetParent(null);
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
-        
     }
 
     public override void OnDepleted()
