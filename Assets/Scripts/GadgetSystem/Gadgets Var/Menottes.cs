@@ -3,8 +3,6 @@ using UnityEngine;
 public class Menottes : Gadget
 {
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private int       moneyValue;
-    [SerializeField] private LayerMask enemisLayerMask;
     [SerializeField] private float     launchSpeed;
     private                  bool      isUsed = false;
 
@@ -31,15 +29,14 @@ public class Menottes : Gadget
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
+    
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == enemisLayerMask)
+        if (!isUsed) return;
+        if (collision.gameObject.TryGetComponent(out EnemyController enemy))
         {
-            if (collision.gameObject.TryGetComponent(out Robber robber) && robber.isStunned)
-            {
-                Destroy(gameObject);
-            }
+            StartCoroutine(EffectManager.instance.SmoothDespawnEffect(gameObject, 0.2f));
         }
     }
     

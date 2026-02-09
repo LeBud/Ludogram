@@ -34,6 +34,7 @@ namespace Player
 		public                    Vector2        lastInput;
 		public                    Vector3        groundNormal;
 		public                    float          normalMagn;
+		public                    float          slowFactor = 1;
 		
 		[Header("Deceleration Settings")]
 		[SerializeField] private float decelerationTime = 0.3f;
@@ -290,10 +291,10 @@ namespace Player
 			if (inCar) {
 				orientation = transform.parent.eulerAngles.y;
 			}
-			
-			var targetRotation = Quaternion.Euler(0,orientation + yaw, 0);
-			var    forward        = targetRotation * Vector3.forward;
-			var    right          = targetRotation * Vector3.right;
+
+			var targetRotation = Quaternion.Euler(0, orientation + yaw, 0);
+			var forward        = targetRotation * Vector3.forward;
+			var right          = targetRotation * Vector3.right;
 
 			Vector3 move         = (forward * movementInput.y + right * movementInput.x).normalized;
 			Vector3 orientedMove = Vector3.ProjectOnPlane(move, groundNormal);
@@ -311,7 +312,7 @@ namespace Player
 			{
 				rb.useGravity         =  true;
 				movementTime       += Time.fixedDeltaTime;
-				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime);
+				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime) * slowFactor;
 			}
 			else if (isDecelerating && decelerationTimer < decelerationTime)
 			{
