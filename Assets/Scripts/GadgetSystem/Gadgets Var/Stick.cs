@@ -64,7 +64,7 @@ public class Stick : Gadget
             }
             if (hit.collider.gameObject.TryGetComponent(out IKnockable knockable))
             {
-                knockable.KnockOut(knockTime);
+                knockable.KnockOut(knockTime, -hit.normal * setback);
             }
         }
     }
@@ -130,8 +130,9 @@ public class Stick : Gadget
         transform.rotation = targetAngle;
     }
 
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
+        gadgetController = gc;
         rb.isKinematic = true;
     }
 

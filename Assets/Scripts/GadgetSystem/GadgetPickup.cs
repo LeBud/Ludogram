@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
         private                  Controller       player;
-        [SerializeField] private GadgetController gadgetController;
+        [SerializeField] public GadgetController gadgetController;
         [SerializeField] private Transform        gadgetTransform;
         public static Transform        gadgetStaticTransform;
         [SerializeField] private LayerMask        interactableLayerMask;
