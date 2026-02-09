@@ -18,6 +18,7 @@ public class GadgetController : MonoBehaviour
 	
 	private Action<InputAction.CallbackContext> dropGadget;
 	private Action<InputAction.CallbackContext> useGadgetAction;
+	private Action<InputAction.CallbackContext> releaseGadgetAction;
 	
 	
 	public bool AddGadget(IGadget gadget)
@@ -31,6 +32,11 @@ public class GadgetController : MonoBehaviour
 		selectedGadget          =  gadget;
 		return true; 
 	}
+
+	void Update()
+	{
+		selectedGadget.IsTaken();
+	}
     
 	public void UseGadget()
 	{
@@ -43,6 +49,10 @@ public class GadgetController : MonoBehaviour
 		}
 	}
 
+	public void ReleaseGadget()
+	{
+		selectedGadget.Release();
+	}
 	public void DropGadget()
 	{
 		selectedGadget?.Drop();
@@ -57,13 +67,16 @@ public class GadgetController : MonoBehaviour
 		concernedPlayerCamera            =  player.playerCamera;
 		useGadgetAction                  += _ => UseGadget();
 		dropGadget                       += _ => DropGadget();
+		releaseGadgetAction              += _ => ReleaseGadget();
 		player.GetInputs().use.started   += useGadgetAction;
+		player.GetInputs().use.canceled  += releaseGadgetAction;
 		player.GetInputs().drop.canceled += dropGadget;
 	}
 	
 	void OnDisable()
 	{
-		player.GetInputs().use.started     -= useGadgetAction;
+		player.GetInputs().use.started   -= useGadgetAction;
+		player.GetInputs().use.canceled  -= releaseGadgetAction;
 		player.GetInputs().drop.canceled -= dropGadget;
 	}
 	

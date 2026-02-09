@@ -6,13 +6,14 @@ using StateMachine.BaseState_class;
 using StateMachine.Finite_State_Machine_class;
 using StateMachine.Finite_State_Machine_Interaces;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace Player
 {
-	public class Controller : MonoBehaviour
+	public class Controller : MonoBehaviour, IKnockable
 	{
 		private FiniteStateMachine stateMachine;
 		private InputsBrain        pInput;
@@ -29,7 +30,10 @@ namespace Player
 		[SerializeField]  public  AnimationCurve gravityForceOverTime;
 		[SerializeField]  private AnimationCurve movementSpeedOverTime;
 		[HideInInspector] public  float          movementTime;
-		private                   Vector2        movementInput;
+		public                    Vector2        movementInput;
+		public                    Vector2        lastInput;
+		public                    Vector3        groundNormal;
+		public                    float          normalMagn;
 		
 		[Header("Deceleration Settings")]
 		[SerializeField] private float decelerationTime = 0.3f;
@@ -43,12 +47,19 @@ namespace Player
 		[Header("Jump Settings")]
 		public AnimationCurve jumpForceOverTime;
 		[SerializeField]  private float minJumpTime;
-		public  bool  canReleaseJump;
-		public  bool  isJumping;
-		public  float jumpTime;
-		public  float maxJumpTime;
-		public  float fallTime;
-		public  bool  isGrounded;
+		[HideInInspector] public  bool  canReleaseJump;
+		[HideInInspector] public  bool  isJumping;
+		[HideInInspector] public  float jumpTime;
+		[HideInInspector] public  float maxJumpTime;
+		[HideInInspector] public  float fallTime;
+		[HideInInspector] public  bool  isGrounded;
+		
+		[Header("Coyote Settings")] 
+		[SerializeField] private float coyoteTime;
+		[SerializeField] private float bufferTime;
+		private                  float bufferTimer;
+		public                   bool  havePressedJump;
+		private                  bool  canCoyoteJump;
 		
 		[Header("Camera Settings")]
 		[SerializeField] private float lookSensitivity;
@@ -72,7 +83,9 @@ namespace Player
 
 		public Transform originalParent { get; private set; }
 		
-		private bool          isknockedOut;
+		private bool  isknockedOut;
+		private float knockOutTime;
+		private float knockOutTimer;
 
 		[HideInInspector] public bool          isDriving = false;
 		[HideInInspector] public bool          isSeated = false;
@@ -101,6 +114,8 @@ namespace Player
 
 		private void Start()
 		{
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
 			playerCameraTransform = playerCamera.transform;
 			AssignActions();
 			SubscribeInputSystemActions();
@@ -140,10 +155,11 @@ namespace Player
 			var      carState      = new CarState(this);
 			var seatedState = new SeatedState(this);
 			
-			At(movementState, jumpState, new FuncPredicate(() => isJumping && isGrounded));
+			At(movementState, jumpState, new FuncPredicate(() => isJumping || (havePressedJump && isGrounded)));
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
-			//Any(movementState, new FuncPredicate(GoToMovementState));
+			
 			Any(stunState, new FuncPredicate(()=> isknockedOut));
+			At(stunState, movementState, new FuncPredicate(()=> !isknockedOut));
 			
 			Any(carState, new FuncPredicate(()=> isDriving));
 			Any(seatedState, new FuncPredicate(()=> isSeated));
@@ -244,12 +260,17 @@ namespace Player
 		
 		private void StopJumpInput()
 		{
-			isJumping = false;
+			isJumping     = false;
+			canCoyoteJump = false;
 		}
 
 		private void JumpInput()
 		{
-			if(isGrounded)isJumping = true;
+			if (fallTime != 0) havePressedJump = true;
+			if (isGrounded || (fallTime < coyoteTime && canCoyoteJump))
+			{
+				isJumping     = true;
+			}
 		}
 
 		private void Interaction() {
@@ -274,14 +295,24 @@ namespace Player
 			var    forward        = targetRotation * Vector3.forward;
 			var    right          = targetRotation * Vector3.right;
 
-			var move = (forward * movementInput.y + right * movementInput.x).normalized;
+			Vector3 move         = (forward * movementInput.y + right * movementInput.x).normalized;
+			Vector3 orientedMove = Vector3.ProjectOnPlane(move, groundNormal);
 			Vector3 horizontalVelocity;
 			modelTransform.forward =  forward;
 			
+			if (Vector3.Distance(movementInput, lastInput) > 0.8f)
+			{
+				Debug.Log(Vector3.Distance(movementInput, lastInput));
+				orientedMove = -orientedMove;
+				movementTime = 0;
+			}
+			lastInput =  movementInput;
+			
 			if (movementInput.magnitude > 0.01f)
 			{
-				movementTime           += Time.fixedDeltaTime;
-				horizontalVelocity     =  move * movementSpeedOverTime.Evaluate(movementTime);
+				rb.useGravity         =  true;
+				movementTime       += Time.fixedDeltaTime;
+				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime);
 			}
 			else if (isDecelerating && decelerationTimer < decelerationTime)
 			{
@@ -295,6 +326,10 @@ namespace Player
 			}
 			else
 			{
+				if (Vector3.Angle(groundNormal, Vector3.up) > 0)
+				{
+					rb.useGravity = false;
+				}
 				horizontalVelocity = Vector3.zero;
 				movementTime       = 0f;
 				isDecelerating     = false;
@@ -305,6 +340,7 @@ namespace Player
 			if (!isGrounded && !isJumping)
 			{
 				fallTime        += Time.fixedDeltaTime;
+				if(havePressedJump) bufferTimer += Time.fixedDeltaTime;
 				finalVelocity.y =  -gravityForceOverTime.Evaluate(fallTime);
 				debugFall       =  -gravityForceOverTime.Evaluate(fallTime);
 			}
@@ -337,14 +373,23 @@ namespace Player
 
 		public void CheckGround()
 		{
-			isGrounded = Physics.Raycast(groundRayPosition.position, Vector3.down, groundCheckDistance, groundLayerMask);
+			isGrounded = Physics.Raycast(groundRayPosition.position, Vector3.down, out var hit, groundCheckDistance, groundLayerMask);
+			
 			if (isGrounded)
 			{
-				fallTime = 0;
+				groundNormal  = hit.normal;
+				if(bufferTimer            > bufferTime) havePressedJump = false;
+				bufferTimer   = 0;
+				canCoyoteJump = true;
+				fallTime      = 0;
 				Keyframe[] keyframes = gravityForceOverTime.keys;
 				keyframes[0].value               = 0;
 				gravityForceOverTime.keys = keyframes;
 				jumpTime                  = 0f;
+			}
+			else
+			{
+				groundNormal  = Vector3.up;
 			}
 		}
 		
@@ -413,18 +458,13 @@ namespace Player
 		{
 			return (!isJumping && canReleaseJump) || jumpTime >= maxJumpTime;
 		}
-
-		bool GoToMovementState()
-		{
-			return !isJumping && !isknockedOut;
-		}
+		
 
 		#endregion
 		
 		void Update()
 		{
 			stateMachine.Update();
-			
 			if(interactTimer > 0)
 				interactTimer -= Time.deltaTime;
 		}
@@ -500,6 +540,23 @@ namespace Player
 		{
 			Gizmos.color = Color.red;
 			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
+		}
+
+		public void KnockOut(float time)
+		{
+			if (isknockedOut) return;
+			isknockedOut  = true;
+			knockOutTime  = 0;
+			knockOutTimer = time;
+		}
+
+		public void HandleKnockTimer()
+		{
+			knockOutTime+= Time.deltaTime;
+			if (knockOutTime >= knockOutTimer)
+			{
+				isknockedOut =  false;
+			}
 		}
 	}
 }

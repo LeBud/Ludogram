@@ -12,8 +12,9 @@ public interface IGadget
     
 	
 	void Use();
+	void IsTaken();
 	void Drop();
-	void OnDepleted();
+	void Release();
 	bool CanUse();
 
 }

@@ -1559,10 +1559,6 @@ PrefabInstance:
       propertyPath: gadgetName
       value: Ball
       objectReference: {fileID: 0}
-    - target: {fileID: 862295097403690948, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
-      propertyPath: smoothTime
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 2637061325646257255, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
       propertyPath: m_Name
       value: PP_Ball (3)
@@ -2026,10 +2022,6 @@ PrefabInstance:
     - target: {fileID: 862295097403690948, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
       propertyPath: gadgetName
       value: Ball
-      objectReference: {fileID: 0}
-    - target: {fileID: 862295097403690948, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
-      propertyPath: smoothTime
-      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2637061325646257255, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
       propertyPath: m_Name
@@ -2601,10 +2593,6 @@ PrefabInstance:
       propertyPath: gadgetName
       value: Ball
       objectReference: {fileID: 0}
-    - target: {fileID: 862295097403690948, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
-      propertyPath: smoothTime
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 2637061325646257255, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
       propertyPath: m_Name
       value: PP_Ball (1)
@@ -2725,10 +2713,6 @@ PrefabInstance:
     - target: {fileID: 7895749195382880658, guid: bdb88c3a543ca45468401da4c2e5627e, type: 3}
       propertyPath: heavyStick
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7895749195382880658, guid: bdb88c3a543ca45468401da4c2e5627e, type: 3}
-      propertyPath: smoothTime
-      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 7895749195382880658, guid: bdb88c3a543ca45468401da4c2e5627e, type: 3}
       propertyPath: maxLoadTime
@@ -3119,7 +3103,7 @@ MonoBehaviour:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: ca0abaf2-ba8e-48f7-b3df-9d7cef5b8a44
+    m_Id: d6cb1a1c-9203-4d2f-99a1-8633347a73a5
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -3277,17 +3261,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 525560940}
     - target: {fileID: 2485190632287867403, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: m_Radius
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2485190632287867403, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 13400000, guid: 87948d2332c671748999a50136fdd5ec, type: 2}
-    - target: {fileID: 2963120311227464727, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: near clip plane
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 3680400537923672243, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.313
@@ -3370,42 +3346,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[1].inSlope
-      value: -62.060055
+      value: -57.928223
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: jumpForceOverTime.m_Curve.Array.data[1].inWeight
-      value: 0.1499495
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: jumpForceOverTime.m_Curve.Array.data[1].outSlope
-      value: -62.060055
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: gravityForceOverTime.m_Curve.Array.data[0].inSlope
-      value: 2.5876012
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: gravityForceOverTime.m_Curve.Array.data[0].outSlope
-      value: 2.5876012
-      objectReference: {fileID: 0}
-    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: gravityForceOverTime.m_Curve.Array.data[0].outWeight
       value: 0.22083333
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: gravityForceOverTime.m_Curve.Array.data[0].tangentMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7786145555891057595, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
+      propertyPath: jumpForceOverTime.m_Curve.Array.data[1].outSlope
+      value: -57.928223
       objectReference: {fileID: 0}
     - target: {fileID: 8962241914823199537, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.061
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7708984246566989306, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3536,10 +3491,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1733139670094537163, guid: 8aa2635a9fea4dd45afe65be9995a937, type: 3}
-      propertyPath: smoothTime
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 2140286692812824005, guid: 8aa2635a9fea4dd45afe65be9995a937, type: 3}
       propertyPath: m_Name
       value: PP_SlowGadget
@@ -3616,10 +3567,6 @@ PrefabInstance:
     - target: {fileID: 862295097403690948, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
       propertyPath: gadgetName
       value: Ball
-      objectReference: {fileID: 0}
-    - target: {fileID: 862295097403690948, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
-      propertyPath: smoothTime
-      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2637061325646257255, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
       propertyPath: m_Name
