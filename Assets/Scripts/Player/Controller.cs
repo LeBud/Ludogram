@@ -2,640 +2,561 @@ using System;
 using System.Collections;
 using CarScripts;
 using GadgetSystem;
+using StateMachine.BaseState_class;
+using StateMachine.Finite_State_Machine_class;
+using StateMachine.Finite_State_Machine_Interaces;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-namespace Player {
-    public class Controller : MonoBehaviour {
-        //InputSystem_Actions playerInputActions;
-        private InputsBrain pInput;
-
-        [Header("General Settings")] [SerializeField]
-        TMP_Text currentStateTxt;
-
-        [SerializeField] Rigidbody rb;
-        [SerializeField] public Camera playerCamera;
-        [SerializeField] Transform playerTransform;
-        [SerializeField] Transform cameraTarget;
-        [SerializeField] Transform groundRayPosition;
-        [SerializeField] LayerMask groundLayerMask;
-
-        [Header("Movement State Settings")] [SerializeField]
-        AnimationCurve movementSpeedCurve;
-
-        [SerializeField] AnimationCurve airMovementSpeedCurve;
-        [SerializeField] AnimationCurve decelerationSpeedCurve;
-
-        [Header("Fall State Settings")] [SerializeField]
-        AnimationCurve fallSpeedCurve;
-
-        [Header("Jump State Settings")] [SerializeField]
-        AnimationCurve jumpSpeedCurve;
-
-        [SerializeField] float minJumpTime = 0.2f;
-        [SerializeField] float maxJumpTime = 0.5f;
-        [SerializeField] int maxJumpNumber;
-        [SerializeField] float coyoteTime;
-        [SerializeField] float bufferTime;
-
-        [Header("Camera Settings")] [SerializeField]
-        float cameraSpeed;
-
-        [SerializeField] float lookSensitivity = 2f;
-        [SerializeField] float verticalLimit = 80f;
-
-        [Header("Head Bob Settings")] [SerializeField]
-        float headBobSmoothSpeed;
-
-        [SerializeField] AnimationCurve headBobFrequencyCurve;
-        [SerializeField] AnimationCurve headBobAmplitudeCurve;
-
-        [Header("Driving Settings")] 
-        [SerializeField] public float maxSpeedInsideVehicle = 4f;
-        
-        private CarController currentCar;
-        private CarSeat seat;
-        private ApplyVehiculePhysics carPhys;
-        private FixedJoint fixedJoint;
-        
-        public float headBobAmmount;
-        public float headBobFrequency;
-
-
-        public bool isGrounded;
-        public float velocityDebug;
-
-        Transform cameraTransform;
-
-        //MOVEMENTS
-        float movementTimer;
-        float stopTimer;
-        float horizontalInput;
-        float verticalInput;
-
-        //JUMP
-        int currentJumpNumber;
-        float jumpTimer;
-        bool isOnJump;
-        bool canStopJump;
-
-        //FALL
-        public float fallTimer;
-
-        //CAMERA
-        float cameraHorizontalInput;
-        float cameraVerticalInput;
-        float yaw;
-        float pitch;
-
-
-        private Action<InputAction.CallbackContext> onMove;
-        private Action<InputAction.CallbackContext> onLook;
-
-        private Action onJump;
-        private Action stopJump;
-        private Action stopMove;
-
-        private Coroutine bufferJumpCoroutine;
-
-        [Header("State Machine")] public StateMachine<ControlerState> PlayerStateMachine = new();
-
-        public enum ControlerState {
-            Idle,
-            Moving,
-            Falling,
-            Jumping,
-            Driving,
-            Seated,
-            InCar
-        }
-
-        private void Awake() {
-            if (TryGetComponent(out pInput)) {
-                pInput.Initialize();
-                Debug.Log("Found PLAYER INPUT");
-            }
-            else Debug.LogError("PlayerInput not found");
-
-            if (TryGetComponent(out GadgetPickup g)) {
-                g.Initialize(this);
-            }
-
-            if(TryGetComponent(out carPhys)) Debug.Log($"Found VehiculePhysics");
-            else Debug.LogError("VehiculePhysics not found");
-        }
-
-        private void Start() {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            cameraTransform = playerCamera.transform;
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-
-            CreateState();
-            AssignActions();
-            SubscribeInputSystemActions();
-            
-            GetInputs().DisableCarInput();
-        }
-
-        private void OnEnable() {
-        }
-
-        private void OnDisable() {
-            UnsubscribeInputSystemActions();
-        }
-
-        #region CreateState
-        void CreateState() {
-            //IDLE
-            PlayerStateMachine.Add(new State<ControlerState>(
-                ControlerState.Idle,
-                _onEnter: IdleEnter,
-                _onUpdate: IdleUpdate,
-                _onFixedUpdate: IdleFixedUpdate,
-                _onLateUpdate: IdleLateUpdate,
-                _onExit: IdleExit
-            ));
-
-            //MOVEMENT
-            PlayerStateMachine.Add(new State<ControlerState>(
-                ControlerState.Moving,
-                _onEnter: MoveEnter,
-                _onUpdate: MoveUpdate,
-                _onFixedUpdate: MoveFixedUpdate,
-                _onLateUpdate: MoveLateUpdate
-            ));
-
-            //JUMP
-            PlayerStateMachine.Add(new State<ControlerState>(
-                ControlerState.Jumping,
-                _onEnter: JumpEnter,
-                _onFixedUpdate: JumpFixedUpdate,
-                _onLateUpdate: JumpLateUpdate,
-                _onExit: JumpExit
-            ));
-
-            //FALL
-            PlayerStateMachine.Add(new State<ControlerState>(
-                ControlerState.Falling,
-                _onEnter: FallEnter,
-                _onUpdate: FallUpdate,
-                _onFixedUpdate: FallFixedUpdate,
-                _onLateUpdate: FallLateUpdate
-            ));
-
-            PlayerStateMachine.Add(new State<ControlerState>(
-                ControlerState.Driving,
-                _onEnter: EnterDriving,
-                _onUpdate: UpdateDriving,
-                _onExit: ExitDriving
-            ));
-
-            PlayerStateMachine.Add(new State<ControlerState>(
-                ControlerState.Seated,
-                _onEnter: EnterSeated,
-                _onUpdate: UpdateSeated,
-                _onExit: ExitDriving
-                ));
-            
-            PlayerStateMachine.Add(new State<ControlerState>(
-                ControlerState.InCar,
-                //_onEnter: MoveEnter,
-                _onUpdate: MoveUpdate,
-                _onFixedUpdate: MoveInCar,
-                _onLateUpdate: MoveLateUpdate
-            ));
-            
-            PlayerStateMachine.ChangeState(ControlerState.Idle);
-        }
-
-        #endregion
-
-        #region STATE-MACHINE
-
-        #region FUNCTION CALL
-
-        void Update() {
-            if(carPhys.tracker)
-                PlayerStateMachine.ChangeState(ControlerState.InCar);
-            
-            PlayerStateMachine?.Update();
-            DebugStateMachine();
-        }
-
-        void FixedUpdate() {
-            PlayerStateMachine?.FixedUpdate();
-        }
-
-        void LateUpdate() {
-            PlayerStateMachine?.LateUpdate();
-        }
-
-        #endregion
-
-        #region IDLE
-
-        void IdleEnter() {
-            stopTimer = 0;
-            Keyframe[] keyframes = decelerationSpeedCurve.keys;
-            keyframes[0].value = movementSpeedCurve.Evaluate(movementTimer);
-            decelerationSpeedCurve.keys = keyframes;
-            //movementTimer = 0;
-        }
-
-        void IdleUpdate() {
-            // if (!IsGrounded() && !isOnJump)
-            // {
-            //     PlayerStateMachine.ChangeState(ControlerState.Falling);
-            // }
-        }
-
-        void IdleFixedUpdate() {
-            stopTimer += Time.fixedDeltaTime;
-            if (horizontalInput == 0 && verticalInput == 0) {
-                movementTimer = 0;
-                return;
-            }
-
-            Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
-
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
-            Vector3 velocity = move * decelerationSpeedCurve.Evaluate(stopTimer);
-            velocity.y = rb.linearVelocity.y;
-
-            playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
-            // if (rb.linearVelocity.magnitude > 0.01f)
-            // {
-            //     movementTimer = 0;
-            // }
-        }
-
-        void IdleLateUpdate() {
-            CameraMovement();
-        }
-
-        void IdleExit() {
-            horizontalInput = 0;
-            verticalInput = 0;
-        }
-
-        #endregion
-
-        #region MOVING
-
-        void MoveEnter() {
-            stopTimer = 0;
-        }
-
-        void MoveUpdate() {
-            CameraUpdate();
-
-            if (!IsGrounded()) {
-                PlayerStateMachine?.ChangeState(ControlerState.Falling);
-            }
-        }
-
-        void MoveFixedUpdate() {
-            movementTimer += Time.fixedDeltaTime;
-
-            Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
-
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
-            Vector3 velocity = move * movementSpeedCurve.Evaluate(movementTimer);
-            velocity.y = rb.linearVelocity.y;
-
-            playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
-        }
-
-        void MoveLateUpdate() {
-            CameraMovement();
-        }
-
-        #endregion
-
-        #region FALLING
-
-        void FallEnter() {
-            Keyframe[] keyframes = fallSpeedCurve.keys;
-            keyframes[0].value = -jumpSpeedCurve.Evaluate(jumpTimer);
-            fallSpeedCurve.keys = keyframes;
-        }
-
-        void FallUpdate() {
-            if (IsGrounded()) {
-                isOnJump = false;
-                currentJumpNumber = 0;
-                PlayerStateMachine.ChangeState(ControlerState.Idle);
-            }
-        }
-
-        void FallFixedUpdate() {
-            fallTimer += Time.fixedDeltaTime;
-            movementTimer += Time.fixedDeltaTime;
-            Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
-
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
-            Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
-            velocity.y += -fallSpeedCurve.Evaluate(fallTimer);
-
-            playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
-        }
-
-        void FallLateUpdate() {
-            CameraMovement();
-        }
-
-        #endregion
-
-        #region JUMPING
-
-        void JumpEnter() {
-            if (bufferJumpCoroutine != null) StopCoroutine(bufferJumpCoroutine);
-            isOnJump = true;
-            canStopJump = false;
-            jumpTimer = 0;
-            fallTimer = 0;
-        }
-
-        void JumpFixedUpdate() {
-            jumpTimer += Time.fixedDeltaTime;
-            movementTimer += Time.fixedDeltaTime;
-
-            Quaternion targetRotation = Quaternion.Euler(0, yaw, 0);
-            Vector3 forward = targetRotation * Vector3.forward;
-            Vector3 right = targetRotation * Vector3.right;
-
-            Vector3 move = (forward * verticalInput + right * horizontalInput).normalized;
-            Vector3 velocity = move * airMovementSpeedCurve.Evaluate(movementTimer);
-            velocity.y += jumpSpeedCurve.Evaluate(jumpTimer);
-
-            playerTransform.forward = forward;
-            rb.linearVelocity = velocity;
-
-            if (jumpTimer > minJumpTime && canStopJump) {
-                PlayerStateMachine.ChangeState(ControlerState.Falling);
-            }
-
-            if (jumpTimer > maxJumpTime) {
-                PlayerStateMachine.ChangeState(ControlerState.Falling);
-            }
-
-        }
-
-        void JumpExit() {
-
-        }
-
-        void JumpLateUpdate() {
-            CameraMovement();
-        }
-
-        #endregion
-
-        #region Driving
-
-        private void EnterDriving() {
-            currentCar.BindInput(pInput, this);
-            //Parent l'objet au vehicule
-            //Désactive le rigidbody
-            //Je met la caméra au bon endroit
-            
-            UnbindLook();
-            GetInputs().SetLookCar(true);
-            RebindLook();
-            
-            GetInputs().DisablePlayerInput();
-            GetInputs().EnableCarInput();
-        }
-
-        private void EnterSeated() {
-            UnbindLook();
-            GetInputs().SetLookCar(true);
-            RebindLook();
-            
-            GetInputs().DisablePlayerInput();
-            GetInputs().EnableCarInput();
-        }
-        
-        private void UpdateDriving() {
-            //rb.linearVelocity = currentCar.GetRB().linearVelocity;
-            CameraMovement();
-        }
-
-        private void UpdateSeated() {
-            //rb.linearVelocity = currentCar.GetRB().linearVelocity;
-            CameraMovement();
-            if(GetInputs().LeaveCar.WasPressedThisFrame())
-                PlayerStateMachine.ChangeState(ControlerState.InCar);
-        }
-        
-        private void ExitDriving() {
-            seat?.UnSeatDriver();
-            
-            currentCar = null;
-            seat = null;
-            
-            UnbindLook();
-            GetInputs().SetLookCar(false);
-            RebindLook();
-            
-            GetInputs().DisableCarInput();
-            GetInputs().EnablePlayerInput();
-        }
-        
-        private void MoveInCar() {
-            if(carPhys.tracker == null)
-                PlayerStateMachine.ChangeState(ControlerState.Idle);
-            
-            movementTimer += Time.fixedDeltaTime;
-            
-            var targetRotation = Quaternion.Euler(0, yaw, 0);
-            var forward = targetRotation * Vector3.forward;
-            var right = targetRotation * Vector3.right;
-            
-            var move = (forward * verticalInput + right * horizontalInput).normalized;
-            var velocity = move * movementSpeedCurve.Evaluate(movementTimer);
-            velocity.y = rb.linearVelocity.y;
-            
-            playerTransform.forward = forward;
-            rb.linearVelocity = velocity - (carPhys.CalculateVel() + carPhys.CalculateAngular());
-        }
-
-        #endregion
-
-        #endregion
-
-        #region INPUT SYSTEM SETUP
-
-        void SubscribeInputSystemActions() {
-            pInput.jump.started += _ => onJump?.Invoke();
-
-            pInput.move.performed += onMove;
-            pInput.look.performed += onLook;
-
-            pInput.move.canceled += _ => stopMove?.Invoke();
-            pInput.jump.canceled += _ => stopJump?.Invoke();
-        }
-        
-        void AssignActions() {
-            onMove += PlayerMovementInputs;
-            onLook += CameraMovementsInputs;
-            stopMove += ResetPlayerMovementInputs;
-            onJump += JumpInput;
-            stopJump += StopJumpInput;
-        }
-
-        private void UnbindLook() {
-            pInput.look.performed -= onLook;
-        }
-
-        private void RebindLook() {
-            pInput.look.performed += onLook;
-        }
-        
-        void UnsubscribeInputSystemActions() {
-            pInput.jump.started -= _ => onJump?.Invoke();
-
-            pInput.move.performed -= onMove;
-            pInput.look.performed -= onLook;
-
-            pInput.move.canceled -= _ => stopMove?.Invoke();
-            pInput.jump.canceled -= _ => onJump?.Invoke();
-        }
-
-        #endregion
-
-        #region INPUT FUNCTIONS
-
-        void PlayerMovementInputs(InputAction.CallbackContext context) {
-            if (IsGrounded() && !isOnJump) PlayerStateMachine.ChangeState(ControlerState.Moving);
-            horizontalInput = context.ReadValue<Vector2>().x;
-            verticalInput = context.ReadValue<Vector2>().y;
-        }
-
-        void ResetPlayerMovementInputs() {
-            if (IsGrounded() && !isOnJump) {
-                PlayerStateMachine.ChangeState(ControlerState.Idle);
-            }
-        }
-
-        void CameraMovementsInputs(InputAction.CallbackContext context) {
-            cameraHorizontalInput = context.ReadValue<Vector2>().x;
-            cameraVerticalInput = context.ReadValue<Vector2>().y;
-        }
-
-        void JumpInput() {
-            if (IsGrounded() || currentJumpNumber < maxJumpNumber ||
-                (fallTimer < coyoteTime && currentJumpNumber == 0)) {
-                currentJumpNumber++;
-                if (isOnJump) {
-                    jumpTimer = 0;
-                }
-                else {
-                    PlayerStateMachine.ChangeState(ControlerState.Jumping);
-                }
-            }
-            else {
-                if (bufferJumpCoroutine != null) StopCoroutine(bufferJumpCoroutine);
-                bufferJumpCoroutine = StartCoroutine(BufferJump());
-            }
-        }
-
-        void StopJumpInput() {
-            if (IsGrounded()) return;
-            canStopJump = true;
-            if (jumpTimer < minJumpTime) return;
-            isOnJump = false;
-            if (!IsGrounded()) {
-                PlayerStateMachine.ChangeState(ControlerState.Falling);
-            }
-            else {
-                PlayerStateMachine.ChangeState(ControlerState.Idle);
-            }
-        }
-
-        #endregion
-
-        #region CAMERA
-
-        void CameraUpdate() {
-
-
-        }
-
-        void CameraMovement() {
-            yaw += cameraHorizontalInput * lookSensitivity;
-            pitch -= cameraVerticalInput * lookSensitivity;
-            pitch = Mathf.Clamp(pitch, -verticalLimit, verticalLimit);
-            headBobAmmount = headBobAmplitudeCurve.Evaluate(rb.linearVelocity.magnitude);
-            headBobFrequency = headBobFrequencyCurve.Evaluate(rb.linearVelocity.magnitude);
-            HeadBobMovement();
-            cameraTransform.position = cameraTarget.position;
-            cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, Quaternion.Euler(pitch, yaw, 0),
-                Time.deltaTime * cameraSpeed);
-        }
-
-        #endregion
-
-        #region GROUND
-
-        bool IsGrounded() {
-            Ray ray = new Ray(groundRayPosition.position, -groundRayPosition.up);
-            return Physics.Raycast(ray, out RaycastHit ground, 0.5f, groundLayerMask);
-        }
-
-        #endregion
-
-        void DebugStateMachine() {
-            if (currentStateTxt)
-                currentStateTxt.text = PlayerStateMachine.currentState.iD.ToString();
-            isGrounded = IsGrounded();
-            Debug.DrawRay(groundRayPosition.position, -groundRayPosition.up * 0.5f, Color.red);
-            velocityDebug = rb.linearVelocity.magnitude;
-        }
-
-        IEnumerator BufferJump() {
-            float elapsedTime = 0;
-            while (elapsedTime < bufferTime) {
-                elapsedTime += Time.deltaTime;
-                if (IsGrounded()) PlayerStateMachine.ChangeState(ControlerState.Jumping);
-                yield return null;
-            }
-
-        }
-
-
-        void HeadBobMovement() {
-            Vector3 pos = Vector3.zero;
-            pos.x = Mathf.Lerp(pos.x, Mathf.Sin(Time.time * headBobFrequency) * headBobAmmount * 1.4f,
-                Time.deltaTime * headBobSmoothSpeed);
-            pos.y = Mathf.Lerp(pos.y, Mathf.Sin(Time.time * headBobFrequency / 2) * headBobAmmount * 1.6f,
-                Time.deltaTime * headBobSmoothSpeed);
-            pos.z = 0;
-            cameraTarget.localPosition += pos;
-        }
-
-        public void SetCarController(CarController car, CarSeat seat) {
-            currentCar = car;
-            this.seat = seat;
-        }
-
-        public InputsBrain GetInputs() {
-            return pInput;
-        }
-
-        public Rigidbody GetRB() {
-            return rb;
-        }
-    }
+using UnityEngine.Serialization;
+
+namespace Player
+{
+	public class Controller : MonoBehaviour, IKnockable
+	{
+		private FiniteStateMachine stateMachine;
+		private InputsBrain        pInput;
+
+		public Camera playerCamera;
+		[SerializeField] private Rigidbody rb;
+		[SerializeField] private Transform modelTransform;
+		[SerializeField] private Transform groundRayPosition;
+		[SerializeField] private Transform cameraPosition;
+		[SerializeField] private LayerMask groundLayerMask;
+
+		[Header("Move Settings")]
+		[SerializeField]  private float          groundCheckDistance    = 0.2f;
+		[SerializeField]  public  AnimationCurve gravityForceOverTime;
+		[SerializeField]  private AnimationCurve movementSpeedOverTime;
+		[HideInInspector] public  float          movementTime;
+		public                    Vector2        movementInput;
+		public                    Vector2        lastInput;
+		public                    Vector3        groundNormal;
+		public                    float          normalMagn;
+		
+		[Header("Deceleration Settings")]
+		[SerializeField] private float decelerationTime = 0.3f;
+		private AnimationCurve decelerationCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+		private                  float          decelerationTimer;
+		private                  bool           isDecelerating;
+		private                  Vector3        lastMovementDirection; 
+		private                  float          lastMovementSpeed;     
+
+		
+		[Header("Jump Settings")]
+		public AnimationCurve jumpForceOverTime;
+		[SerializeField]  private float minJumpTime;
+		[HideInInspector] public  bool  canReleaseJump;
+		[HideInInspector] public  bool  isJumping;
+		[HideInInspector] public  float jumpTime;
+		[HideInInspector] public  float maxJumpTime;
+		[HideInInspector] public  float fallTime;
+		[HideInInspector] public  bool  isGrounded;
+		
+		[Header("Coyote Settings")] 
+		[SerializeField] private float coyoteTime;
+		[SerializeField] private float bufferTime;
+		private                  float bufferTimer;
+		public                   bool  havePressedJump;
+		private                  bool  canCoyoteJump;
+		
+		[Header("Camera Settings")]
+		[SerializeField] private float lookSensitivity;
+		[SerializeField] private float lookVerticalLimit;
+		[SerializeField] private float cameraSpeed;
+		
+		[Header("Headbob Settings")]
+		[SerializeField] private bool enableHeadbob = true;
+		[SerializeField] private float headbobFrequency           = 2f;    
+		[SerializeField] private float headbobHorizontalAmplitude = 0.05f; 
+		[SerializeField] private float headbobVerticalAmplitude   = 0.08f; 
+		[SerializeField] private float headbobSmoothness          = 10f;   
+
+		
+		public Transform       playerCameraTransform { get; private set; }
+		private float   yaw;
+		private float   pitch;
+		private float   headbobTimer;
+		private Vector3 headbobOffset;
+		private Vector2 lookInput;
+
+		public Transform originalParent { get; private set; }
+		
+		private bool  isknockedOut;
+		private float knockOutTime;
+		private float knockOutTimer;
+
+		[HideInInspector] public bool          isDriving = false;
+		[HideInInspector] public bool          isSeated = false;
+		[HideInInspector] public CarController currentCar;
+		public CarSeat seat { get; private set; }
+		private Collider collider;
+		private GadgetPickup pickUp;
+		
+		private Action<InputAction.CallbackContext> onMove;
+		private Action<InputAction.CallbackContext> onLook;
+
+		private Action        onJump;
+		private Action        stopJump;
+		private Action        stopMove;
+
+		public float debugFall;
+
+		private bool inCar;
+		public float interactTimer;
+		
+		void Awake()
+		{
+			Initialize();
+			SetupStateMachine();
+		}
+
+		private void Start()
+		{
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+			playerCameraTransform = playerCamera.transform;
+			AssignActions();
+			SubscribeInputSystemActions();
+			GetInputs().DisableCarInput();
+		}
+
+		#region AWAKE METHODS
+
+		void Initialize()
+		{
+			if (TryGetComponent(out pInput))
+			{
+				pInput.Initialize();
+				Debug.Log("Found PLAYER INPUT");
+			}
+			else Debug.LogError("PlayerInput not found");
+
+			if (TryGetComponent(out pickUp))
+			{
+				Debug.Log("Found GADGET INPUT and reference this as Controller");
+				pickUp.Initialize(this);
+			}
+			
+			originalParent = transform.parent;
+			
+			if(TryGetComponent(out collider)) Debug.Log("Found collider");
+			else Debug.LogError("Collider not found");
+		}
+
+		void SetupStateMachine()
+		{
+			stateMachine = new FiniteStateMachine();
+
+			var movementState = new MovementState(this);
+			var     jumpState     = new JumpState(this);
+			var     stunState     = new StunState(this);
+			var      carState      = new CarState(this);
+			var seatedState = new SeatedState(this);
+			
+			At(movementState, jumpState, new FuncPredicate(() => isJumping || (havePressedJump && isGrounded)));
+			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
+			
+			Any(stunState, new FuncPredicate(()=> isknockedOut));
+			At(stunState, movementState, new FuncPredicate(()=> !isknockedOut));
+			
+			Any(carState, new FuncPredicate(()=> isDriving));
+			Any(seatedState, new FuncPredicate(()=> isSeated));
+			
+			At(carState, movementState, new FuncPredicate(()=> !isDriving));
+			At(seatedState, movementState, new FuncPredicate(()=> !isSeated));
+			
+			stateMachine.SetState(movementState);
+		}
+
+		#endregion
+		
+		#region INPUT MANAGER & START METHODS
+
+		private void OnDisable()
+		{
+			UnsubscribeInputSystemActions();
+		}
+		
+		void SubscribeInputSystemActions()
+		{
+			pInput.jump.started += _ => onJump?.Invoke();
+
+			pInput.move.performed += onMove;
+			pInput.look.performed += onLook;
+
+			pInput.move.canceled += _ => stopMove?.Invoke();
+			pInput.jump.canceled += _ => stopJump?.Invoke();
+			
+			pInput.LeaveCar.started += _ => Interaction();
+			pInput.pickUp.started += _ => Interaction();
+		}
+
+		void AssignActions()
+		{
+			onMove   += PlayerMovementInputs;
+			onLook   += CameraMovementsInputs;
+			stopMove += ResetPlayerMovementInputs;
+			onJump   += JumpInput;
+			stopJump += StopJumpInput;
+		}
+
+		void UnsubscribeInputSystemActions()
+		{
+			pInput.jump.started -= _ => onJump?.Invoke();
+
+			pInput.move.performed -= onMove;
+			pInput.look.performed -= onLook;
+
+			pInput.move.canceled -= _ => stopMove?.Invoke();
+			pInput.jump.canceled -= _ => onJump?.Invoke();
+			
+			pInput.LeaveCar.started -= _ => Interaction();
+			pInput.pickUp.started -= _ => Interaction();
+		}
+
+		public void UnbindLook() {
+			pInput.look.performed -= onLook;
+		}
+
+		public void RebindLook() {
+			pInput.look.performed += onLook;
+		}
+		
+		#endregion
+		
+		#region INPUTS METHODS
+		
+		private void PlayerMovementInputs(InputAction.CallbackContext ctx)
+		{
+			movementInput = ctx.ReadValue<Vector2>();
+			if (movementInput.magnitude > 0.01f)
+			{
+				isDecelerating    = false;
+				decelerationTimer = 0f;
+			}
+		}
+
+		private void ResetPlayerMovementInputs()
+		{
+			if (!isDecelerating && rb.linearVelocity.magnitude > 0.1f)
+			{
+				Vector3 currentVel = rb.linearVelocity;
+				lastMovementDirection = new Vector3(currentVel.x, 0, currentVel.z).normalized;
+				lastMovementSpeed     = new Vector3(currentVel.x, 0, currentVel.z).magnitude;
+				isDecelerating        = true;
+				decelerationTimer     = 0f;
+			}
+    
+			movementInput = Vector2.zero;
+		}
+		
+		private void CameraMovementsInputs(InputAction.CallbackContext ctx)
+		{
+			lookInput = ctx.ReadValue<Vector2>();
+		}
+
+		
+		private void StopJumpInput()
+		{
+			isJumping     = false;
+			canCoyoteJump = false;
+		}
+
+		private void JumpInput()
+		{
+			if (fallTime != 0) havePressedJump = true;
+			if (isGrounded || (fallTime < coyoteTime && canCoyoteJump))
+			{
+				isJumping     = true;
+			}
+		}
+
+		private void Interaction() {
+			if(interactTimer > 0) return;
+			interactTimer = 0.2f;
+			
+			if(isSeated) isSeated = false;
+			else pickUp.TryPickupNearbyGadget();
+		}
+		
+		#endregion
+
+		#region METHODS
+		
+		public void HandleMovement() {
+			var orientation = 0f;
+			if (inCar) {
+				orientation = transform.parent.eulerAngles.y;
+			}
+			
+			var targetRotation = Quaternion.Euler(0,orientation + yaw, 0);
+			var    forward        = targetRotation * Vector3.forward;
+			var    right          = targetRotation * Vector3.right;
+
+			Vector3 move         = (forward * movementInput.y + right * movementInput.x).normalized;
+			Vector3 orientedMove = Vector3.ProjectOnPlane(move, groundNormal);
+			Vector3 horizontalVelocity;
+			modelTransform.forward =  forward;
+			
+			if (Vector3.Distance(movementInput, lastInput) > 0.8f)
+			{
+				Debug.Log(Vector3.Distance(movementInput, lastInput));
+				orientedMove = -orientedMove;
+				movementTime = 0;
+			}
+			lastInput =  movementInput;
+			
+			if (movementInput.magnitude > 0.01f)
+			{
+				rb.useGravity         =  true;
+				movementTime       += Time.fixedDeltaTime;
+				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime);
+			}
+			else if (isDecelerating && decelerationTimer < decelerationTime)
+			{
+				decelerationTimer += Time.fixedDeltaTime;
+				var normalizedTime = decelerationTimer / decelerationTime;
+				var curveValue     = decelerationCurve.Evaluate(normalizedTime);
+				
+				horizontalVelocity = lastMovementDirection * (lastMovementSpeed * curveValue);
+				
+				movementTime = Mathf.Lerp(movementTime, 0f, normalizedTime);
+			}
+			else
+			{
+				if (Vector3.Angle(groundNormal, Vector3.up) > 0)
+				{
+					rb.useGravity = false;
+				}
+				horizontalVelocity = Vector3.zero;
+				movementTime       = 0f;
+				isDecelerating     = false;
+			}
+			
+			var finalVelocity = horizontalVelocity;
+    
+			if (!isGrounded && !isJumping)
+			{
+				fallTime        += Time.fixedDeltaTime;
+				if(havePressedJump) bufferTimer += Time.fixedDeltaTime;
+				finalVelocity.y =  -gravityForceOverTime.Evaluate(fallTime);
+				debugFall       =  -gravityForceOverTime.Evaluate(fallTime);
+			}
+			else
+			{
+				finalVelocity.y = rb.linearVelocity.y;
+			}
+
+			rb.linearVelocity = finalVelocity;
+		}
+
+		
+
+		public void HandleJump()
+		{
+			Debug.Log("JUMP");
+			if (jumpTime >= minJumpTime)
+			{
+				canReleaseJump = true;
+			}
+			
+			if (jumpTime < maxJumpTime)
+			{
+				Vector3 jumpVel = rb.linearVelocity;
+				jumpVel.y         =  jumpForceOverTime.Evaluate(jumpTime);;
+				rb.linearVelocity =  jumpVel;
+				jumpTime          += Time.fixedDeltaTime;
+			}
+		}
+
+		public void CheckGround()
+		{
+			isGrounded = Physics.Raycast(groundRayPosition.position, Vector3.down, out var hit, groundCheckDistance, groundLayerMask);
+			
+			if (isGrounded)
+			{
+				groundNormal  = hit.normal;
+				if(bufferTimer            > bufferTime) havePressedJump = false;
+				bufferTimer   = 0;
+				canCoyoteJump = true;
+				fallTime      = 0;
+				Keyframe[] keyframes = gravityForceOverTime.keys;
+				keyframes[0].value               = 0;
+				gravityForceOverTime.keys = keyframes;
+				jumpTime                  = 0f;
+			}
+			else
+			{
+				groundNormal  = Vector3.up;
+			}
+		}
+		
+		void HandleCamera() {
+			var orientation = 0f;
+			if (isSeated || isDriving || inCar) {
+				orientation = transform.parent.eulerAngles.y;
+			}
+			
+			yaw   += lookInput.x * lookSensitivity;
+		    pitch -= lookInput.y * lookSensitivity;
+		    pitch =  Mathf.Clamp(pitch, -lookVerticalLimit, lookVerticalLimit);
+		    
+		    playerCameraTransform.position = cameraPosition.position;
+		    playerCameraTransform.rotation = Quaternion.Lerp(
+		        playerCameraTransform.rotation, 
+		        Quaternion.Euler(pitch, orientation + yaw, 0), 
+		        Time.deltaTime * cameraSpeed
+		    );
+		}
+
+		public void HandleHeadbob()
+		{
+		    Vector3 targetPosition = playerCameraTransform.position;
+		    
+		    if (enableHeadbob && isGrounded && movementInput.magnitude > 0.01f && !isJumping)
+		    {
+		        float currentSpeed    = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
+		        float speedMultiplier = Mathf.Clamp01(currentSpeed / movementSpeedOverTime.Evaluate(5f));
+		        
+		        headbobTimer += Time.deltaTime * headbobFrequency * speedMultiplier;
+		        
+		        float horizontalOffset = Mathf.Sin(headbobTimer) * headbobHorizontalAmplitude * speedMultiplier;
+		        float verticalOffset = Mathf.Abs(Mathf.Sin(headbobTimer * 2f)) * headbobVerticalAmplitude * speedMultiplier;
+		        
+		        Vector3 targetHeadbobOffset = new Vector3(horizontalOffset, verticalOffset, 0);
+		        headbobOffset = Vector3.Lerp(headbobOffset, targetHeadbobOffset, Time.deltaTime * headbobSmoothness);
+		        
+		        targetPosition += playerCameraTransform.right * headbobOffset.x;
+		        targetPosition += playerCameraTransform.up * headbobOffset.y;
+		    }
+		    else
+		    {
+		        headbobOffset = Vector3.Lerp(headbobOffset, Vector3.zero, Time.deltaTime * headbobSmoothness);
+		        
+		        targetPosition += playerCameraTransform.right * headbobOffset.x;
+		        targetPosition += playerCameraTransform.up * headbobOffset.y;
+		        
+		        headbobTimer = Mathf.Lerp(headbobTimer, 0f, Time.deltaTime * headbobSmoothness);
+		    }
+		    
+		    playerCameraTransform.position = targetPosition;
+		}
+
+		public void ResetHeadbob()
+		{
+		    headbobTimer = 0f;
+		    headbobOffset = Vector3.zero;
+		}
+		
+		#endregion
+	
+		#region BOOL
+
+		bool StopJumpCheck()
+		{
+			return (!isJumping && canReleaseJump) || jumpTime >= maxJumpTime;
+		}
+		
+
+		#endregion
+		
+		void Update()
+		{
+			stateMachine.Update();
+			if(interactTimer > 0)
+				interactTimer -= Time.deltaTime;
+		}
+		
+		void FixedUpdate()
+		{
+			stateMachine.FixedUpdate();
+		}
+		
+		void LateUpdate() {
+			HandleCamera();
+			stateMachine.LateUpdate();
+		}
+
+		public void SetPlayerInCar(Transform newParent) {
+			yaw -= newParent.eulerAngles.y;
+			
+			transform.parent = newParent;
+			playerCameraTransform.parent = newParent;
+			inCar = true;
+			GetRB().interpolation = RigidbodyInterpolation.None;
+		}
+
+		public void RemovePlayerFromCar() {
+			yaw += transform.parent.eulerAngles.y;
+			
+			transform.parent = originalParent;
+			playerCameraTransform.parent = originalParent;
+			inCar = false;
+			GetRB().interpolation = RigidbodyInterpolation.Interpolate;
+		}
+		
+		
+		#region HELPERS
+
+		void At(IState from, IState to, IPredicate condition)
+		{
+			stateMachine.AddTransition(from, to, condition);
+		}
+
+		void Any(IState to, IPredicate  condition)
+		{
+			stateMachine.AddAnyTransition(to, condition);
+		}
+		
+		public void SetCarController(CarController car, CarSeat carSeat)
+		{
+			currentCar = car;
+			seat = carSeat;
+		}
+
+		public void EnableCollider() {
+			collider.enabled = true;
+		}
+		
+		public void DisableCollider() {
+			collider.enabled = false;
+		}
+		
+		public InputsBrain GetInputs()
+		{
+			return pInput;
+		}
+
+		public Rigidbody GetRB()
+		{
+			return rb;
+		}
+
+		#endregion
+
+		private void OnDrawGizmos()
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
+		}
+
+		public void KnockOut(float time)
+		{
+			if (isknockedOut) return;
+			isknockedOut  = true;
+			knockOutTime  = 0;
+			knockOutTimer = time;
+		}
+
+		public void HandleKnockTimer()
+		{
+			knockOutTime+= Time.deltaTime;
+			if (knockOutTime >= knockOutTimer)
+			{
+				isknockedOut =  false;
+			}
+		}
+	}
 }

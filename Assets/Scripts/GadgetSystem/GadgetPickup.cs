@@ -4,19 +4,16 @@ using UnityEngine;
 
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
+        private                  Controller       player;
+        [SerializeField] private GadgetController gadgetController;
+        [SerializeField] private Transform        gadgetTransform;
+        [SerializeField] private LayerMask        interactableLayerMask;
+        [SerializeField] private float            pickupRange = 2f;
         
-        private Controller player;
-        [SerializeField] private GadgetInventory playerInventory;
-        [SerializeField] private Transform gadgetTransform;
-        [SerializeField] private LayerMask interactableLayerMask;
-        [SerializeField] private float pickupRange = 2f;
-
-        private const int MAX_PICKUP_COUNT = 5;
         private Collider[] hitColliders;
-
+        
         public void Initialize(Controller p) {
             player = p;
-            player.GetInputs().pickUp.started += _ => TryPickupNearbyGadget();
         }
 
 
@@ -27,37 +24,20 @@ namespace GadgetSystem {
         }
 
         void OnDisable() {
-            player.GetInputs().pickUp.started -= _ => TryPickupNearbyGadget();
+            player.GetInputs().pickUp.performed -= _ => TryPickupNearbyGadget();
         }
 
         #endregion
 
 
         [ContextMenu("Pickup")]
-        private void TryPickupNearbyGadget() {
-            //Ray
-
-            // hitColliders = new Collider[MAX_PICKUP_COUNT];
-            // int numColliders =
-            //     Physics.OverlapSphereNonAlloc(transform.position, pickupRange, hitColliders, gadgetLayerMask);
-            //
-            // Transform closestObj = hitColliders[0].transform;
-            // IGadget gadget = closestObj ? closestObj.GetComponent<IGadget>() : null;
-            //
-            // for (int i = 0; i < numColliders; i++) {
-            //     if (closestObj == null) continue;
-            //     if (Vector3.Distance(transform.position, hitColliders[i].transform.position) <
-            //         Vector3.Distance(transform.position, closestObj.position)
-            //         && !playerInventory.gadgets.Contains(gadget)) {
-            //         closestObj = hitColliders[i].transform;
-            //         gadget = closestObj.GetComponent<IGadget>();
-            //     }
-            // }
-
-            Physics.Raycast(player.playerCamera.transform.position, player.playerCamera.transform.forward, out var hit, pickupRange, interactableLayerMask);
+        public void TryPickupNearbyGadget() {
+            if(player.isSeated || player.isDriving) return;
             
-            //Debug.Log(closestObj.name + "est le plus proche : " + Vector3.Distance(transform.position, closestObj.position));
-
+            var baseCast = new Ray(player.playerCamera.transform.position, player.playerCamera.transform.forward);
+            //Physics.SphereCast(baseCast, 0.25f, out var hit, pickupRange, interactableLayerMask);
+            Physics.Raycast(baseCast, out var hit, pickupRange, interactableLayerMask);
+            
             if(!hit.collider) return;
             
             if (hit.collider.TryGetComponent(out CarSeat seat) && !seat.playerAlreadySeated) {
@@ -65,12 +45,13 @@ namespace GadgetSystem {
                 return;
             }
             
-            Transform hitted = hit.collider.transform;
-            if (playerInventory.AddGadget(hit.collider.GetComponent<IGadget>())) {
-                hitted.position = gadgetTransform.position;
-                hitted.forward = gadgetTransform.forward;
-                hitted.SetParent(gadgetTransform);
-                hitted.GetComponent<Gadget>().OnPickup();
+            var hitted = hit.collider.transform;
+            if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
+                Gadget gadget = hitted.GetComponent<Gadget>();
+                //hitted.SetParent(gadgetTransform);
+                gadget.target            = gadgetTransform;
+                gadget.transform.forward = gadgetTransform.forward;
+                gadget.OnPickup();
                 //Debug.Log("Ramassé:" + gadget.Name);
             }
             else {

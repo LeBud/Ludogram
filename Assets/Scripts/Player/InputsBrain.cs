@@ -9,10 +9,10 @@ namespace Player
         private PlayerInput pInput;
         private InputActionAsset playerActions;
         private InputActionMap playerMap;
-        [HideInInspector] public InputAction    move, look, jump, pickUp;
+        [HideInInspector] public InputAction    move, look, jump, pickUp, use, drop;
         
-        private InputActionMap carMap;
-        public InputAction Steering, Throttle, Brake, LeaveCar;
+        private                 InputActionMap carMap;
+        [HideInInspector] public InputAction    Steering, Throttle, Reverse, LeaveCar, Brake;
 
         public void Initialize()
         {
@@ -20,14 +20,17 @@ namespace Player
                 playerActions = pInput.actions;
                 playerMap = playerActions.FindActionMap("Player", true);
                 carMap = playerActions.FindActionMap("Car", true);
-                
+
                 move = playerMap.FindAction("Move", true);
                 look = playerMap.FindAction("Look", true);
                 jump = playerMap.FindAction("Jump", true);
-                pickUp = playerMap.FindAction("PickUpGadget", true);
+                pickUp = playerMap.FindAction("PickUp", true);
+                use = playerMap.FindAction("Use", true);
+                drop = playerMap.FindAction("DropGadget", true);
                 
                 Steering = carMap.FindAction("Steering");
                 Throttle = carMap.FindAction("Throttle");
+                Reverse = carMap.FindAction("Reverse");
                 Brake = carMap.FindAction("Brake");
                 LeaveCar = carMap.FindAction("LeaveCar");
             }
