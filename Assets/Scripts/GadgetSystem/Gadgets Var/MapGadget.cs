@@ -14,8 +14,12 @@ public class MapGadget : Gadget
         if(readState != null) StopCoroutine(readState);
         readState = StartCoroutine(Read());
     }
-    
-    
+
+    public override void IsTaken()
+    {
+        base.IsTaken();
+    }
+
     public override void Release()
     {
         if(readState != null) StopCoroutine(readState);
@@ -29,6 +33,8 @@ public class MapGadget : Gadget
 
     public override void Drop()
     {
+        base.Drop();
+        if(readState != null) StopCoroutine(readState);
         transform.SetParent(null);
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
@@ -39,7 +45,7 @@ public class MapGadget : Gadget
         float elapsedTime = 0;
         while (elapsedTime < transitionTime)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, readPosition, elapsedTime / transitionTime);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, (transform.position + readPosition), elapsedTime / transitionTime);
             elapsedTime             += Time.deltaTime;
             yield return null;
         }
