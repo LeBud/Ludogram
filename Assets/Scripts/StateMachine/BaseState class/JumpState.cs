@@ -12,7 +12,6 @@ namespace StateMachine.BaseState_class
 
 		public override void OnEnter()
 		{
-			Debug.Log("EnterJump");
 			player.maxJumpTime = player.jumpForceOverTime.keys[player.jumpForceOverTime.length - 1].time;
 			player.ResetHeadbob();
 		}
@@ -31,7 +30,6 @@ namespace StateMachine.BaseState_class
 
 		public override void OnExit()
 		{
-			Debug.Log("ExitJump");
 			player.canReleaseJump = false;
 			player.fallTime       = 0;
 			player.isJumping = false;

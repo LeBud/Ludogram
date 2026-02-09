@@ -1,11 +1,24 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Robber : MonoBehaviour, IKnockable
 {
+    public bool isStunned = false;
     public void KnockOut(float time)
     {
-        Debug.Log($"KnockOut for {time} seconds");
+        if (!isStunned)
+        {
+            Debug.Log($"KnockOut for {time} seconds");
+            StartCoroutine(Stun(time));
+            isStunned = true;   
+        }
+    }
+
+    IEnumerator Stun(float time)
+    {
+        yield return new WaitForSeconds(time);
+        isStunned = false;
     }
 
     [ContextMenu("Attack")]

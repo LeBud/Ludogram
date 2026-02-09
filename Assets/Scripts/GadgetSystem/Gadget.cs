@@ -8,20 +8,20 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[SerializeField] protected int    maxUses = 1;
 	protected int currentUses;
     
-	public string Name         => gadgetName;
-	public Sprite Icon         => icon;
-	public int    CurrentUses  => currentUses;
-	public int    MaxUses      => maxUses;
-	public bool   IsHandled    { get; }
-	public bool   IsInfinite   => maxUses == -1;
-	public bool   IsDepleted   => !IsInfinite && currentUses <= 0;
+	public string Name        => gadgetName;
+	public Sprite Icon        => icon;
+	public int    CurrentUses => currentUses;
+	public int    MaxUses     => maxUses;
+	public bool   IsHandled   { get; }
+	public bool   IsInfinite  => maxUses == -1;
+	public bool   IsDepleted  => !IsInfinite && currentUses <= 0;
 
 	[Header("Follow Player")]
 	public Vector3 offset;
-	public float   smoothTime;
-	private Vector3 velref = Vector3.zero;
+	public                  float   smoothTime;
+	[HideInInspector] public Vector3 velref = Vector3.zero;
 
-	public Transform target;
+	public Transform target = null;
 
 	protected virtual void Awake() => currentUses = maxUses;
 
@@ -29,19 +29,18 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	{
 		if (!CanUse()) return;
 		OnUse();
-		
 	}
+	
 	
 	
 	public virtual void IsTaken()
 	{
-		if (target != null)
-		{
-			//transform.forward = target.forward;
-			Vector3 targetPos = target.position + offset;
-			transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velref, smoothTime);
-			transform.rotation = Quaternion.LookRotation(target.forward);
-		}
+		if (target == null) return;
+		//transform.forward = target.forward;
+		Vector3 targetPos = target.position + offset;
+		transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velref, smoothTime);
+		transform.rotation = Quaternion.LookRotation(target.forward);
+
 	}
 
 

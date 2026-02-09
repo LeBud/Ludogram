@@ -7,6 +7,7 @@ namespace GadgetSystem {
         private                  Controller       player;
         [SerializeField] private GadgetController gadgetController;
         [SerializeField] private Transform        gadgetTransform;
+        public static Transform        gadgetStaticTransform;
         [SerializeField] private LayerMask        interactableLayerMask;
         [SerializeField] private float            pickupRange = 2f;
         
@@ -16,7 +17,10 @@ namespace GadgetSystem {
             player = p;
         }
 
-
+        void Start()
+        {
+            gadgetStaticTransform = gadgetTransform;
+        }
         #region InputSystem
 
         void OnEnable() {
