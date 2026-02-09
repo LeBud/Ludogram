@@ -7,13 +7,14 @@ using StateMachine.Finite_State_Machine_Interaces;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Robber : MonoBehaviour, IKnockable
-{
+public class Robber : MonoBehaviour, IKnockable {
     private FiniteStateMachine stateMachine;
     public NavMeshAgent agent { get; private set; }
     public EnemyMovementController movement { get; private set; }
-
+    public Rigidbody rigidbody { get; private set; }
+    
     private bool knockOut = false;
+    public float knockOutTime { get; private set; }
     
     private void Awake() {
         Initialize();
@@ -23,10 +24,16 @@ public class Robber : MonoBehaviour, IKnockable
     private void Initialize() {
         if(TryGetComponent(out NavMeshAgent agent)) this.agent = agent;
         else Debug.LogError("No NavMeshAgent found");
+        if(TryGetComponent(out Rigidbody rb)) rigidbody = rb;
+        else Debug.LogError("No EnemyMovementController found");
         if(TryGetComponent(out EnemyMovementController move)) movement = move;
         else Debug.LogError("No EnemyMovementController found");
         
         movement.Initialize(agent);
+        
+        //Set the rigidbody
+        rigidbody.isKinematic = true;
+        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     private void Start() {
@@ -46,7 +53,7 @@ public class Robber : MonoBehaviour, IKnockable
         At(waitState, pursuitState, new FuncPredicate(() => movement.playerInRange.Count > 0));
         At(pursuitState, waitState, new FuncPredicate(() => movement.playerInRange.Count == 0));
         
-        At(knockOutState, pursuitState, new FuncPredicate(() => !knockOut));
+        At(knockOutState, pursuitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
         
         //Set Any State
         Any(knockOutState, new FuncPredicate(() => knockOut));
@@ -61,6 +68,10 @@ public class Robber : MonoBehaviour, IKnockable
     void FixedUpdate() {
         stateMachine.FixedUpdate();
     }
+
+    void OnDestroy() {
+        GameManager.instance.enemyManager.DeregisterEnemy(this);
+    }
     
     void At(IState from, IState to, IPredicate condition)
     {
@@ -72,11 +83,16 @@ public class Robber : MonoBehaviour, IKnockable
         stateMachine.AddAnyTransition(to, condition);
     }
 
-    public void KnockOut(float time)
-    {
+    public void KnockOut(float time) {
+        knockOutTime = time;
+        knockOut = true;
         Debug.Log($"KnockOut for {time} seconds");
     }
 
+    public void UnKnockOut() {
+        knockOut = false;
+    }
+    
     [ContextMenu("Attack")]
     public void KnockOutPlayer()
     {
