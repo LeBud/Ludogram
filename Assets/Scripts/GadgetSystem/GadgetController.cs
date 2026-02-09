@@ -56,9 +56,12 @@ public class GadgetController : MonoBehaviour
 	
 	public void DropGadget()
 	{
-		selectedGadget?.Drop();
-		selectedGadget = null;
-		gadgetObject = null;
+		if (gadgetObject != null)
+		{
+			selectedGadget?.Drop();
+			selectedGadget = null;
+			gadgetObject   = null;	
+		}
 	}
 	
 	#region INPUT SYSTEM

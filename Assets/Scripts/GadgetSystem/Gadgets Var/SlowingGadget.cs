@@ -27,6 +27,8 @@ namespace GadgetSystem.Gadgets_Var
             Debug.Log("Collision");
             if (collision.gameObject.layer == surfaceLayer)
             {
+                GameObject newSlowZone = Instantiate(this.slowZone,  collision.contacts[0].point, Quaternion.identity);
+                //StartCoroutine(EffectManager.instance.SmoothSpawnEffect(newSlowZone, 0.25f));
                 Destroy(gameObject);
                 Debug.Log("Create SlowZone");
             }
