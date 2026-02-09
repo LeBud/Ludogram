@@ -35,7 +35,7 @@ public class GadgetController : MonoBehaviour
 
 	void Update()
 	{
-		selectedGadget.IsTaken();
+		selectedGadget?.IsTaken();
 	}
     
 	public void UseGadget()
@@ -53,6 +53,7 @@ public class GadgetController : MonoBehaviour
 	{
 		selectedGadget.Release();
 	}
+	
 	public void DropGadget()
 	{
 		selectedGadget?.Drop();

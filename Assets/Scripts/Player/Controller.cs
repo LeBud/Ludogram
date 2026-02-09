@@ -302,7 +302,6 @@ namespace Player
 			
 			if (Vector3.Distance(movementInput, lastInput) > 0.8f)
 			{
-				Debug.Log(Vector3.Distance(movementInput, lastInput));
 				orientedMove = -orientedMove;
 				movementTime = 0;
 			}
@@ -356,7 +355,6 @@ namespace Player
 
 		public void HandleJump()
 		{
-			Debug.Log("JUMP");
 			if (jumpTime >= minJumpTime)
 			{
 				canReleaseJump = true;
