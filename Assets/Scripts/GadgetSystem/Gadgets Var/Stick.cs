@@ -2,7 +2,7 @@ using System.Collections;
 using Player;
 using UnityEngine;
 
-public class StickGadget : Gadget
+public class Stick : Gadget
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] LayerMask hitLayerMask;

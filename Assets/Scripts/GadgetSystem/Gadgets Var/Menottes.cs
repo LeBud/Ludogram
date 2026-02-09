@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class MoneyBag : Gadget
+public class Menottes : Gadget
 {
-    [SerializeField]private  Rigidbody rb;
-    [SerializeField]private int moneyValue;
-    [SerializeField]private LayerMask moneyZoneLayerMask;
-    [SerializeField]private  float     launchSpeed;
-    private bool      isUsed = false;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private int       moneyValue;
+    [SerializeField] private LayerMask enemisLayerMask;
+    [SerializeField] private float     launchSpeed;
+    private                  bool      isUsed = false;
 
     protected override void OnUse()
     {
@@ -34,9 +34,14 @@ public class MoneyBag : Gadget
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == moneyZoneLayerMask)
+        if (collision.gameObject.layer == enemisLayerMask)
         {
-            Destroy(gameObject);
+            if (collision.gameObject.TryGetComponent(out Robber robber) && robber.isStunned)
+            {
+                Destroy(gameObject);
+            }
         }
     }
+    
+    
 }
