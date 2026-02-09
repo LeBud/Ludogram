@@ -280,7 +280,6 @@ GameObject:
   - component: {fileID: 1432589740226359693}
   - component: {fileID: 424766025125358269}
   - component: {fileID: 1664221753916381289}
-  - component: {fileID: 7708984246566989306}
   m_Layer: 3
   m_Name: PlayerV2
   m_TagString: Untagged
@@ -382,7 +381,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Gamepad
-  m_DefaultActionMap: df70fa95-8a34-4494-b137-73ab6b9c7d37
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 2963120311227464727}
 --- !u!114 &7724837287475400754
@@ -455,6 +454,10 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementTime: 0
+  movementInput: {x: 0, y: 0}
+  lastInput: {x: 0, y: 0}
+  groundNormal: {x: 0, y: 0, z: 0}
+  normalMagn: 0
   decelerationTime: 0.25
   jumpForceOverTime:
     serializedVersion: 2
@@ -487,6 +490,9 @@ MonoBehaviour:
   maxJumpTime: 0.1
   fallTime: 0
   isGrounded: 0
+  coyoteTime: 0
+  bufferTime: 0
+  havePressedJump: 0
   lookSensitivity: 1
   lookVerticalLimit: 80
   cameraSpeed: 15
@@ -499,6 +505,7 @@ MonoBehaviour:
   isSeated: 0
   currentCar: {fileID: 0}
   debugFall: 0
+  interactTimer: 0
 --- !u!114 &1432589740226359693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -583,11 +590,11 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  Brake:
+  Reverse:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 3b169b31-8f60-4274-b092-f7ebf88cc31c
+    m_Id: ae7a9414-33e5-456a-86b2-e2e348e233d4
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -597,6 +604,15 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 706d5da8-c269-4bbe-a37c-252d7c13dc5b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Brake:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 3b169b31-8f60-4274-b092-f7ebf88cc31c
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -627,24 +643,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c60dec95e4e81478d061fb1e6ece96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GadgetSystem.GadgetPickup
-  gadgetController: {fileID: 0}
+  gadgetController: {fileID: 424766025125358269}
   gadgetTransform: {fileID: 916862714566091920}
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 192
   pickupRange: 3
---- !u!114 &7708984246566989306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4528880029191460453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f9c6a87fd104190b7468caabfb1bf13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player.ApplyVehiculePhysics
 --- !u!1 &7523587435861852068
 GameObject:
   m_ObjectHideFlags: 0
