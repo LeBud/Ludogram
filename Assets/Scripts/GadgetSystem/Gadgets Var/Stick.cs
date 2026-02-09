@@ -78,9 +78,8 @@ public class StickGadget : Gadget
             {
                 Debug.Log("Release");
                 Hit();
-                StopCoroutine(chargeStick);
-                
-                setback                 = baseForce;
+                if (chargeStick != null) StopCoroutine(chargeStick);
+                setback = baseForce;
             }
         
             chargeStick = null;
