@@ -53,6 +53,7 @@ public class GadgetController : MonoBehaviour
 	{
 		selectedGadget.Release();
 	}
+	
 	public void DropGadget()
 	{
 		selectedGadget?.Drop();

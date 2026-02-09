@@ -20,7 +20,7 @@ public class StickGadget : Gadget
     
     private int        currentLoadTime;
     private Controller player;
-    private bool       canUse = true;
+    public bool       canUse = true;
     private float      baseForce;
     private Coroutine  chargeStick;
     
@@ -34,19 +34,21 @@ public class StickGadget : Gadget
     
     protected override void OnUse()
     {
-        switch (heavyStick)
+        if (canUse)
         {
-            case true:
-                if (!canUse) return;
-                if(chargeStick != null) StopCoroutine(chargeStick);
-                chargeStick = StartCoroutine(LoadForce());
-                break;
-            case false:
-                if (!canUse) return;
-                StartCoroutine(AnimateGadget());
-                Hit();
-                break;
+            switch (heavyStick)
+            {
+                case true:
+                    if(chargeStick != null) StopCoroutine(chargeStick);
+                    chargeStick = StartCoroutine(LoadForce());
+                    break;
+                case false:
+                    StartCoroutine(AnimateGadget());
+                    Hit();
+                    break;
+            }
         }
+        
         
     }
 
@@ -71,14 +73,17 @@ public class StickGadget : Gadget
     {
         if (canUse)
         {
+            
             if (heavyStick)
             {
+                Debug.Log("Release");
                 Hit();
                 StopCoroutine(chargeStick);
-                transform.localRotation = Quaternion.Euler(0, 0, 0);
+                
                 setback                 = baseForce;
             }
         
+            chargeStick = null;
             StartCoroutine(Cooldown());
         }
         
@@ -94,9 +99,20 @@ public class StickGadget : Gadget
 
     IEnumerator AnimateGadget()
     {
-        transform.localRotation = Quaternion.Euler(-90, 0, 0);
+        transform.localRotation = Quaternion.Euler(90, 0, 0);
         yield return new WaitForSeconds(0.15f);
         transform.localRotation = Quaternion.Euler(0, 0, 0);
+    }
+
+    public override void IsTaken()
+    {
+        if (target != null)
+        {
+            //transform.forward = target.forward;
+            Vector3 targetPos                         = target.position + offset;
+            transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velref, smoothTime);
+            if(chargeStick == null)  transform.rotation = Quaternion.LookRotation(target.forward);
+        }
     }
 
     IEnumerator LoadForce()
@@ -106,10 +122,12 @@ public class StickGadget : Gadget
         while (elapsed < maxLoadTime)
         {
             setback                 =  Mathf.Lerp(baseForce, maxLoadForce, elapsed / maxLoadTime);
-            transform.localRotation =  Quaternion.Lerp(Quaternion.Euler(0, 0, 0), Quaternion.Euler(-60, 0, 0), elapsed / maxLoadTime);
+            transform.rotation =  Quaternion.Lerp(transform.rotation, Quaternion.Euler(60, 0, 0), elapsed / maxLoadTime);
             elapsed                 += Time.deltaTime;
             yield return null;
         }
+
+        transform.rotation = Quaternion.Euler(60, 0, 0);
     }
 
     public override void OnPickup()
@@ -120,7 +138,6 @@ public class StickGadget : Gadget
     public override void Drop()
     {
         base.Drop();
-        transform.SetParent(null);
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }

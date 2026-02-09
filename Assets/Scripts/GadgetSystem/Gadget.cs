@@ -18,8 +18,8 @@ public abstract class Gadget : MonoBehaviour, IGadget
 
 	[Header("Follow Player")]
 	public Vector3 offset;
-	public float   smoothTime;
-	private Vector3 velref = Vector3.zero;
+	public                  float   smoothTime;
+	[HideInInspector] public Vector3 velref = Vector3.zero;
 
 	public Transform target;
 

@@ -302,7 +302,6 @@ namespace Player
 			
 			if (Vector3.Distance(movementInput, lastInput) > 0.8f)
 			{
-				Debug.Log(Vector3.Distance(movementInput, lastInput));
 				orientedMove = -orientedMove;
 				movementTime = 0;
 			}
