@@ -16,8 +16,9 @@ public class Ball :  Gadget
         rb.AddForce(transform.forward * speed, ForceMode.Impulse);
     }
 
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
+        gadgetController = gc;
         rb.isKinematic = true;
         isUsed = false;
     }

@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
     
     private bool knockOut = false;
     public float knockOutTime { get; private set; }
-    
+    public Vector3 knockOutForce { get; private set; }
     private void Awake() {
         Initialize();
         SetupStateMachine();
@@ -83,12 +83,21 @@ public class EnemyController : MonoBehaviour, IKnockable {
         stateMachine.AddAnyTransition(to, condition);
     }
 
-    public void KnockOut(float time) {
+    public void KnockOut(float time, Vector3 knockOutForce) {
+        this.knockOutForce = knockOutForce;
         knockOutTime = time;
         knockOut = true;
         Debug.Log($"KnockOut for {time} seconds");
     }
 
+    public void EnableNavMesh() {
+        agent.enabled = true;
+    }
+
+    public void DisableNavMesh() {
+        agent.enabled = false;
+    }
+    
     public void UnKnockOut() {
         knockOut = false;
     }
@@ -101,10 +110,10 @@ public class EnemyController : MonoBehaviour, IKnockable {
 
         foreach (Collider coll in col)
         {
-            if (coll.TryGetComponent(out IKnockable knockable))
-            {
-                knockable.KnockOut(2);
-            }
+            // if (coll.TryGetComponent(out IKnockable knockable))
+            // {
+            //     knockable.KnockOut(2);
+            // }
         }
     }
 

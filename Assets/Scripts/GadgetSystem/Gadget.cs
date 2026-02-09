@@ -22,7 +22,8 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[HideInInspector] public Vector3 velref = Vector3.zero;
 
 	public Transform target = null;
-
+	protected GadgetController gadgetController;
+	
 	protected virtual void Awake() => currentUses = maxUses;
 
 	public void Use()
@@ -71,7 +72,7 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		return IsInfinite || currentUses > 0;
 	}
 	
-	public virtual void OnPickup()
+	public virtual void OnPickup(GadgetController gadgetController)
 	{
 		Debug.Log(this.name);
 	}
@@ -83,15 +84,14 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	
 	public virtual void OnDepleted()
 	{
-		GadgetController.selectedGadget = null;
+		gadgetController.selectedGadget = null;
 		Debug.Log(name + " is depleted");
 	}
 
 	private void OnDestroy()
 	{
-		if(GadgetController.selectedGadget == GetComponent<IGadget>())
-		{
-			GadgetController.selectedGadget = null;
+		if(gadgetController.selectedGadget == GetComponent<IGadget>()) {
+			gadgetController.selectedGadget = null;
 		}
 	}
 }
