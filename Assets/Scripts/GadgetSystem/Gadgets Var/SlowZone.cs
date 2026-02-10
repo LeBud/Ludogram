@@ -1,3 +1,4 @@
+using CarScripts;
 using Player;
 using UnityEngine;
 
@@ -21,6 +22,16 @@ public class SlowZone : MonoBehaviour
         {
             player.slowFactor = this.slowFactor;
         }
+
+        if (other.TryGetComponent(out CarController car) && other.attachedRigidbody != null)
+        {
+            other.attachedRigidbody.angularDamping = 10f;
+        }
+
+        if (other.TryGetComponent(out EnemyController enemyController))
+        {
+            Debug.Log("Enemy In");
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -28,6 +39,16 @@ public class SlowZone : MonoBehaviour
         if (other.TryGetComponent(out Controller player))
         {
             player.slowFactor = 1;
+        }
+        
+        if (other.TryGetComponent(out CarController car) && other.attachedRigidbody != null)
+        {
+            other.attachedRigidbody.angularDamping = 0f;
+        }
+        
+        if (other.TryGetComponent(out EnemyController enemyController))
+        {
+            Debug.Log("Enemy Out");
         }
     }
 
