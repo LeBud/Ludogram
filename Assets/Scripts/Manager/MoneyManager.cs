@@ -23,5 +23,13 @@ namespace Manager {
             if(bagsInCar.Contains(bag))
                 bagsInCar.Remove(bag);
         }
+        
+        public HashSet<MoneyBag> GetAllBags() {
+            return detectableBags;
+        }
+        
+        public HashSet<MoneyBag> GetBagsInCar() {
+            return bagsInCar;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Manager;
 using Player;
 using UnityEngine;
 
@@ -17,11 +18,19 @@ namespace CarScripts {
             if (other.transform.TryGetComponent(out Controller player)) {
                 player.SetPlayerInCar(transform);
             }
+
+            if (other.transform.TryGetComponent(out MoneyBag bag)) {
+                GameManager.instance.moneyManager.RegisterBagInCar(bag);
+            }
         }
 
         private void OnTriggerExit(Collider other) {
             if (other.transform.TryGetComponent(out Controller player)) {
                 player.RemovePlayerFromCar();
+            }
+            
+            if (other.transform.TryGetComponent(out MoneyBag bag)) {
+                GameManager.instance.moneyManager.DeregisterBagInCar(bag);
             }
         }
     }
