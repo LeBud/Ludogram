@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
         private                  Controller       player;
-        [SerializeField] private GadgetController gadgetController;
+        [SerializeField] public GadgetController gadgetController;
         [SerializeField] private Transform        gadgetTransform;
         public static Transform        gadgetStaticTransform;
         [SerializeField] private LayerMask        interactableLayerMask;
@@ -52,10 +52,10 @@ namespace GadgetSystem {
             var hitted = hit.collider.transform;
             if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
                 Gadget gadget = hitted.GetComponent<Gadget>();
-                //hitted.SetParent(gadgetTransform);
-                gadget.target            = gadgetTransform;
-                gadget.transform.forward = gadgetTransform.forward;
-                gadget.OnPickup();
+                gadgetController.gadgetObject = hit.collider.gameObject;
+                gadget.target                 = gadgetTransform;
+                gadget.transform.forward      = gadgetTransform.forward;
+                gadget.OnPickup(gadgetController);
                 //Debug.Log("Ramassé:" + gadget.Name);
             }
             else {

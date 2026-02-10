@@ -184,6 +184,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1664221753916381289, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: gadgetController
+      value: 
+      objectReference: {fileID: 161165247}
     - target: {fileID: 3680400537923672243, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: m_LocalPosition.x
       value: -21.35818
@@ -285,6 +289,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+--- !u!114 &161165247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 424766025125358269, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+  m_PrefabInstance: {fileID: 161165246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64f81b3129387d342befb7f62d85dcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GadgetController
 --- !u!43 &445671537
 Mesh:
   m_ObjectHideFlags: 0

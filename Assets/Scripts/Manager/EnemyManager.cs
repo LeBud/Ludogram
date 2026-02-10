@@ -10,7 +10,8 @@ namespace Manager {
         }
 
         public void DeregisterEnemy(EnemyController removedEnemy) {
-            enemies.Remove(removedEnemy);
+            if(enemies.Contains(removedEnemy))
+                enemies.Remove(removedEnemy);
         }
 
         public void UpdatePlayerList() {

@@ -1,17 +1,19 @@
 using System.Collections.Generic;
 using Manager;
+using Player;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Enemies {
     public class EnemyMovementController : MonoBehaviour {
         private NavMeshAgent agent;
+        private MoneyBag moneyBag; //Réf pour avoir le money bag a attraper
 
         [Header("Movement")] 
         [SerializeField] private float rotationSpeed = 12f;
 
         [HideInInspector]
-        public List<Transform> playerInRange = new();
+        public List<Controller> playerInRange = new();
         
         public void Initialize(NavMeshAgent agent) {
             this.agent = agent;
@@ -32,8 +34,12 @@ namespace Enemies {
             playerInRange.Clear();
 
             foreach (var player in GameManager.instance.GetPlayers()) {
-                playerInRange.Add(player.transform);
+                playerInRange.Add(player);
             }
+        }
+
+        public void SetMoneyBag() {
+            
         }
 
         
