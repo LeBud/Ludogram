@@ -21,6 +21,13 @@ namespace EnemyStates {
 
             //Checker si tout les joueurs sont dans une voiture
             //Checker les sacs d'argents
+            //Si les sacs sont remis dans une banque, il sort de la détection
+            
+            //Priorité sur ceux en dehors du vanne
+            //Entre sac par terre ou tenu par le joueur la prio au plus proche
+            //Dernière prio le vanne
+            //Range max de détection
+            //La voiture c'est full prio sur le vanne que si il y a 1 sac ou plus dedans
             
             if(closestPlayer != null)
                 ia.movement.MoveAt(closestPlayer.transform.position, true);
