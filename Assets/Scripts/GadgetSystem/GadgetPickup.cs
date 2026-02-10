@@ -55,7 +55,7 @@ namespace GadgetSystem {
                 gadgetController.gadgetObject = hit.collider.gameObject;
                 gadget.target                 = gadgetTransform;
                 gadget.transform.forward      = gadgetTransform.forward;
-                gadget.OnPickup();
+                gadget.OnPickup(gadgetController);
                 //Debug.Log("Ramassé:" + gadget.Name);
             }
             else {
