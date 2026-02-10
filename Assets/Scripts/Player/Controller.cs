@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CarScripts;
 using GadgetSystem;
+using Manager;
 using StateMachine.BaseState_class;
 using StateMachine.Finite_State_Machine_class;
 using StateMachine.Finite_State_Machine_Interaces;
@@ -34,6 +35,7 @@ namespace Player
 		public                    Vector2        lastInput;
 		public                    Vector3        groundNormal;
 		public                    float          normalMagn;
+		public                    float          slowFactor = 1;
 		
 		[Header("Deceleration Settings")]
 		[SerializeField] private float decelerationTime = 0.3f;
@@ -143,6 +145,8 @@ namespace Player
 			
 			if(TryGetComponent(out collider)) Debug.Log("Found collider");
 			else Debug.LogError("Collider not found");
+			
+			GameManager.instance.RegisterPlayer(this);
 		}
 
 		void SetupStateMachine()
@@ -290,10 +294,10 @@ namespace Player
 			if (inCar) {
 				orientation = transform.parent.eulerAngles.y;
 			}
-			
-			var targetRotation = Quaternion.Euler(0,orientation + yaw, 0);
-			var    forward        = targetRotation * Vector3.forward;
-			var    right          = targetRotation * Vector3.right;
+
+			var targetRotation = Quaternion.Euler(0, orientation + yaw, 0);
+			var forward        = targetRotation * Vector3.forward;
+			var right          = targetRotation * Vector3.right;
 
 			Vector3 move         = (forward * movementInput.y + right * movementInput.x).normalized;
 			Vector3 orientedMove = Vector3.ProjectOnPlane(move, groundNormal);
@@ -302,7 +306,6 @@ namespace Player
 			
 			if (Vector3.Distance(movementInput, lastInput) > 0.8f)
 			{
-				Debug.Log(Vector3.Distance(movementInput, lastInput));
 				orientedMove = -orientedMove;
 				movementTime = 0;
 			}
@@ -312,7 +315,7 @@ namespace Player
 			{
 				rb.useGravity         =  true;
 				movementTime       += Time.fixedDeltaTime;
-				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime);
+				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime) * slowFactor;
 			}
 			else if (isDecelerating && decelerationTimer < decelerationTime)
 			{
@@ -356,7 +359,6 @@ namespace Player
 
 		public void HandleJump()
 		{
-			Debug.Log("JUMP");
 			if (jumpTime >= minJumpTime)
 			{
 				canReleaseJump = true;
@@ -479,7 +481,12 @@ namespace Player
 			stateMachine.LateUpdate();
 		}
 
+		private void OnDestroy() {
+			GameManager.instance.DeregisterPlayer(this);
+		}
+
 		public void SetPlayerInCar(Transform newParent) {
+			GameManager.instance.RegisterPlayerInCar(this);
 			yaw -= newParent.eulerAngles.y;
 			
 			transform.parent = newParent;
@@ -489,6 +496,7 @@ namespace Player
 		}
 
 		public void RemovePlayerFromCar() {
+			GameManager.instance.DeregisterPlayerInCar(this);
 			yaw += transform.parent.eulerAngles.y;
 			
 			transform.parent = originalParent;
@@ -542,7 +550,11 @@ namespace Player
 			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
 		}
 
-		public void KnockOut(float time)
+		public IGadget GetGadget() {
+			return pickUp.gadgetController.selectedGadget;
+		}
+
+		public void KnockOut(float time, Vector3 knockOutForce)
 		{
 			if (isknockedOut) return;
 			isknockedOut  = true;

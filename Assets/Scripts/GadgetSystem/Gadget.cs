@@ -8,40 +8,40 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[SerializeField] protected int    maxUses = 1;
 	protected int currentUses;
     
-	public string Name         => gadgetName;
-	public Sprite Icon         => icon;
-	public int    CurrentUses  => currentUses;
-	public int    MaxUses      => maxUses;
-	public bool   IsHandled    { get; }
-	public bool   IsInfinite   => maxUses == -1;
-	public bool   IsDepleted   => !IsInfinite && currentUses <= 0;
+	public string Name        => gadgetName;
+	public Sprite Icon        => icon;
+	public int    CurrentUses => currentUses;
+	public int    MaxUses     => maxUses;
+	public bool   IsHandled   { get; }
+	public bool   IsInfinite  => maxUses == -1;
+	public bool   IsDepleted  => !IsInfinite && currentUses <= 0;
 
 	[Header("Follow Player")]
 	public Vector3 offset;
-	public float   smoothTime;
-	private Vector3 velref = Vector3.zero;
+	public                  float   smoothTime;
+	[HideInInspector] public Vector3 velref = Vector3.zero;
 
-	public Transform target;
-
+	public Transform target = null;
+	protected GadgetController gadgetController;
+	
 	protected virtual void Awake() => currentUses = maxUses;
 
 	public void Use()
 	{
 		if (!CanUse()) return;
 		OnUse();
-		
 	}
+	
 	
 	
 	public virtual void IsTaken()
 	{
-		if (target != null)
-		{
-			//transform.forward = target.forward;
-			Vector3 targetPos = target.position + offset;
-			transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velref, smoothTime);
-			transform.rotation = Quaternion.LookRotation(target.forward);
-		}
+		if (target == null) return;
+		//transform.forward = target.forward;
+		Vector3 targetPos = target.position + offset;
+		transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velref, smoothTime);
+		transform.rotation = Quaternion.LookRotation(target.forward);
+
 	}
 
 
@@ -72,7 +72,7 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		return IsInfinite || currentUses > 0;
 	}
 	
-	public virtual void OnPickup()
+	public virtual void OnPickup(GadgetController gadgetController)
 	{
 		Debug.Log(this.name);
 	}
@@ -84,15 +84,14 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	
 	public virtual void OnDepleted()
 	{
-		GadgetController.selectedGadget = null;
+		gadgetController.selectedGadget = null;
 		Debug.Log(name + " is depleted");
 	}
 
 	private void OnDestroy()
 	{
-		if(GadgetController.selectedGadget == GetComponent<IGadget>())
-		{
-			GadgetController.selectedGadget = null;
+		if(gadgetController.selectedGadget == GetComponent<IGadget>()) {
+			gadgetController.selectedGadget = null;
 		}
 	}
 }

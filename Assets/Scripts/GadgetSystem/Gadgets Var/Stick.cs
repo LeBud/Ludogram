@@ -2,7 +2,7 @@ using System.Collections;
 using Player;
 using UnityEngine;
 
-public class StickGadget : Gadget
+public class Stick : Gadget
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] LayerMask hitLayerMask;
@@ -20,7 +20,7 @@ public class StickGadget : Gadget
     
     private int        currentLoadTime;
     private Controller player;
-    private bool       canUse = true;
+    public bool       canUse = true;
     private float      baseForce;
     private Coroutine  chargeStick;
     
@@ -34,19 +34,21 @@ public class StickGadget : Gadget
     
     protected override void OnUse()
     {
-        switch (heavyStick)
+        if (canUse)
         {
-            case true:
-                if (!canUse) return;
-                if(chargeStick != null) StopCoroutine(chargeStick);
-                chargeStick = StartCoroutine(LoadForce());
-                break;
-            case false:
-                if (!canUse) return;
-                StartCoroutine(AnimateGadget());
-                Hit();
-                break;
+            switch (heavyStick)
+            {
+                case true:
+                    if(chargeStick != null) StopCoroutine(chargeStick);
+                    chargeStick = StartCoroutine(LoadForce());
+                    break;
+                case false:
+                    StartCoroutine(AnimateGadget());
+                    Hit();
+                    break;
+            }
         }
+        
         
     }
 
@@ -62,7 +64,7 @@ public class StickGadget : Gadget
             }
             if (hit.collider.gameObject.TryGetComponent(out IKnockable knockable))
             {
-                knockable.KnockOut(knockTime);
+                knockable.KnockOut(knockTime, -hit.normal * setback);
             }
         }
     }
@@ -71,14 +73,16 @@ public class StickGadget : Gadget
     {
         if (canUse)
         {
+            
             if (heavyStick)
             {
+                Debug.Log("Release");
                 Hit();
-                StopCoroutine(chargeStick);
-                transform.localRotation = Quaternion.Euler(0, 0, 0);
-                setback                 = baseForce;
+                if (chargeStick != null) StopCoroutine(chargeStick);
+                setback = baseForce;
             }
         
+            chargeStick = null;
             StartCoroutine(Cooldown());
         }
         
@@ -94,33 +98,47 @@ public class StickGadget : Gadget
 
     IEnumerator AnimateGadget()
     {
-        transform.localRotation = Quaternion.Euler(-90, 0, 0);
+        transform.rotation = Quaternion.Euler(transform.rotation.x + 90, transform.rotation.y, transform.rotation.z);
         yield return new WaitForSeconds(0.15f);
-        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.identity;
+    }
+
+    public override void IsTaken()
+    {
+        if (target != null)
+        {
+            //transform.forward = target.forward;
+            Vector3 targetPos                         = target.position + offset;
+            transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velref, smoothTime);
+            if(chargeStick == null)  transform.rotation = Quaternion.LookRotation(target.forward);
+        }
     }
 
     IEnumerator LoadForce()
     {
-        float baseForce = setback;
-        float elapsed   = 0;
+        float      baseForce   = setback;
+        float      elapsed     = 0;
+        Quaternion targetAngle = Quaternion.Euler(transform.rotation.x +  60, transform.rotation.z, transform.rotation.z) ;
         while (elapsed < maxLoadTime)
         {
             setback                 =  Mathf.Lerp(baseForce, maxLoadForce, elapsed / maxLoadTime);
-            transform.localRotation =  Quaternion.Lerp(Quaternion.Euler(0, 0, 0), Quaternion.Euler(-60, 0, 0), elapsed / maxLoadTime);
+            transform.rotation =  Quaternion.Lerp(transform.rotation, targetAngle, elapsed / maxLoadTime);
             elapsed                 += Time.deltaTime;
             yield return null;
         }
+
+        transform.rotation = targetAngle;
     }
 
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
+        gadgetController = gc;
         rb.isKinematic = true;
     }
 
     public override void Drop()
     {
         base.Drop();
-        transform.SetParent(null);
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }

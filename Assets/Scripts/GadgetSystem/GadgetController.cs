@@ -9,7 +9,7 @@ public class GadgetController : MonoBehaviour
 {
 	//public static GadgetInventory     instance;
 	[SerializeField] private Controller          player;
-	public static            IGadget             selectedGadget;
+	public                   IGadget             selectedGadget;
 	public                   GameObject          gadgetObject;
 	private                  InputSystem_Actions playerActions;
 	public static            Camera              concernedPlayerCamera;
@@ -35,7 +35,7 @@ public class GadgetController : MonoBehaviour
 
 	void Update()
 	{
-		selectedGadget.IsTaken();
+		selectedGadget?.IsTaken();
 	}
     
 	public void UseGadget()
@@ -53,11 +53,15 @@ public class GadgetController : MonoBehaviour
 	{
 		selectedGadget.Release();
 	}
+	
 	public void DropGadget()
 	{
-		selectedGadget?.Drop();
-		selectedGadget = null;
-		gadgetObject = null;
+		if (gadgetObject != null)
+		{
+			selectedGadget?.Drop();
+			selectedGadget = null;
+			gadgetObject   = null;	
+		}
 	}
 	
 	#region INPUT SYSTEM
