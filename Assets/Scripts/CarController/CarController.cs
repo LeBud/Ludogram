@@ -369,8 +369,8 @@ namespace CarScripts {
             if (throttle < 0.01f && forwardSpeed > 0f) driveForce -= engineBrakeTorque * forwardSpeed;
 
             if (inputs == null) {
-                if (forwardSpeed > 0) driveForce -= engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
-                else if (forwardSpeed < 0) driveForce += engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
+                if (forwardSpeed > 1f) driveForce -= engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
+                else if (forwardSpeed < -1f) driveForce += engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
             }
             
             var driveWheelCount = wheelDriveMode == WheelDriveMode.AWD ? 4 : 2;
