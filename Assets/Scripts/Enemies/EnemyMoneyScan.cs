@@ -22,9 +22,10 @@ namespace Enemies {
         
         //====Money====
         public MoneyBag targetedBag { get; private set; }
-        public MoneyBag pickupBag { get; private set; }
+        private MoneyBag pickupBag { get; set; }
         public bool HasTargetBag => targetedBag != null;
         public bool HasBag => pickupBag != null;
+        public bool BagInCar { get; private set; }
         
         private float timeSinceLastScan = 0f;
         private float timeSinceNewClosestScan = 0f;
@@ -72,8 +73,11 @@ namespace Enemies {
 
         private void GetBag() {
             if(HasBag) return;
-            
-            if (HasTargetBag) GrabBag();
+
+            if (HasTargetBag) {
+                BagInCar = GameManager.instance.moneyManager.GetBagsInCar().Contains(targetedBag);
+                GrabBag();
+            }
             
             if(!HasTargetBag && timeSinceLastScan < 0f) targetedBag = ScanBags();
             if(HasTargetBag && timeSinceNewClosestScan < 0f) targetedBag = ScanBags();
@@ -97,6 +101,14 @@ namespace Enemies {
             pickupBag.transform.position = bagPos.position;
             targetedBag = null;
         }
+
+        public void GrabBagByAbility(MoneyBag bag) {
+            pickupBag = bag;
+            pickupBag.rb.isKinematic = true;
+            pickupBag.transform.parent = transform;
+            pickupBag.transform.position = bagPos.position;
+            targetedBag = null;
+        }
         
         private MoneyBag ScanBags() {
             timeSinceLastScan = timeBetweenEachScan;
@@ -113,7 +125,7 @@ namespace Enemies {
             }
 
             if (outsideBags.Count > 0) return GetClosest(outsideBags);
-
+            
             return GetClosest(bags.ToList());
         }
 
