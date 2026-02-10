@@ -98,12 +98,17 @@ MonoBehaviour:
   gadgetName: Honey
   icon: {fileID: 0}
   maxUses: 1
+  price: 1
+  offset: {x: 0, y: 0, z: 0}
+  smoothTime: 0
+  velref: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
   rb: {fileID: 5051335699166092347}
   surfaceLayer:
     serializedVersion: 2
-    m_Bits: 503
+    m_Bits: 0
   slowFactor: 10
-  slowZone: {fileID: 0}
+  slowZone: {fileID: 8050200527370076816, guid: af20001d41ba7cf45b8cfcdc54816719, type: 3}
   launchSpeed: 10
 --- !u!1 &7428545220528119000
 GameObject:
