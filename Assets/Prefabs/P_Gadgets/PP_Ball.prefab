@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -658380232794184309}
   - component: {fileID: 823633868615918669}
   - component: {fileID: 862295097403690948}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PP_Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,6 +98,10 @@ MonoBehaviour:
   gadgetName: Ball
   icon: {fileID: 0}
   maxUses: 1
+  offset: {x: 0, y: 0, z: 0}
+  smoothTime: 0.05
+  velref: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
   speed: 35
   rb: {fileID: -658380232794184309}
 --- !u!1 &8561237150011632140
@@ -112,7 +116,7 @@ GameObject:
   - component: {fileID: 6665919128857823735}
   - component: {fileID: 7163399047552611052}
   - component: {fileID: 3540370713684236618}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ball_Visuel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

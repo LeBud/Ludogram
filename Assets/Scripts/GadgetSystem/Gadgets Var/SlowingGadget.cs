@@ -17,7 +17,7 @@ namespace GadgetSystem.Gadgets_Var
             isUsed = true;
             transform.SetParent(null);
             rb.isKinematic                  = false;
-            GadgetController.selectedGadget = null;
+            gadgetController.selectedGadget = null;
             rb.AddForce((Vector3.up + transform.forward) * launchSpeed, ForceMode.Impulse);
         }
 
@@ -27,6 +27,8 @@ namespace GadgetSystem.Gadgets_Var
             Debug.Log("Collision");
             if (collision.gameObject.layer == surfaceLayer)
             {
+                GameObject newSlowZone = Instantiate(this.slowZone,  collision.contacts[0].point, Quaternion.identity);
+                //StartCoroutine(EffectManager.instance.SmoothSpawnEffect(newSlowZone, 0.25f));
                 Destroy(gameObject);
                 Debug.Log("Create SlowZone");
             }
@@ -34,8 +36,8 @@ namespace GadgetSystem.Gadgets_Var
         }
         
     
-        public override void OnPickup()
-        {
+        public override void OnPickup(GadgetController gc) {
+            gadgetController = gc;
             rb.isKinematic = true;
         }
 

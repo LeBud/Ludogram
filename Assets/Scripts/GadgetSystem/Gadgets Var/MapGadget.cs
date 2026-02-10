@@ -1,11 +1,12 @@
 using System.Collections;
+using GadgetSystem;
 using UnityEngine;
 
 public class MapGadget : Gadget
 {
-    [SerializeField] Rigidbody rb;
-    [SerializeField] private Vector3 readPosition;
-    [SerializeField] private float transitionTime;
+    [SerializeField]         Rigidbody rb;
+    [SerializeField] private Vector3   readPosition;
+    [SerializeField] private float     transitionTime;
 
     private Coroutine readState;
     
@@ -17,7 +18,6 @@ public class MapGadget : Gadget
 
     public override void IsTaken()
     {
-        base.IsTaken();
     }
 
     public override void Release()
@@ -26,9 +26,12 @@ public class MapGadget : Gadget
         readState = StartCoroutine(Unread());
     }
     
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
+        gadgetController = gc;
         rb.isKinematic = true;
+        transform.SetParent(GadgetPickup.gadgetStaticTransform);
+        transform.position = GadgetPickup.gadgetStaticTransform.position;
     }
 
     public override void Drop()
@@ -45,8 +48,8 @@ public class MapGadget : Gadget
         float elapsedTime = 0;
         while (elapsedTime < transitionTime)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, (transform.position + readPosition), elapsedTime / transitionTime);
-            elapsedTime             += Time.deltaTime;
+            transform.localPosition =  Vector3.Lerp(transform.localPosition, readPosition, elapsedTime / transitionTime);
+            elapsedTime        += Time.deltaTime;
             yield return null;
         }
     }
@@ -57,8 +60,8 @@ public class MapGadget : Gadget
         float elapsedTime = 0;
         while (elapsedTime < transitionTime)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, elapsedTime / transitionTime);
-            elapsedTime             += Time.deltaTime;
+            transform.localPosition =  Vector3.Lerp(transform.localPosition ,Vector3.zero, elapsedTime / transitionTime);
+            elapsedTime        += Time.deltaTime;
             yield return null;
         }
     }

@@ -4,7 +4,7 @@ using StateMachine.Finite_State_Machine_class;
 using StateMachine.Finite_State_Machine_Interaces;
 using UnityEngine;
 
-public class FiniteStateMachine : MonoBehaviour
+public class FiniteStateMachine
 {
     StateNode                   currentState;
 	Dictionary<Type, StateNode> nodes          = new Dictionary<Type, StateNode>();
