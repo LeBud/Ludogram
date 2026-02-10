@@ -6,13 +6,13 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[SerializeField] protected string gadgetName;
 	[SerializeField] protected Sprite icon;
 	[SerializeField] protected int    maxUses = 1;
-	protected int currentUses;
+	[SerializeField] protected int    price = 1;
+	protected                  int    currentUses;
     
 	public string Name        => gadgetName;
-	public Sprite Icon        => icon;
+	public int  Price       => price;
 	public int    CurrentUses => currentUses;
 	public int    MaxUses     => maxUses;
-	public bool   IsHandled   { get; }
 	public bool   IsInfinite  => maxUses == -1;
 	public bool   IsDepleted  => !IsInfinite && currentUses <= 0;
 
@@ -88,8 +88,9 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		Debug.Log(name + " is depleted");
 	}
 
-	private void OnDestroy()
-	{
+	private void OnDestroy() {
+		if(gadgetController == null) return;
+		
 		if(gadgetController.selectedGadget == GetComponent<IGadget>()) {
 			gadgetController.selectedGadget = null;
 		}

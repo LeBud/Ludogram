@@ -6,11 +6,12 @@ namespace EnemyStates {
         }
         
         public override void OnEnter() {
-            
+            ia.movement.ResetMovement();
         }
 
         public override void Update() {
-            
+            if(ia.money.closestManhole)
+                ia.movement.MoveAt(ia.money.closestManhole.transform.position, true);
         }
 
         public override void OnExit() {
