@@ -17,4 +17,5 @@ public interface IGadget
 	void Release();
 	bool CanUse();
 
+	
 }

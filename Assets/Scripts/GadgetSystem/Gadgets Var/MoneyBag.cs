@@ -1,10 +1,11 @@
-using System.Collections;
 using UnityEngine;
 
-public class Ball :  Gadget
+public class MoneyBag : Gadget
 {
-    public  float     speed;
-    public  Rigidbody rb;
+    [SerializeField]private  Rigidbody rb;
+    [SerializeField]private int moneyValue;
+    [SerializeField]private LayerMask moneyZoneLayerMask;
+    [SerializeField]private  float     launchSpeed;
     private bool      isUsed = false;
 
     protected override void OnUse()
@@ -13,14 +14,14 @@ public class Ball :  Gadget
         target = null;
         transform.SetParent(null);
         rb.isKinematic = false;
-        rb.AddForce(transform.forward * speed, ForceMode.Impulse);
+        rb.AddForce(transform.forward * launchSpeed, ForceMode.Impulse);
     }
 
     public override void OnPickup(GadgetController gc)
     {
         gadgetController = gc;
         rb.isKinematic = true;
-        isUsed = false;
+        isUsed         = false;
     }
 
     public override void Drop()
@@ -31,6 +32,12 @@ public class Ball :  Gadget
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
-    
-    
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == moneyZoneLayerMask)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
