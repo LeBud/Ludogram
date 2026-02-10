@@ -13,13 +13,17 @@ public class GadgetController : MonoBehaviour
 	public        GameObject          gadgetObject;
 	private       InputSystem_Actions playerActions;
 	public static Camera              concernedPlayerCamera;
+	public LayerMask buttonLayerMask;
 	
-	
+	[HideInInspector] public bool       isInShop;
+	[HideInInspector] public GadgetSeller gadgetSeller;
+	[HideInInspector] public GameObject buttonToBuy;
+
 	
 	private Action<InputAction.CallbackContext> dropGadget;
-	private Action<InputAction.CallbackContext> useGadgetAction;
-	private Action<InputAction.CallbackContext> releaseGadgetAction;
-	
+	public  Action<InputAction.CallbackContext> useGadgetAction;
+	public  Action<InputAction.CallbackContext> releaseGadgetAction;
+
 	
 	public bool AddGadget(IGadget gadget)
 	{
@@ -40,6 +44,7 @@ public class GadgetController : MonoBehaviour
     
 	public void UseGadget()
 	{
+		if(isInShop) BuyGadget();
 		if (selectedGadget == null) return; 
 		
 		if (selectedGadget.CanUse())
@@ -51,7 +56,7 @@ public class GadgetController : MonoBehaviour
 
 	public void ReleaseGadget()
 	{
-		selectedGadget.Release();
+		if(!isInShop) selectedGadget.Release();
 	}
 	
 	public void DropGadget()
@@ -61,6 +66,19 @@ public class GadgetController : MonoBehaviour
 			selectedGadget?.Drop();
 			selectedGadget = null;
 			gadgetObject   = null;	
+		}
+	}
+
+	public void BuyGadget()
+	{
+		Ray ray = new Ray(player.playerCameraTransform.position, player.playerCamera.transform.forward);
+		if (Physics.Raycast(ray, out RaycastHit hit, 10, buttonLayerMask))
+		{
+			if (hit.transform.gameObject == buttonToBuy)
+			{
+				Debug.Log("BuyGadget");
+				gadgetSeller.BuyGadget();
+			}
 		}
 	}
 	
@@ -79,6 +97,9 @@ public class GadgetController : MonoBehaviour
 	
 	void OnDisable()
 	{
+		useGadgetAction                  -= _ => UseGadget();
+		dropGadget                       -= _ => DropGadget();
+		releaseGadgetAction              -= _ => ReleaseGadget();
 		player.GetInputs().use.started   -= useGadgetAction;
 		player.GetInputs().use.canceled  -= releaseGadgetAction;
 		player.GetInputs().drop.canceled -= dropGadget;

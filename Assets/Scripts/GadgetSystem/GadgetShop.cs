@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,7 +6,6 @@ public class GadgetShop : MonoBehaviour
 {
     public List<GameObject>    gadgetsPrefabs;
     public List<Transform> targets;
-
     void Start()
     {
         GetTargets();
@@ -32,6 +32,20 @@ public class GadgetShop : MonoBehaviour
             }
             GameObject gadget = Instantiate(gadgetsPrefabs[gadgetIndex], targets[i].position, Quaternion.identity);
             gadget.GetComponent<Rigidbody>().isKinematic = true;
+        }
+    }
+
+    void SpawnGadget()
+    {
+        
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.dodgerBlue;
+        foreach (Transform target in transform.GetChild(0))
+        {
+            Gizmos.DrawWireSphere(target.position, 0.5f);
         }
     }
 }

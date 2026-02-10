@@ -23,7 +23,6 @@ public class Ball :  Gadget
         {
             rb.AddForce(ray.direction * speed, ForceMode.Impulse);
         }
-        
     }
 
     public override void OnPickup(GadgetController gc)
