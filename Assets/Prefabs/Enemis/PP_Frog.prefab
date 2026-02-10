@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8261763699978874181}
   - component: {fileID: 5563702627412948259}
   - component: {fileID: 1819784522964411657}
+  - component: {fileID: 6226562129351892669}
+  - component: {fileID: 4367417677122724751}
   m_Layer: 0
   m_Name: PP_Frog
   m_TagString: Untagged
@@ -107,6 +109,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyMovementController
   rotationSpeed: 12
   playerInRange: []
+--- !u!54 &6226562129351892669
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845045999135552423}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &4367417677122724751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845045999135552423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9449a7b907434908aea33b4fbbc4149a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyMoneyScan
+  maxDetectableRange: 15
+  timeBetweenEachScan: 0.5
+  timeToScanForNewClosestBag: 1
+  timeWithoutTargetToDespawn: 5
 --- !u!1001 &9207189949296385949
 PrefabInstance:
   m_ObjectHideFlags: 0

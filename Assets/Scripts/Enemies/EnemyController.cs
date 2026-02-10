@@ -9,13 +9,9 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour, IKnockable {
     private FiniteStateMachine stateMachine;
     private NavMeshAgent agent { get; set; }
-    public EnemyMovementController movement { get; private set; }
     public Rigidbody rigidbody { get; private set; }
-    
-    
-    [Header("Ai Settings")]
-    [SerializeField] private float moneyScanRadius = 5f;
-    
+    public EnemyMovementController movement { get; private set; }
+    public EnemyMoneyScan money { get; private set; }
     
     private bool knockOut = false;
     public float knockOutTime { get; private set; }
@@ -33,6 +29,8 @@ public class EnemyController : MonoBehaviour, IKnockable {
         else Debug.LogError("No EnemyMovementController found");
         if(TryGetComponent(out EnemyMovementController move)) movement = move;
         else Debug.LogError("No EnemyMovementController found");
+        if(TryGetComponent(out EnemyMoneyScan money)) this.money = money;
+        else Debug.LogError("No EnemyMoneyScan found");
         
         movement.Initialize(agent);
         
@@ -55,10 +53,11 @@ public class EnemyController : MonoBehaviour, IKnockable {
         var fleeState = new EnemyFleeState(this);
         
         //Set At State
-        At(waitState, pursuitState, new FuncPredicate(() => movement.playerInRange.Count > 0));
-        At(pursuitState, waitState, new FuncPredicate(() => movement.playerInRange.Count == 0));
+        At(waitState, pursuitState, new FuncPredicate(() => money.HasTargetBag));
+        At(pursuitState, waitState, new FuncPredicate(() => !money.HasBag && !money.HasTargetBag));
+        At(pursuitState, fleeState, new FuncPredicate(() => money.HasBag));
         
-        At(knockOutState, pursuitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
+        At(knockOutState, waitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
         
         //Set Any State
         Any(knockOutState, new FuncPredicate(() => knockOut));
