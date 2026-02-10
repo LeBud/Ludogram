@@ -9,7 +9,7 @@ namespace Enemies {
         [SerializeField] private float abilityCooldown;
         [SerializeField] private float tongueAbilityRange = 15f;
         [SerializeField] private float minRangeToAbility = 2f;
-        [SerializeField] private float maxRangeToAbility = 20f;
+        [SerializeField] private float maxRangeToAbility = 14f;
         
         private float currentCooldown = 0f;
         
@@ -30,13 +30,23 @@ namespace Enemies {
         private void UseAbility() {
             currentCooldown = abilityCooldown;
             
-            var dir = transform.position - ia.money.targetedBag.transform.position;
+            var dir = ia.money.targetedBag.transform.position - transform.position;
             Physics.Raycast(transform.position, dir.normalized, out var hit, tongueAbilityRange);
             
             if(hit.collider == null) return;
             
             if(hit.transform.TryGetComponent(out MoneyBag bag))
                 ia.money.GrabBagByAbility(bag);
+        }
+
+        private void OnDrawGizmos() {
+            if(!Application.isPlaying) return;
+            
+            if (ia.money.HasTargetBag) {
+                Gizmos.color = Color.red;
+                var dir = ia.money.targetedBag.transform.position - transform.position;
+                Gizmos.DrawLine(transform.position, dir.normalized * tongueAbilityRange);
+            }
         }
 
         private bool CanUseAbility() {
