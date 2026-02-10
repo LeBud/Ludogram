@@ -28,6 +28,7 @@ public class MapGadget : Gadget
     
     public override void OnPickup(GadgetController gc)
     {
+        
         gadgetController = gc;
         rb.isKinematic = true;
         transform.SetParent(GadgetPickup.gadgetStaticTransform);
