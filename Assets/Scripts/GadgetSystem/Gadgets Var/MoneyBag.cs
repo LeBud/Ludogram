@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MoneyBag : Gadget
 {
-    [SerializeField]private  Rigidbody rb;
+    [SerializeField] public  Rigidbody rb;
     [SerializeField]private int moneyValue;
     [SerializeField]private LayerMask moneyZoneLayerMask;
     [SerializeField]private  float     launchSpeed;

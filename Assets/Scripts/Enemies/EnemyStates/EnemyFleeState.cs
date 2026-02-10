@@ -6,7 +6,7 @@ namespace EnemyStates {
         }
         
         public override void OnEnter() {
-            
+            ia.movement.ResetMovement();
         }
 
         public override void Update() {
