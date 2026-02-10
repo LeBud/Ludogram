@@ -73,7 +73,7 @@ public class FiniteStateMachine
 		anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
 
 	}
-
+	
 	private StateNode GetOrAddNode(IState state)
 	{
 		StateNode node = nodes.GetValueOrDefault(state.GetType());
@@ -86,7 +86,7 @@ public class FiniteStateMachine
 		return node;
 	}
 
-	class StateNode
+	private class StateNode
 	{
 		public IState               State       { get; }
 		public HashSet<ITransition> Transitions { get; }

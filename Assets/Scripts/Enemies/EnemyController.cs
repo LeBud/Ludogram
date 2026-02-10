@@ -13,9 +13,11 @@ public class EnemyController : MonoBehaviour, IKnockable {
     public EnemyMovementController movement { get; private set; }
     public EnemyMoneyScan money { get; private set; }
     
-    private bool knockOut = false;
+    private bool enterKnockOut = false;
     public float knockOutTime { get; private set; }
     public Vector3 knockOutForce { get; private set; }
+
+    public bool isKnockOut;
     
     private void Awake() {
         Initialize();
@@ -23,16 +25,17 @@ public class EnemyController : MonoBehaviour, IKnockable {
     }
 
     private void Initialize() {
-        if(TryGetComponent(out NavMeshAgent agent)) this.agent = agent;
+        if(TryGetComponent(out NavMeshAgent ag)) agent = ag;
         else Debug.LogError("No NavMeshAgent found");
         if(TryGetComponent(out Rigidbody rb)) rigidbody = rb;
         else Debug.LogError("No EnemyMovementController found");
         if(TryGetComponent(out EnemyMovementController move)) movement = move;
         else Debug.LogError("No EnemyMovementController found");
-        if(TryGetComponent(out EnemyMoneyScan money)) this.money = money;
+        if(TryGetComponent(out EnemyMoneyScan mo)) money = mo;
         else Debug.LogError("No EnemyMoneyScan found");
         
         movement.Initialize(agent);
+        money.Initialize(this);
         
         //Set the rigidbody
         rigidbody.isKinematic = true;
@@ -60,7 +63,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
         At(knockOutState, waitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
         
         //Set Any State
-        Any(knockOutState, new FuncPredicate(() => knockOut));
+        Any(knockOutState, new FuncPredicate(() => enterKnockOut));
         
         stateMachine.SetState(waitState);
     }
@@ -90,10 +93,10 @@ public class EnemyController : MonoBehaviour, IKnockable {
     public void KnockOut(float time, Vector3 knockOutForce) {
         this.knockOutForce = knockOutForce;
         knockOutTime = time;
-        knockOut = true;
+        enterKnockOut = true;
         Debug.Log($"KnockOut for {time} seconds");
     }
-
+    
     public void EnableNavMesh() {
         agent.enabled = true;
     }
@@ -103,7 +106,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
     }
     
     public void UnKnockOut() {
-        knockOut = false;
+        enterKnockOut = false;
     }
     
     [ContextMenu("Attack")]
