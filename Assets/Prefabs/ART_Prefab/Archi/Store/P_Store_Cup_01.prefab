@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5168067467476717353}
   - component: {fileID: 8005069916823486772}
   - component: {fileID: 4042975701042287191}
+  - component: {fileID: 3123386602206890980}
   m_Layer: 0
   m_Name: P_Store_Cup_01
   m_TagString: Untagged
@@ -90,3 +91,24 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3123386602206890980
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5087350708855603427}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.28882423, y: 0.35148236, z: 0.4607576}
+  m_Center: {x: -0.00000020861626, y: 0.17352681, z: 0.07062777}
