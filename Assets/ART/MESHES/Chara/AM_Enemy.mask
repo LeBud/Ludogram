@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AM_Enemy
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature.004
+    m_Weight: 1
+  - m_Path: Armature.004/head
+    m_Weight: 1
+  - m_Path: Armature.004/head/bandana.L
+    m_Weight: 1
+  - m_Path: Armature.004/head/bandana.L/bandana.L_end
+    m_Weight: 1
+  - m_Path: Armature.004/head/Bone.009
+    m_Weight: 1
+  - m_Path: Armature.004/head/Bone.009/Bone.009_end
+    m_Weight: 1
+  - m_Path: Armature.004/head/eye.L
+    m_Weight: 1
+  - m_Path: Armature.004/head/eye.L/eye.L_end
+    m_Weight: 1
+  - m_Path: Armature.004/head/eye.R
+    m_Weight: 1
+  - m_Path: Armature.004/head/eye.R/eye.R_end
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/torso
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.L
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.L/lowerArm.L
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.L/lowerArm.L/hand.L
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.L/lowerArm.L/hand.L/hand.L_end
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.R
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.R/lowerArm.R
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.R/lowerArm.R/hand.R
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/torso/upperArm.R/lowerArm.R/hand.R/hand.R_end
+    m_Weight: 1
+  - m_Path: Armature.004/pelvis/upperLeg.L
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/upperLeg.L/lowerLeg.L
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/upperLeg.L/lowerLeg.L/foot.L
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/upperLeg.L/lowerLeg.L/foot.L/foot.L_end
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/upperLeg.R
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/upperLeg.R/lowerLeg.R
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/upperLeg.R/lowerLeg.R/foot.R
+    m_Weight: 0
+  - m_Path: Armature.004/pelvis/upperLeg.R/lowerLeg.R/foot.R/foot.R_end
+    m_Weight: 0
+  - m_Path: Frog_01_Body_low
+    m_Weight: 1
+  - m_Path: Frog_01_Head_low
+    m_Weight: 1
