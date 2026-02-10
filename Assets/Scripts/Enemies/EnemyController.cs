@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
     public Rigidbody rigidbody { get; private set; }
     public EnemyMovementController movement { get; private set; }
     public EnemyMoneyScan money { get; private set; }
+    public EnemyAbilityController ability { get; private set; }
     
     private bool enterKnockOut = false;
     public float knockOutTime { get; private set; }
@@ -33,9 +34,12 @@ public class EnemyController : MonoBehaviour, IKnockable {
         else Debug.LogError("No EnemyMovementController found");
         if(TryGetComponent(out EnemyMoneyScan mo)) money = mo;
         else Debug.LogError("No EnemyMoneyScan found");
+        if(TryGetComponent(out EnemyAbilityController ab)) ability = ab;
+        else Debug.LogError("No EnemyAbilityController found");
         
         movement.Initialize(agent);
         money.Initialize(this);
+        ability.Initialize(this);
         
         //Set the rigidbody
         rigidbody.isKinematic = true;
