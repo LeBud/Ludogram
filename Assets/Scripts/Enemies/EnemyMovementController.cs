@@ -37,11 +37,6 @@ namespace Enemies {
                 playerInRange.Add(player);
             }
         }
-
-        public void SetMoneyBag() {
-            
-        }
-
         
         private void LookAt(Vector3 position) {
             var dir = (position - transform.position).normalized;
