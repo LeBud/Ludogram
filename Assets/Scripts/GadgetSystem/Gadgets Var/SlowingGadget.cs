@@ -4,13 +4,13 @@ namespace GadgetSystem.Gadgets_Var
 {
     public class SlowingGadget : Gadget
     {
-        [SerializeField] private Rigidbody rb;
-        
-        [SerializeField] private LayerMask surfaceLayer;
-        [SerializeField] private float     slowFactor;
+        private                  Camera     currentCamera;
+        [SerializeField] private Rigidbody  rb;
+        [SerializeField] private LayerMask  surfaceLayer;
+        [SerializeField] private float      slowFactor;
         [SerializeField] private GameObject slowZone;
-        [SerializeField] private float     launchSpeed;
-        private                  bool      isUsed;
+        [SerializeField] private float      launchSpeed;
+        private                  bool       isUsed;
         
         protected override void OnUse()
         {
@@ -18,7 +18,15 @@ namespace GadgetSystem.Gadgets_Var
             transform.SetParent(null);
             rb.isKinematic                  = false;
             gadgetController.selectedGadget = null;
-            rb.AddForce((Vector3.up + transform.forward) * launchSpeed, ForceMode.Impulse);
+            Ray ray = new Ray(currentCamera.transform.position, currentCamera.transform.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                rb.AddForce((ray.direction + Vector3.up) * launchSpeed, ForceMode.Impulse);
+            }
+            else
+            {
+                rb.AddForce((ray.direction + Vector3.up), ForceMode.Impulse);
+            }
         }
 
         public void OnCollisionEnter(Collision collision)
@@ -36,9 +44,11 @@ namespace GadgetSystem.Gadgets_Var
         }
         
     
-        public override void OnPickup(GadgetController gc) {
+        public override void OnPickup(GadgetController gc)
+        {
+            currentCamera    = gc.player.playerCamera;
             gadgetController = gc;
-            rb.isKinematic = true;
+            rb.isKinematic   = true;
         }
 
         public override void Drop()

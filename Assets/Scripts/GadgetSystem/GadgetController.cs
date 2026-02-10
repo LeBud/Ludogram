@@ -8,11 +8,11 @@ using UnityEngine.Serialization;
 public class GadgetController : MonoBehaviour
 {
 	//public static GadgetInventory     instance;
-	[SerializeField] private Controller          player;
-	public                   IGadget             selectedGadget;
-	public                   GameObject          gadgetObject;
-	private                  InputSystem_Actions playerActions;
-	public static            Camera              concernedPlayerCamera;
+	public        Controller          player;
+	public        IGadget             selectedGadget;
+	public        GameObject          gadgetObject;
+	private       InputSystem_Actions playerActions;
+	public static Camera              concernedPlayerCamera;
 	
 	
 	

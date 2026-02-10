@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class MoneyBag : Gadget
 {
+    private Camera currentCamera;
     [SerializeField]private  Rigidbody rb;
     [SerializeField]private int moneyValue;
     [SerializeField]private LayerMask moneyZoneLayerMask;
@@ -14,14 +15,23 @@ public class MoneyBag : Gadget
         target = null;
         transform.SetParent(null);
         rb.isKinematic = false;
-        rb.AddForce(transform.forward * launchSpeed, ForceMode.Impulse);
+        Ray ray = new Ray(currentCamera.transform.position, currentCamera.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            rb.AddForce((hit.point - transform.position).normalized * launchSpeed, ForceMode.Impulse);
+        }
+        else
+        {
+            rb.AddForce(ray.direction * launchSpeed, ForceMode.Impulse);
+        }
     }
 
     public override void OnPickup(GadgetController gc)
     {
+        currentCamera    = gc.player.playerCamera;
         gadgetController = gc;
-        rb.isKinematic = true;
-        isUsed         = false;
+        rb.isKinematic   = true;
+        isUsed           = false;
     }
 
     public override void Drop()
