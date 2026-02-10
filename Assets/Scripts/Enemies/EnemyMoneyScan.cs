@@ -8,14 +8,19 @@ namespace Enemies {
     public class EnemyMoneyScan : MonoBehaviour {
         private EnemyController ia;
         
-        [Header("Ai Settings")]
+        [Header("Money Settings")]
         [SerializeField] private float maxDetectableRange = 5f;
         [SerializeField] private float timeBetweenEachScan = 0.5f;
         [SerializeField] private float timeToScanForNewClosestBag = 1f;
         [SerializeField] private float timeWithoutTargetToDespawn = 5f;
         [SerializeField] private float rangeToGrabBag = 1.5f;
         [SerializeField] private Transform bagPos;
+
+        [Header("Money Settings")] 
+        [SerializeField] private float timeToExitLevel = 2f;
+        [SerializeField] private float rangeToExit = 1.5f;
         
+        //====Money====
         public MoneyBag targetedBag { get; private set; }
         public MoneyBag pickupBag { get; private set; }
         public bool HasTargetBag => targetedBag != null;
@@ -26,6 +31,10 @@ namespace Enemies {
 
         private float timeToDespawn = 0f;
 
+        //====Manhole====
+        public Transform closestManhole { get; private set; }
+        private float timeToExit = 0f;
+        
         public void Initialize(EnemyController controller) {
             ia = controller;
         }
@@ -33,6 +42,16 @@ namespace Enemies {
         private void Update() {
             if(ia.isKnockOut) return;
             GetBag();
+
+            if (HasBag && closestManhole == null)
+                closestManhole = GetClosestExit();
+
+            if (CanExit()) {
+                timeToExit += Time.deltaTime;
+                if(timeToExit >= timeToExitLevel) FrogExit();
+            }
+            else
+                timeToExit = 0f;
 
             if (!HasTargetBag) timeToDespawn += Time.deltaTime;
             else timeToDespawn = 0f;
@@ -63,6 +82,12 @@ namespace Enemies {
             timeSinceNewClosestScan -= Time.deltaTime;
         }
 
+        private void FrogExit() {
+            GameManager.instance.moneyManager.DeregisterMoneyBag(pickupBag);
+            
+            Destroy(gameObject);
+        }
+        
         private void GrabBag() {
             if (Vector3.Distance(targetedBag.transform.position, transform.position) > rangeToGrabBag) return;
             
@@ -91,6 +116,32 @@ namespace Enemies {
 
             return GetClosest(bags.ToList());
         }
+
+        private Transform GetClosestExit() {
+            Transform tempClosest = null;
+            var dist = float.MaxValue;
+            
+            foreach (var hole in GameManager.instance.enemyManager.GetManholeCover()) {
+                var distance = Vector3.Distance(hole.transform.position, transform.position);
+
+                if (distance < dist) {
+                    dist = distance;
+                    tempClosest = hole.transform;
+                }
+            }
+
+            return tempClosest;
+        }
+
+        private bool CanExit() {
+            if(closestManhole == null) return false;
+            
+            return Vector3.Distance(transform.position, closestManhole.position) <= rangeToExit;
+        }
+
+        public void ResetClosestExit() {
+            closestManhole = null;
+        }
         
         private MoneyBag GetClosest(List<MoneyBag> bags) {
             var index = 0;
@@ -105,7 +156,7 @@ namespace Enemies {
                 }
             }
 
-            if (dist == maxDetectableRange) return null;
+            if (dist >= maxDetectableRange) return null;
             
             return bags[index];
         }

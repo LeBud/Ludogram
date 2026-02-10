@@ -17,6 +17,7 @@ namespace EnemyStates {
             ia.rigidbody.AddForce(ia.knockOutForce, ForceMode.VelocityChange);
             
             ia.money.DropBag();
+            ia.money.ResetClosestExit();
         }
 
         public override void Update() {
