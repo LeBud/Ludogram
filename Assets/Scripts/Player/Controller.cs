@@ -19,10 +19,11 @@ namespace Player
 		private FiniteStateMachine stateMachine;
 		private InputsBrain        pInput;
 
-		public Camera playerCamera;
+		public                   Camera    playerCamera;
 		[SerializeField] private Rigidbody rb;
 		[SerializeField] private Transform modelTransform;
 		[SerializeField] private Transform groundRayPosition;
+		[SerializeField] private Transform borderRayPosition;
 		[SerializeField] private Transform cameraPosition;
 		[SerializeField] private LayerMask groundLayerMask;
 
@@ -395,6 +396,16 @@ namespace Player
 				groundNormal  = Vector3.up;
 			}
 		}
+
+		void CheckBorder()
+		{
+			Ray check = new Ray(borderRayPosition.position, modelTransform.forward);
+
+			if (Physics.Raycast(check, 0.5f, groundLayerMask))
+			{
+				
+			}
+		}
 		
 		void HandleCamera() {
 			var orientation = 0f;
@@ -549,6 +560,7 @@ namespace Player
 		{
 			Gizmos.color = Color.red;
 			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
+			Gizmos.DrawRay(borderRayPosition.position, modelTransform.forward * 0.5f);
 		}
 
 		public IGadget GetGadget() {
