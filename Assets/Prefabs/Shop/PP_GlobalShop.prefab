@@ -68,10 +68,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c7c154b95c81ac4a9bfe4a69de910c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  currentMoney: 30
+  gadgetToSell: []
   total: 0
   priceText: {fileID: 5748069451638389532}
   spawnPlace: {fileID: 3404059891385849252}
   buttonPrefab: {fileID: 7848953307571607087}
+  shop: {fileID: 5193281580269984667}
 --- !u!1 &1363906511459588629
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,7 +1041,7 @@ Transform:
   m_GameObject: {fileID: 6642728192957665662}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.68, y: 2.6, z: 1.3400002}
+  m_LocalPosition: {x: 6.6800003, y: 2.6, z: -1.6599998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1128,6 +1131,7 @@ MonoBehaviour:
   - {fileID: 7858950195334356250, guid: f7173c36ff4277e478a83d3acbbbff83, type: 3}
   - {fileID: 2637061325646257255, guid: 85afa3187d1a13648a9376117a18c80f, type: 3}
   targets: []
+  placedGadgets: []
 --- !u!1 &7636073995722275471
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,7 +1386,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 15.46, y: 1.38, z: -2.4}
-  m_LocalScale: {x: 6, y: 3, z: 6}
+  m_LocalScale: {x: 7.962, y: 4.904194, z: 9.349458}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2403312993162493457}
