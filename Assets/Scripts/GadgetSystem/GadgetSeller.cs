@@ -14,19 +14,22 @@ public class GadgetSeller : MonoBehaviour
     [SerializeField] Transform    spawnPlace;
     public           GameObject   buttonPrefab;
     private          Collider     collider;
+    public GadgetShop shop;
 
     void Start()
     {
-        collider = GetComponent<Collider>();
-        total    = 0;
+        collider       = GetComponent<Collider>();
+        total          = 0;
+        priceText.text = total.ToString() + "$";
     }
     
     void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Gadget gadget))
         {
-            if (total + gadget.Price <= currentMoney)
+            if (currentMoney > total + gadget.Price)
             {
+                shop.placedGadgets.Remove(gadget.gameObject);
                 gadgetToSell.Add(gadget);
                 UdpatePrice(gadget.Price);
                 other.gameObject.SetActive(false);
@@ -51,6 +54,11 @@ public class GadgetSeller : MonoBehaviour
             gadgetToSell.Remove(gadgetToSell[i]);
             total = 0;
         }
+        gadgetToSell.Clear();
+        shop.ResetGadget();
+        total          = 0;
+        priceText.text = total.ToString() + "$";
+
     }
 
     private void OnDrawGizmos()
