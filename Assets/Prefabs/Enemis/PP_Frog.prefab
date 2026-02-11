@@ -70,6 +70,7 @@ Transform:
   m_Children:
   - {fileID: 7904593707351447114}
   - {fileID: 8668368285607590006}
+  - {fileID: 4855498572992983479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6226562129351892669
@@ -229,6 +230,41 @@ MonoBehaviour:
   tongueAbilityRange: 15
   minRangeToAbility: 2
   maxRangeToAbility: 14
+  abilityStateDuration: 1
+  raycastPoint: {fileID: 4855498572992983479}
+  triggerAbility: 0
+  canUseTongue: 1
+--- !u!1 &6396438097986476485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4855498572992983479}
+  m_Layer: 0
+  m_Name: RaycastPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4855498572992983479
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6396438097986476485}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 714273337696556680}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &9207189949296385949
 PrefabInstance:
   m_ObjectHideFlags: 0
