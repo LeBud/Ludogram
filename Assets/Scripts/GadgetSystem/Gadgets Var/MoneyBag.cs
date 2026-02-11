@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class MoneyBag : Gadget
 {
-    private Camera currentCamera;
-    [SerializeField]private  Rigidbody rb;
-    [SerializeField]private int moneyValue;
-    [SerializeField]private LayerMask moneyZoneLayerMask;
-    [SerializeField]private  float     launchSpeed;
-    private bool      isUsed = false;
+    private                  Camera    currentCamera;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private int       moneyValue;
+    [SerializeField] private LayerMask moneyZoneLayerMask;
+    [SerializeField] private float     launchSpeed;
+    private                  bool      isUsed = false;
 
     protected override void OnUse()
     {
