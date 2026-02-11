@@ -1,4 +1,6 @@
 using System;
+using CarScripts;
+using Player;
 using UnityEngine;
 
 namespace Enemies {
@@ -6,12 +8,19 @@ namespace Enemies {
         private EnemyController ia;
         
         [Header("Ability Settings")] 
-        [SerializeField] private float abilityCooldown;
+        [SerializeField] private float abilityCooldown = 4f;
         [SerializeField] private float tongueAbilityRange = 15f;
         [SerializeField] private float minRangeToAbility = 2f;
         [SerializeField] private float maxRangeToAbility = 14f;
+        [SerializeField] public float abilityStateDuration = 1f;
+        [SerializeField] private Transform raycastPoint;
         
         private float currentCooldown = 0f;
+        
+        [HideInInspector]
+        public bool triggerAbility = false;
+        [HideInInspector]
+        public bool canUseTongue = true;
         
         //Faire l'action pour tirer la langue sur le sac Target dans MoneyScan
         //Distinguer si le sac est dans le camion
@@ -28,26 +37,63 @@ namespace Enemies {
         }
 
         private void UseAbility() {
+            triggerAbility = true;
             currentCooldown = abilityCooldown;
+            var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+
+            if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
+                dir = CarDoors.instance.transform.position - raycastPoint.position;
+            else if (ia.money.targetedBag.isPickedUp) {
+                var pos = ia.money.targetedBag.gadgetController.transform.position;
+                pos.y += 0.5f;
+                dir = pos - raycastPoint.position;
+            }
             
-            var dir = ia.money.targetedBag.transform.position - transform.position;
             Physics.Raycast(transform.position, dir.normalized, out var hit, tongueAbilityRange);
             
             if(hit.collider == null) return;
+
+            Debug.Log("ability hit " + hit.collider.name);
             
-            //Checker ici pour la voiture si ça touche les portes
+            if (hit.transform.TryGetComponent(out SingleDoor door)) {
+                Debug.Log("Hit Door");
+                door.UseDoor();
+                return;
+            }
             
-            if(hit.transform.TryGetComponent(out MoneyBag bag))
+            if (hit.transform.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
+                c.pickUp.gadgetController.DropGadget();
+                ia.money.GrabBagByAbility(ia.money.targetedBag);
+                return;
+            }
+
+            if (hit.transform.TryGetComponent(out MoneyBag bag)) {
                 ia.money.GrabBagByAbility(bag);
+                return;
+            }
         }
 
         private void OnDrawGizmos() {
             if(!Application.isPlaying) return;
             
+            Gizmos.matrix = 
+            
             if (ia.money.HasTargetBag) {
                 Gizmos.color = Color.red;
-                var dir = ia.money.targetedBag.transform.position - transform.position;
-                Gizmos.DrawLine(transform.position, dir.normalized * tongueAbilityRange);
+                var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+                
+                if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen) {
+                    Gizmos.color = Color.green;
+                    dir = CarDoors.instance.transform.position - raycastPoint.position;
+                }
+                else if (ia.money.targetedBag.isPickedUp) {
+                    Gizmos.color = Color.cornflowerBlue;
+                    var pos = ia.money.targetedBag.gadgetController.transform.position;
+                    pos.y += 0.5f;
+                    dir = pos - raycastPoint.position;
+                }
+                
+                Gizmos.DrawLine(raycastPoint.position, dir.normalized * tongueAbilityRange);
             }
         }
 
@@ -56,7 +102,7 @@ namespace Enemies {
             if(ia.money.HasTargetBag) getDist = Vector3.Distance(transform.position, ia.money.targetedBag.transform.position);
             else return false;
             
-            return currentCooldown <= 0f && getDist < maxRangeToAbility && getDist > minRangeToAbility;
+            return currentCooldown <= 0f && getDist < maxRangeToAbility && getDist > minRangeToAbility && canUseTongue;
         }
     }
 }

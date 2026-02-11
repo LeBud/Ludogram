@@ -96,7 +96,7 @@ namespace Player
 		[HideInInspector] public CarController currentCar;
 		public CarSeat seat { get; private set; }
 		private Collider collider;
-		private GadgetPickup pickUp;
+		public GadgetPickup pickUp { get; private set; }
 		
 		private Action<InputAction.CallbackContext> onMove;
 		private Action<InputAction.CallbackContext> onLook;
@@ -130,16 +130,13 @@ namespace Player
 
 		void Initialize()
 		{
-			if (TryGetComponent(out pInput))
-			{
+			if (TryGetComponent(out pInput)) {
 				pInput.Initialize();
-				Debug.Log("Found PLAYER INPUT");
 			}
 			else Debug.LogError("PlayerInput not found");
 
-			if (TryGetComponent(out pickUp))
-			{
-				Debug.Log("Found GADGET INPUT and reference this as Controller");
+			if (TryGetComponent(out GadgetPickup pick)) {
+				pickUp = pick;
 				pickUp.Initialize(this);
 			}
 			
