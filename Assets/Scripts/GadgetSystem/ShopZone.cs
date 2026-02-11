@@ -28,8 +28,9 @@ public class ShopZone : MonoBehaviour
         if (other.TryGetComponent(out Gadget gadget))
         {
             yield return new WaitForSeconds(0.5f);
-            if (gadgetSeller.currentMoney > gadgetSeller.total + gadget.Price)
+            if (gadgetSeller.currentMoney >= gadgetSeller.total + gadget.Price)
             {
+                gadgetSeller.shop.placedGadgets.Remove(gadget.gameObject);
                 gadgetSeller.gadgetToSell.Add(gadget);
                 gadgetSeller.UdpatePrice(gadget.Price);
                 other.gameObject.SetActive(false);
@@ -37,7 +38,7 @@ public class ShopZone : MonoBehaviour
             }
             else
             {
-                Destroy(other.gameObject);
+                Destroy(gadget.gameObject);
             }
             
         }
