@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ShopZone : MonoBehaviour
@@ -17,7 +18,7 @@ public class ShopZone : MonoBehaviour
        
     }
 
-    void OnTriggerExit(Collider other)
+    IEnumerator OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent(out GadgetController gadgetController))
         {
@@ -26,10 +27,19 @@ public class ShopZone : MonoBehaviour
         
         if (other.TryGetComponent(out Gadget gadget))
         {
-            gadgetSeller.gadgetToSell.Add(gadget);
-            gadgetSeller.UdpatePrice(gadget.Price);
-            other.gameObject.SetActive(false);
-            other.attachedRigidbody.linearVelocity = Vector3.zero;
+            yield return new WaitForSeconds(0.5f);
+            if (gadgetSeller.total + gadget.Price <= gadgetSeller.currentMoney)
+            {
+                gadgetSeller.gadgetToSell.Add(gadget);
+                gadgetSeller.UdpatePrice(gadget.Price);
+                other.gameObject.SetActive(false);
+                other.attachedRigidbody.linearVelocity = Vector3.zero;
+            }
+            else
+            {
+                Destroy(other.gameObject);
+            }
+            
         }
     }
 
