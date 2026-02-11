@@ -27,7 +27,7 @@ public class GadgetSeller : MonoBehaviour
     {
         if (other.TryGetComponent(out Gadget gadget))
         {
-            if (currentMoney > total + gadget.Price)
+            if (currentMoney >= total + gadget.Price)
             {
                 shop.placedGadgets.Remove(gadget.gameObject);
                 gadgetToSell.Add(gadget);
@@ -54,7 +54,7 @@ public class GadgetSeller : MonoBehaviour
             gadgetToSell.Remove(gadgetToSell[i]);
             total = 0;
         }
-        gadgetToSell.Clear();
+        
         shop.ResetGadget();
         total          = 0;
         priceText.text = total.ToString() + "$";
