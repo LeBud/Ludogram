@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class GadgetSeller : MonoBehaviour
 {
-    private          List<Gadget> gadgetToSell = new();
+    public          List<Gadget> gadgetToSell = new();
     [SerializeField] int          total = 0;
     [SerializeField] TMP_Text     priceText;
     [SerializeField] Transform   spawnPlace;
@@ -20,10 +20,11 @@ public class GadgetSeller : MonoBehaviour
             gadgetToSell.Add(gadget);
             UdpatePrice(gadget.Price);
             other.gameObject.SetActive(false);
+            other.attachedRigidbody.linearVelocity = Vector3.zero;
         }
     }
 
-    void UdpatePrice(int price)
+    public void UdpatePrice(int price)
     {
         total += price;
         priceText.text = total.ToString();

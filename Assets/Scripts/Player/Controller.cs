@@ -66,6 +66,7 @@ namespace Player
 		[Header("Camera Settings")]
 		[SerializeField] private float lookSensitivity;
 		[SerializeField] private float lookVerticalLimit;
+		[SerializeField] private float lookHorizontalLimit;
 		[SerializeField] private float cameraSpeed;
 		
 		[Header("Headbob Settings")]

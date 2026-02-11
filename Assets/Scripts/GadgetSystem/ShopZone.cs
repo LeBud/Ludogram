@@ -13,6 +13,8 @@ public class ShopZone : MonoBehaviour
             gadgetController.buttonToBuy = gadgetSeller.buttonPrefab;
             gadgetController.gadgetSeller = gadgetSeller;
         }
+
+       
     }
 
     void OnTriggerExit(Collider other)
@@ -20,6 +22,14 @@ public class ShopZone : MonoBehaviour
         if (other.TryGetComponent(out GadgetController gadgetController))
         {
             gadgetController.isInShop = false;
+        }
+        
+        if (other.TryGetComponent(out Gadget gadget))
+        {
+            gadgetSeller.gadgetToSell.Add(gadget);
+            gadgetSeller.UdpatePrice(gadget.Price);
+            other.gameObject.SetActive(false);
+            other.attachedRigidbody.linearVelocity = Vector3.zero;
         }
     }
 
