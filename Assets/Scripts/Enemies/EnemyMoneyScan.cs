@@ -15,7 +15,7 @@ namespace Enemies {
         [SerializeField] private float timeWithoutTargetToDespawn = 5f;
         [SerializeField] private float rangeToGrabBag = 1.5f;
         [SerializeField] private Transform bagPos;
-
+        
         [Header("Money Settings")] 
         [SerializeField] private float timeToExitLevel = 2f;
         [SerializeField] private float rangeToExit = 1.5f;
