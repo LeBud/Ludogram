@@ -699,7 +699,7 @@ GameObject:
   - component: {fileID: 1388080834115137849}
   - component: {fileID: 4317061911409297853}
   - component: {fileID: 1009192718328269742}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: CarGhost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2174,7 +2174,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6368482058187213498}
-  - component: {fileID: 1811812182747703795}
   - component: {fileID: 7201642468313853493}
   - component: {fileID: 8998605192606720160}
   m_Layer: 7
@@ -2201,27 +2200,6 @@ Transform:
   - {fileID: 6295802955834376450}
   m_Father: {fileID: 8006773071717219511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1811812182747703795
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5137849365732196507}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7201642468313853493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2235,7 +2213,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarScripts.CarDoors
   anim: {fileID: 8998605192606720160}
-  areDoorsOpen: 0
 --- !u!95 &8998605192606720160
 Animator:
   serializedVersion: 7
