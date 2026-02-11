@@ -17,6 +17,8 @@ namespace CarScripts {
         private void OnTriggerEnter(Collider other) {
             if (other.transform.TryGetComponent(out Controller player)) {
                 player.SetPlayerInCar(transform);
+                if(player.pickUp.gadgetController.selectedGadget as MoneyBag)
+                    GameManager.instance.moneyManager.RegisterBagInCar(player.pickUp.gadgetController.selectedGadget as MoneyBag);
             }
 
             if (other.transform.TryGetComponent(out MoneyBag bag)) {
@@ -27,6 +29,8 @@ namespace CarScripts {
         private void OnTriggerExit(Collider other) {
             if (other.transform.TryGetComponent(out Controller player)) {
                 player.RemovePlayerFromCar();
+                if(player.pickUp.gadgetController.selectedGadget as MoneyBag)
+                    GameManager.instance.moneyManager.DeregisterBagInCar(player.pickUp.gadgetController.selectedGadget as MoneyBag);
             }
             
             if (other.transform.TryGetComponent(out MoneyBag bag)) {
