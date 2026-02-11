@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 39512915525792593}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.168, z: 0.273}
+  m_LocalPosition: {x: -0, y: 1.259, z: 0.334}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -97,7 +97,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.15
+  near clip plane: 0.05
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -301,6 +301,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5810163413214570554}
+  - {fileID: 360500617645004554}
   - {fileID: 1894068283738562458}
   m_Father: {fileID: 3680400537923672243}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -400,6 +401,7 @@ MonoBehaviour:
   rb: {fileID: 7786145555891057595}
   modelTransform: {fileID: 1894068283738562458}
   groundRayPosition: {fileID: 5810163413214570554}
+  borderRayPosition: {fileID: 0}
   cameraPosition: {fileID: 5580658350381849890}
   groundLayerMask:
     serializedVersion: 2
@@ -491,6 +493,9 @@ MonoBehaviour:
   maxJumpTime: 0.1
   fallTime: 0
   isGrounded: 0
+  maxStepHeight: 0.3
+  stepCheckDistance: 0.5
+  stepUpSpeed: 5
   coyoteTime: 0
   bufferTime: 0
   havePressedJump: 0
@@ -657,6 +662,37 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   pickupRange: 3
+--- !u!1 &5519433883203904181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 360500617645004554}
+  m_Layer: 3
+  m_Name: 'Border Cast Start Point '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &360500617645004554
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5519433883203904181}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8962241914823199537}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7523587435861852068
 GameObject:
   m_ObjectHideFlags: 0
