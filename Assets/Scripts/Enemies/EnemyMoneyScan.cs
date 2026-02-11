@@ -32,6 +32,8 @@ namespace Enemies {
 
         private float timeToDespawn = 0f;
 
+        private MoneyBag previousTarget;
+        
         //====Manhole====
         public Transform closestManhole { get; private set; }
         private float timeToExit = 0f;
@@ -66,6 +68,7 @@ namespace Enemies {
             //Drop bag if get knockOut
             if(!HasBag) return;
             
+            GameManager.instance.enemyManager.DeregisterTarget(pickupBag);
             pickupBag.transform.parent = null;
             pickupBag.rb.isKinematic = false;
             pickupBag = null;
@@ -78,9 +81,28 @@ namespace Enemies {
                 BagInCar = GameManager.instance.moneyManager.GetBagsInCar().Contains(targetedBag);
                 GrabBag();
             }
-            
-            if(!HasTargetBag && timeSinceLastScan < 0f) targetedBag = ScanBags();
-            if(HasTargetBag && timeSinceNewClosestScan < 0f) targetedBag = ScanBags();
+
+            if (!HasTargetBag && timeSinceLastScan < 0f) {
+                previousTarget = targetedBag;
+                targetedBag = ScanBags();
+                if(targetedBag == previousTarget)
+                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
+                else {
+                    GameManager.instance.enemyManager.DeregisterTarget(previousTarget);
+                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
+                }
+            }
+
+            if (HasTargetBag && timeSinceNewClosestScan < 0f) {
+                previousTarget = targetedBag;
+                targetedBag = ScanBags();
+                if(targetedBag == previousTarget)
+                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
+                else {
+                    GameManager.instance.enemyManager.DeregisterTarget(previousTarget);
+                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
+                }
+            }
             
             timeSinceLastScan -= Time.deltaTime;
             timeSinceNewClosestScan -= Time.deltaTime;
@@ -88,6 +110,7 @@ namespace Enemies {
 
         private void FrogExit() {
             GameManager.instance.moneyManager.DeregisterMoneyBag(pickupBag);
+            GameManager.instance.enemyManager.DeregisterTarget(pickupBag);
             
             Destroy(gameObject);
         }
@@ -160,6 +183,9 @@ namespace Enemies {
             var dist = maxDetectableRange;
             
             for (int i = 0; i < bags.Count; i++) {
+                if(GameManager.instance.enemyManager.targetedBag.Contains(bags[i]))
+                    continue;
+                
                 var distance = Vector3.Distance(bags[i].transform.position, transform.position);
 
                 if (distance < dist) {

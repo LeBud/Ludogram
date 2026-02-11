@@ -1,5 +1,6 @@
 using System;
 using CarScripts;
+using Player;
 using UnityEngine;
 
 namespace Enemies {
@@ -41,13 +42,17 @@ namespace Enemies {
             
             if(ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
                 dir = CarDoors.instance.transform.position - transform.position;
-                    
+            else if(ia.money.targetedBag.isPickedUp)
+                dir = CarDoors.instance.transform.position - transform.position;
+            
             Physics.Raycast(transform.position, dir.normalized, out var hit, tongueAbilityRange);
             
             if(hit.collider == null) return;
-            
-            //Faire aussi correctement le vol dans les mains du joueur
-            //Faire en sorte que les IA ne target pas un sac déjà target ou en possession d'une autre IA
+
+            if (hit.transform.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
+                c.pickUp.gadgetController.DropGadget();
+                ia.money.GrabBagByAbility(ia.money.targetedBag);
+            }
             
             if(hit.transform.TryGetComponent(out SingleDoor door))
                 door.UseDoor();

@@ -9,6 +9,7 @@ public class MoneyBag : Gadget
     [SerializeField] private float     launchSpeed;
     private                  bool      isUsed = false;
     [SerializeField] private Collider col;
+    public bool isPickedUp {get; private set;}
     
     protected override void OnUse()
     {
@@ -34,6 +35,7 @@ public class MoneyBag : Gadget
         rb.isKinematic   = true;
         isUsed           = false;
         col.enabled = false;
+        isPickedUp = true;
     }
 
     public override void Drop()
@@ -43,6 +45,7 @@ public class MoneyBag : Gadget
         transform.SetParent(null);
         rb.isKinematic = false;
         col.enabled = true;
+        isPickedUp = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 

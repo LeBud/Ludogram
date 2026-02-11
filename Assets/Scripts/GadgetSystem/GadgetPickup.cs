@@ -17,10 +17,10 @@ namespace GadgetSystem {
             player = p;
         }
 
-        void Start()
-        {
+        void Start() {
             gadgetStaticTransform = gadgetTransform;
         }
+        
         #region InputSystem
 
         void OnEnable() {
@@ -32,7 +32,6 @@ namespace GadgetSystem {
         }
 
         #endregion
-
 
         [ContextMenu("Pickup")]
         public void TryPickupNearbyGadget() {
