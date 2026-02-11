@@ -114,6 +114,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_BuildingWindow_05 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 25002e2273e1f1c45a01c51a1a0eec60, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -132,9 +136,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1310309231933580465, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.63
+      objectReference: {fileID: 0}
     - target: {fileID: 2043351818541493217, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_Name
       value: PV_BuildingSmall Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308661954472492681, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.388474
       objectReference: {fileID: 0}
     - target: {fileID: 2674456862319786502, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -150,31 +162,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.8271621
+      value: 48.611526
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.11572647
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -69.76974
+      value: 0.74504423
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70414007
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.71006113
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -182,7 +194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -90.48
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 5518105578243393922, guid: 6b762a8e174ce8247996393ec0abd76d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -335,6 +347,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3387a1fea192c1747a441ebd9725b021, type: 3}
       propertyPath: m_Name
       value: SM_BuildingWindow_06
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3387a1fea192c1747a441ebd9725b021, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

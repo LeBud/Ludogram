@@ -10,10 +10,14 @@ namespace EnemyStates {
         public override void OnEnter() {
             ia.DisableNavMesh();
             ia.UnKnockOut();
+            ia.isKnockOut = true;
             
             ia.rigidbody.isKinematic = false;
             ia.rigidbody.constraints = RigidbodyConstraints.None;
             ia.rigidbody.AddForce(ia.knockOutForce, ForceMode.VelocityChange);
+            
+            ia.money.DropBag();
+            ia.money.ResetClosestExit();
         }
 
         public override void Update() {
@@ -28,6 +32,7 @@ namespace EnemyStates {
             ia.transform.rotation = Quaternion.Euler(0,ia.transform.eulerAngles.y,0);
             
             ia.EnableNavMesh();
+            ia.isKnockOut = false;
         }
 
         private void ResetState() {

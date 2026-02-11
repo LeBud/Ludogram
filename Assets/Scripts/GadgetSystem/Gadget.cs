@@ -88,8 +88,9 @@ public abstract class Gadget : MonoBehaviour, IGadget
 		Debug.Log(name + " is depleted");
 	}
 
-	private void OnDestroy()
-	{
+	private void OnDestroy() {
+		if(gadgetController == null) return;
+		
 		if(gadgetController.selectedGadget == GetComponent<IGadget>()) {
 			gadgetController.selectedGadget = null;
 		}
