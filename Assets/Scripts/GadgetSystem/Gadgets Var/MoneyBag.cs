@@ -8,7 +8,8 @@ public class MoneyBag : Gadget
     [SerializeField] private LayerMask moneyZoneLayerMask;
     [SerializeField] private float     launchSpeed;
     private                  bool      isUsed = false;
-
+    [SerializeField] private Collider col;
+    
     protected override void OnUse()
     {
         isUsed = true;
@@ -32,6 +33,7 @@ public class MoneyBag : Gadget
         gadgetController = gc;
         rb.isKinematic   = true;
         isUsed           = false;
+        col.enabled = false;
     }
 
     public override void Drop()
@@ -40,6 +42,7 @@ public class MoneyBag : Gadget
         if (isUsed) return;
         transform.SetParent(null);
         rb.isKinematic = false;
+        col.enabled = true;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 
