@@ -39,26 +39,34 @@ namespace Enemies {
             triggerAbility = true;
             currentCooldown = abilityCooldown;
             var dir = ia.money.targetedBag.transform.position - transform.position;
-            
-            if(ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
+
+            if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen) {
+                Debug.Log("Target Doors");
                 dir = CarDoors.instance.transform.position - transform.position;
+            }
             else if(ia.money.targetedBag.isPickedUp)
-                dir = CarDoors.instance.transform.position - transform.position;
+                dir = ia.money.targetedBag.gadgetController.transform.position - transform.position;
             
             Physics.Raycast(transform.position, dir.normalized, out var hit, tongueAbilityRange);
             
             if(hit.collider == null) return;
 
+            if (hit.transform.TryGetComponent(out SingleDoor door)) {
+                Debug.Log("Hit Door");
+                door.UseDoor();
+                return;
+            }
+            
             if (hit.transform.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
                 c.pickUp.gadgetController.DropGadget();
                 ia.money.GrabBagByAbility(ia.money.targetedBag);
+                return;
             }
-            
-            if(hit.transform.TryGetComponent(out SingleDoor door))
-                door.UseDoor();
-            
-            if(hit.transform.TryGetComponent(out MoneyBag bag))
+
+            if (hit.transform.TryGetComponent(out MoneyBag bag)) {
                 ia.money.GrabBagByAbility(bag);
+                return;
+            }
         }
 
         private void OnDrawGizmos() {

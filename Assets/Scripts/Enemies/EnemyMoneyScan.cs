@@ -85,9 +85,7 @@ namespace Enemies {
             if (!HasTargetBag && timeSinceLastScan < 0f) {
                 previousTarget = targetedBag;
                 targetedBag = ScanBags();
-                if(targetedBag == previousTarget)
-                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
-                else {
+                if(targetedBag != previousTarget){
                     GameManager.instance.enemyManager.DeregisterTarget(previousTarget);
                     GameManager.instance.enemyManager.RegisterTarget(targetedBag);
                 }
@@ -96,9 +94,7 @@ namespace Enemies {
             if (HasTargetBag && timeSinceNewClosestScan < 0f) {
                 previousTarget = targetedBag;
                 targetedBag = ScanBags();
-                if(targetedBag == previousTarget)
-                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
-                else {
+                if(targetedBag != previousTarget){
                     GameManager.instance.enemyManager.DeregisterTarget(previousTarget);
                     GameManager.instance.enemyManager.RegisterTarget(targetedBag);
                 }
@@ -183,7 +179,7 @@ namespace Enemies {
             var dist = maxDetectableRange;
             
             for (int i = 0; i < bags.Count; i++) {
-                if(GameManager.instance.enemyManager.targetedBag.Contains(bags[i]))
+                if(GameManager.instance.enemyManager.targetedBag.Contains(bags[i]) && bags[i] != targetedBag)
                     continue;
                 
                 var distance = Vector3.Distance(bags[i].transform.position, transform.position);
