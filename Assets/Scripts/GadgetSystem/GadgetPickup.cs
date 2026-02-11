@@ -48,6 +48,11 @@ namespace GadgetSystem {
                 seat.SetDriver(player);
                 return;
             }
+
+            if (hit.collider.TryGetComponent(out SingleDoor door)) {
+                door.UseDoor();
+                return;
+            }
             
             var hitted = hit.collider.transform;
             if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
