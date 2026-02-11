@@ -6,11 +6,19 @@ namespace Manager {
             if (other.transform.TryGetComponent(out MoneyBag bag)) {
                 GameManager.instance.moneyManager.DeregisterMoneyBag(bag);
             }
+            
+            if (other.transform.TryGetComponent(out GadgetController ctrl) && ctrl.selectedGadget as MoneyBag) {
+                GameManager.instance.moneyManager.DeregisterMoneyBag(ctrl.selectedGadget as MoneyBag);
+            }
         }
         
         public void OnTriggerExit(Collider other) {
             if (other.transform.TryGetComponent(out MoneyBag bag)) {
                 GameManager.instance.moneyManager.RegisterMoneyBag(bag);
+            }
+            
+            if (other.transform.TryGetComponent(out GadgetController ctrl) && ctrl.selectedGadget as MoneyBag) {
+                GameManager.instance.moneyManager.RegisterMoneyBag(ctrl.selectedGadget as MoneyBag);
             }
         }
     }

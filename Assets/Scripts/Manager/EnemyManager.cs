@@ -6,7 +6,8 @@ namespace Manager {
     public class EnemyManager : MonoBehaviour {
         private HashSet<EnemyController> enemies = new();
         private HashSet<ManholeCover> manholeCover = new();
-
+        public HashSet<MoneyBag> targetedBag = new();
+        
         public void RegisterEnemy(EnemyController newEnemy) {
             enemies.Add(newEnemy);
         }
@@ -27,6 +28,17 @@ namespace Manager {
 
         public HashSet<ManholeCover> GetManholeCover() {
             return manholeCover;
+        }
+        
+        public void RegisterTarget(MoneyBag bag) {
+            targetedBag.Add(bag);
+        }
+
+        public void DeregisterTarget(MoneyBag bag) {
+            if(bag == null) return;
+            
+            if(targetedBag.Contains(bag))
+                targetedBag.Remove(bag);
         }
 
         public void UpdatePlayerList() {
