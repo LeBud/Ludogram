@@ -7,11 +7,19 @@ using Random = UnityEngine.Random;
 
 public class GadgetSeller : MonoBehaviour
 {
-    private          List<Gadget> gadgetToSell = new();
-    [SerializeField] int          total = 0;
+    public           int          currentMoney;
+    public           List<Gadget> gadgetToSell = new();
+    [SerializeField] int          total        = 0;
     [SerializeField] TMP_Text     priceText;
-    [SerializeField] Transform   spawnPlace;
-    public GameObject buttonPrefab;
+    [SerializeField] Transform    spawnPlace;
+    public           GameObject   buttonPrefab;
+    private          Collider     collider;
+
+    void Start()
+    {
+        collider = GetComponent<Collider>();
+        total    = 0;
+    }
     
     void OnTriggerEnter(Collider other)
     {
@@ -20,13 +28,14 @@ public class GadgetSeller : MonoBehaviour
             gadgetToSell.Add(gadget);
             UdpatePrice(gadget.Price);
             other.gameObject.SetActive(false);
+            other.attachedRigidbody.linearVelocity = Vector3.zero;
         }
     }
 
-    void UdpatePrice(int price)
+    public void UdpatePrice(int price)
     {
         total += price;
-        priceText.text = total.ToString();
+        priceText.text = total.ToString() + "$";
     }
 
     public void BuyGadget()
@@ -37,6 +46,7 @@ public class GadgetSeller : MonoBehaviour
             gadgetToSell[i].transform.position = spawnPlace.position + position;
             gadgetToSell[i].gameObject.SetActive(true);
             gadgetToSell.Remove(gadgetToSell[i]);
+            total = 0;
         }
     }
 
@@ -44,4 +54,6 @@ public class GadgetSeller : MonoBehaviour
     {
         Gizmos.DrawWireSphere(spawnPlace.position, 02f);
     }
+
+    
 }
