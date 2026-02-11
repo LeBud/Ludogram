@@ -22,7 +22,7 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[HideInInspector] public Vector3 velref = Vector3.zero;
 
 	public Transform target = null;
-	protected GadgetController gadgetController;
+	public GadgetController gadgetController;
 	
 	protected virtual void Awake() => currentUses = maxUses;
 
