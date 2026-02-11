@@ -35,7 +35,7 @@ public class GadgetShop : MonoBehaviour
         }
     }
 
-    void SpawnGadget()
+    void ResetGadget()
     {
         
     }
