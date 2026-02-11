@@ -28,12 +28,12 @@ public class ShopZone : MonoBehaviour
         if (other.TryGetComponent(out Gadget gadget))
         {
             yield return new WaitForSeconds(0.5f);
-            if (gadgetSeller.total + gadget.Price <= gadgetSeller.currentMoney)
+            if (gadgetSeller.currentMoney > gadgetSeller.total + gadget.Price)
             {
                 gadgetSeller.gadgetToSell.Add(gadget);
                 gadgetSeller.UdpatePrice(gadget.Price);
                 other.gameObject.SetActive(false);
-                other.attachedRigidbody.linearVelocity = Vector3.zero;
+                gadget.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             }
             else
             {

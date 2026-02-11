@@ -6,6 +6,10 @@ public class GadgetShop : MonoBehaviour
 {
     public List<GameObject>    gadgetsPrefabs;
     public List<Transform> targets;
+    
+    
+    public List<GameObject>    placedGadgets;
+
     void Start()
     {
         GetTargets();
@@ -31,13 +35,19 @@ public class GadgetShop : MonoBehaviour
                 gadgetIndex = 0;
             }
             GameObject gadget = Instantiate(gadgetsPrefabs[gadgetIndex], targets[i].position, Quaternion.identity);
+            placedGadgets.Add(gadget);
             gadget.GetComponent<Rigidbody>().isKinematic = true;
         }
     }
 
-    void ResetGadget()
+    public void ResetGadget()
     {
-        
+        for (int i = placedGadgets.Count - 1; i >= 0; i--)
+        {
+            Destroy(placedGadgets[i]);
+        }
+        placedGadgets.Clear();
+        PlaceGadget();
     }
 
     private void OnDrawGizmos()
