@@ -13,6 +13,7 @@ namespace Enemies {
         [SerializeField] private float minRangeToAbility = 2f;
         [SerializeField] private float maxRangeToAbility = 14f;
         [SerializeField] public float abilityStateDuration = 1f;
+        [SerializeField] private Transform raycastPoint;
         
         private float currentCooldown = 0f;
         
@@ -38,19 +39,22 @@ namespace Enemies {
         private void UseAbility() {
             triggerAbility = true;
             currentCooldown = abilityCooldown;
-            var dir = ia.money.targetedBag.transform.position - transform.position;
+            var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
 
-            if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen) {
-                Debug.Log("Target Doors");
-                dir = CarDoors.instance.transform.position - transform.position;
+            if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
+                dir = CarDoors.instance.transform.position - raycastPoint.position;
+            else if (ia.money.targetedBag.isPickedUp) {
+                var pos = ia.money.targetedBag.gadgetController.transform.position;
+                pos.y += 0.5f;
+                dir = pos - raycastPoint.position;
             }
-            else if(ia.money.targetedBag.isPickedUp)
-                dir = ia.money.targetedBag.gadgetController.transform.position - transform.position;
             
             Physics.Raycast(transform.position, dir.normalized, out var hit, tongueAbilityRange);
             
             if(hit.collider == null) return;
 
+            Debug.Log("ability hit " + hit.collider.name);
+            
             if (hit.transform.TryGetComponent(out SingleDoor door)) {
                 Debug.Log("Hit Door");
                 door.UseDoor();
@@ -72,10 +76,24 @@ namespace Enemies {
         private void OnDrawGizmos() {
             if(!Application.isPlaying) return;
             
+            Gizmos.matrix = 
+            
             if (ia.money.HasTargetBag) {
                 Gizmos.color = Color.red;
-                var dir = ia.money.targetedBag.transform.position - transform.position;
-                Gizmos.DrawLine(transform.position, dir.normalized * tongueAbilityRange);
+                var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+                
+                if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen) {
+                    Gizmos.color = Color.green;
+                    dir = CarDoors.instance.transform.position - raycastPoint.position;
+                }
+                else if (ia.money.targetedBag.isPickedUp) {
+                    Gizmos.color = Color.cornflowerBlue;
+                    var pos = ia.money.targetedBag.gadgetController.transform.position;
+                    pos.y += 0.5f;
+                    dir = pos - raycastPoint.position;
+                }
+                
+                Gizmos.DrawLine(raycastPoint.position, dir.normalized * tongueAbilityRange);
             }
         }
 
