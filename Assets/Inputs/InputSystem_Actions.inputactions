@@ -39,8 +39,8 @@
                     "id": "852140f2-7766-474d-8707-702459ba45f3",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Press(behavior=2)",
-                    "initialStateCheck": true
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "DropGadget",
@@ -55,24 +55,6 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "f1ba0d36-48eb-4cd5-b651-1c94a6531f70",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "NextGadget",
-                    "type": "Button",
-                    "id": "094271ea-74a6-4dda-9819-3252af306495",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "PreviousGadget",
-                    "type": "Button",
-                    "id": "ac752391-358e-4f1e-93b0-74b93a05d666",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -352,28 +334,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "DropGadget",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "61449cd0-8249-4ddf-a54b-22f2dd2172a0",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": "",
-                    "action": "NextGadget",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "04d2b818-b147-4cab-b629-1ea4fdabdedd",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PreviousGadget",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -834,6 +794,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "afe81302-0a1f-4083-868c-956dc787329c",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
                     "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false

@@ -125,8 +125,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""id"": ""852140f2-7766-474d-8707-702459ba45f3"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)"",
-                    ""initialStateCheck"": true
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""DropGadget"",
@@ -141,24 +141,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""f1ba0d36-48eb-4cd5-b651-1c94a6531f70"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""NextGadget"",
-                    ""type"": ""Button"",
-                    ""id"": ""094271ea-74a6-4dda-9819-3252af306495"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""PreviousGadget"",
-                    ""type"": ""Button"",
-                    ""id"": ""ac752391-358e-4f1e-93b0-74b93a05d666"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -438,28 +420,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""DropGadget"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""61449cd0-8249-4ddf-a54b-22f2dd2172a0"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextGadget"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""04d2b818-b147-4cab-b629-1ea4fdabdedd"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PreviousGadget"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -926,6 +886,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""afe81302-0a1f-4083-868c-956dc787329c"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""38c99815-14ea-4617-8627-164d27641299"",
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
@@ -1269,8 +1240,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
         m_Player_DropGadget = m_Player.FindAction("DropGadget", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_NextGadget = m_Player.FindAction("NextGadget", throwIfNotFound: true);
-        m_Player_PreviousGadget = m_Player.FindAction("PreviousGadget", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1379,8 +1348,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_PickUp;
     private readonly InputAction m_Player_DropGadget;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_NextGadget;
-    private readonly InputAction m_Player_PreviousGadget;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1416,14 +1383,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Jump".
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/NextGadget".
-        /// </summary>
-        public InputAction @NextGadget => m_Wrapper.m_Player_NextGadget;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/PreviousGadget".
-        /// </summary>
-        public InputAction @PreviousGadget => m_Wrapper.m_Player_PreviousGadget;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1468,12 +1427,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @NextGadget.started += instance.OnNextGadget;
-            @NextGadget.performed += instance.OnNextGadget;
-            @NextGadget.canceled += instance.OnNextGadget;
-            @PreviousGadget.started += instance.OnPreviousGadget;
-            @PreviousGadget.performed += instance.OnPreviousGadget;
-            @PreviousGadget.canceled += instance.OnPreviousGadget;
         }
 
         /// <summary>
@@ -1503,12 +1456,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @NextGadget.started -= instance.OnNextGadget;
-            @NextGadget.performed -= instance.OnNextGadget;
-            @NextGadget.canceled -= instance.OnNextGadget;
-            @PreviousGadget.started -= instance.OnPreviousGadget;
-            @PreviousGadget.performed -= instance.OnPreviousGadget;
-            @PreviousGadget.canceled -= instance.OnPreviousGadget;
         }
 
         /// <summary>
@@ -2002,20 +1949,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "NextGadget" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnNextGadget(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "PreviousGadget" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPreviousGadget(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

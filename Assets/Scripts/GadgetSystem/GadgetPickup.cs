@@ -5,8 +5,9 @@ using UnityEngine;
 namespace GadgetSystem {
     public class GadgetPickup : MonoBehaviour {
         private                  Controller       player;
-        [SerializeField] private GadgetController gadgetController;
+        [SerializeField] public GadgetController gadgetController;
         [SerializeField] private Transform        gadgetTransform;
+        public static Transform        gadgetStaticTransform;
         [SerializeField] private LayerMask        interactableLayerMask;
         [SerializeField] private float            pickupRange = 2f;
         
@@ -16,7 +17,10 @@ namespace GadgetSystem {
             player = p;
         }
 
-
+        void Start()
+        {
+            gadgetStaticTransform = gadgetTransform;
+        }
         #region InputSystem
 
         void OnEnable() {
@@ -24,7 +28,7 @@ namespace GadgetSystem {
         }
 
         void OnDisable() {
-            player.GetInputs().pickUp.started -= _ => TryPickupNearbyGadget();
+            player.GetInputs().pickUp.performed -= _ => TryPickupNearbyGadget();
         }
 
         #endregion
@@ -44,13 +48,19 @@ namespace GadgetSystem {
                 seat.SetDriver(player);
                 return;
             }
+
+            if (hit.collider.TryGetComponent(out SingleDoor door)) {
+                door.UseDoor();
+                return;
+            }
             
             var hitted = hit.collider.transform;
             if (gadgetController.AddGadget(hit.collider.GetComponent<IGadget>())) {
-                hitted.position = gadgetTransform.position;
-                hitted.forward = gadgetTransform.forward;
-                hitted.SetParent(gadgetTransform);
-                hitted.GetComponent<Gadget>().OnPickup();
+                Gadget gadget = hitted.GetComponent<Gadget>();
+                gadgetController.gadgetObject = hit.collider.gameObject;
+                gadget.target                 = gadgetTransform;
+                gadget.transform.forward      = gadgetTransform.forward;
+                gadget.OnPickup(gadgetController);
                 //Debug.Log("Ramassé:" + gadget.Name);
             }
             else {

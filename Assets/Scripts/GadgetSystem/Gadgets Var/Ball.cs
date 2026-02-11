@@ -3,42 +3,44 @@ using UnityEngine;
 
 public class Ball :  Gadget
 {
-    //bool             isUsed = false;
-    public float     speed;
-    public Rigidbody rb;
+    public  Camera    currentCamera;
+    public  float     speed;
+    public  Rigidbody rb;
+    private bool      isUsed = false;
 
     protected override void OnUse()
     {
+        isUsed = true;
+        target = null;
         transform.SetParent(null);
         rb.isKinematic = false;
-        //isUsed = true;
-        //Debug.Log($"{name} : {isUsed}");
-        rb.AddForce(transform.forward * speed, ForceMode.Impulse);
+        Ray ray = new Ray(currentCamera.transform.position, currentCamera.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            rb.AddForce((hit.point - transform.position).normalized * speed, ForceMode.Impulse);
+        }
+        else
+        {
+            rb.AddForce(ray.direction * speed, ForceMode.Impulse);
+        }
     }
-    
-    // void OnCollisionEnter(Collision collision)
-    // {
-    //     if (!isUsed)return;
-    //     
-    //     Debug.Log(collision.gameObject.name);
-    //     Destroy(gameObject);
-    // }
 
-    public override void OnPickup()
+    public override void OnPickup(GadgetController gc)
     {
-        rb.isKinematic = true;
+        currentCamera    = gc.player.playerCamera; 
+        gadgetController = gc;
+        rb.isKinematic   = true;
+        isUsed           = false;
     }
 
     public override void Drop()
     {
+        base.Drop();
+        if (isUsed) return;
         transform.SetParent(null);
         rb.isKinematic = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
-
-
-    public override void OnDepleted()
-    {
-        base.OnDepleted();
-    }
+    
+    
 }

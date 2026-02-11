@@ -4,7 +4,7 @@ using UnityEngine;
 public interface IGadget 
 {
 	string Name        { get; }
-	Sprite Icon        { get; }
+	int  Price       { get; }
 	int    CurrentUses { get; }
 	int    MaxUses     { get; }
 	bool   IsInfinite  { get; }
@@ -12,8 +12,10 @@ public interface IGadget
     
 	
 	void Use();
+	void IsTaken();
 	void Drop();
-	void OnDepleted();
+	void Release();
 	bool CanUse();
 
+	
 }

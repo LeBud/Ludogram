@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3097441696667778164}
-  - component: {fileID: -658380232794184309}
+  - component: {fileID: 8816276054205701799}
   - component: {fileID: 823633868615918669}
   - component: {fileID: 862295097403690948}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PP_Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 3203137650332077597}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &-658380232794184309
+--- !u!54 &8816276054205701799
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,9 +59,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!135 &823633868615918669
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -97,9 +97,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   gadgetName: Ball
   icon: {fileID: 0}
-  maxUses: 1
-  speed: 35
-  rb: {fileID: -658380232794184309}
+  maxUses: -1
+  price: 10
+  offset: {x: 0, y: 0, z: 0}
+  smoothTime: 0.05
+  velref: {x: 0, y: 0, z: 0}
+  target: {fileID: 0}
+  currentCamera: {fileID: 0}
+  speed: 30
+  rb: {fileID: 8816276054205701799}
 --- !u!1 &8561237150011632140
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,8 +117,7 @@ GameObject:
   - component: {fileID: 3203137650332077597}
   - component: {fileID: 6665919128857823735}
   - component: {fileID: 7163399047552611052}
-  - component: {fileID: 3540370713684236618}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ball_Visuel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +172,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 86a2c9f1bc149a54c894e2f0ef5744c7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -191,24 +196,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3540370713684236618
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8561237150011632140}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

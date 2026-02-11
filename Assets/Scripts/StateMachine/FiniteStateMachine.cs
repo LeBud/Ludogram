@@ -4,7 +4,7 @@ using StateMachine.Finite_State_Machine_class;
 using StateMachine.Finite_State_Machine_Interaces;
 using UnityEngine;
 
-public class FiniteStateMachine : MonoBehaviour
+public class FiniteStateMachine
 {
     StateNode                   currentState;
 	Dictionary<Type, StateNode> nodes          = new Dictionary<Type, StateNode>();
@@ -73,7 +73,7 @@ public class FiniteStateMachine : MonoBehaviour
 		anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
 
 	}
-
+	
 	private StateNode GetOrAddNode(IState state)
 	{
 		StateNode node = nodes.GetValueOrDefault(state.GetType());
@@ -86,7 +86,7 @@ public class FiniteStateMachine : MonoBehaviour
 		return node;
 	}
 
-	class StateNode
+	private class StateNode
 	{
 		public IState               State       { get; }
 		public HashSet<ITransition> Transitions { get; }
