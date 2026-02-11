@@ -129,7 +129,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 714273337696556680, guid: af664ba4febd4ec468942ba1aa668c96, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.423459
+      value: -9.576542
       objectReference: {fileID: 0}
     - target: {fileID: 714273337696556680, guid: af664ba4febd4ec468942ba1aa668c96, type: 3}
       propertyPath: m_LocalPosition.y
@@ -137,7 +137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 714273337696556680, guid: af664ba4febd4ec468942ba1aa668c96, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.2671967
+      value: 2.7328033
       objectReference: {fileID: 0}
     - target: {fileID: 714273337696556680, guid: af664ba4febd4ec468942ba1aa668c96, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3657,6 +3657,10 @@ PrefabInstance:
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: headbobFrequency
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
+      propertyPath: lookVerticalLimit
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7724837287475400754, guid: 124a41adaf57c404a97ef53d03860b98, type: 3}
       propertyPath: groundCheckDistance
