@@ -35,6 +35,8 @@ namespace Enemies {
             
             if(hit.collider == null) return;
             
+            //Checker ici pour la voiture si ça touche les portes
+            
             if(hit.transform.TryGetComponent(out MoneyBag bag))
                 ia.money.GrabBagByAbility(bag);
         }
