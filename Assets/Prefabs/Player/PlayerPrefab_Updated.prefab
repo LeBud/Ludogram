@@ -41,7 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8149909411786639550}
   - component: {fileID: 2963120311227464727}
-  - component: {fileID: 7644666218923301032}
   - component: {fileID: 1505654648605785059}
   m_Layer: 0
   m_Name: Main Camera
@@ -117,14 +116,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &7644666218923301032
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 569684427134156208}
-  m_Enabled: 1
 --- !u!114 &1505654648605785059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,15 +402,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 60
-      outSlope: 60
+      inSlope: 35
+      outSlope: 35
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 60
+      value: 35
       inSlope: 0.5489397
       outSlope: 0.5489397
       tangentMode: 0
@@ -443,7 +434,7 @@ MonoBehaviour:
       outWeight: 0.21445782
     - serializedVersion: 3
       time: 1
-      value: 5
+      value: 4
       inSlope: 0.04730984
       outSlope: 0.04730984
       tangentMode: 0
@@ -458,6 +449,7 @@ MonoBehaviour:
   lastInput: {x: 0, y: 0}
   groundNormal: {x: 0, y: 0, z: 0}
   normalMagn: 0
+  slowFactor: 1
   decelerationTime: 0.25
   jumpForceOverTime:
     serializedVersion: 2
@@ -465,15 +457,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.007160187
       value: 10
-      inSlope: 0.01788829
-      outSlope: 0.01788829
+      inSlope: 0.11755834
+      outSlope: 0.11755834
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.31219956
+      outWeight: 0.23095231
     - serializedVersion: 3
-      time: 0.19954224
-      value: 0.44000435
+      time: 0.2
+      value: 3
       inSlope: -111.32474
       outSlope: -111.32474
       tangentMode: 0
