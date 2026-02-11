@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -44,5 +45,9 @@ public class ShopZone : MonoBehaviour
         }
     }
 
-    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.chocolate;
+        Gizmos.DrawWireCube(transform.position, transform.localScale);
+    }
 }
