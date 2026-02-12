@@ -16,6 +16,10 @@ namespace Enemies {
             carController.SetAiCar(true);
         }
 
+        private void Start() {
+            target = FindAnyObjectByType<AttachedPlayer>().transform;
+        }
+
         private void Update() {
             float forwardAmount = 0f;
             float turnAmount = 0f;

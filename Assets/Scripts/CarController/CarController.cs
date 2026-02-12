@@ -207,7 +207,11 @@ namespace CarScripts {
         }
 
         void MyInputs() {
-            if (inputs == null && !AiCar) {
+            if(AiCar) return;
+            
+            Debug.Log(gameObject.name + "Read Inputs : " + steering);
+            
+            if (inputs == null) {
                 steering = 0;
                 throttle = 0;
                 reverse = 0;
@@ -229,6 +233,7 @@ namespace CarScripts {
             steering = turn;
             throttle = Mathf.Max(0, forward);
             reverse = Mathf.Min(0, forward);
+            reverse = Mathf.Abs(reverse);
         }
         
         void LateUpdate() {
