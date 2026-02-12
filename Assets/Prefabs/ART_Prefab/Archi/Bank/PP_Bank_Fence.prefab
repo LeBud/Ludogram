@@ -41,6 +41,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2746739533237412361}
     m_Modifications:
+    - target: {fileID: 624266726968082644, guid: 3f723e0364dccf6479c867af66c13f64, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 99c28abc5fbc2af43854b7950b81eb1a, type: 2}
     - target: {fileID: 8379158863657073764, guid: 3f723e0364dccf6479c867af66c13f64, type: 3}
       propertyPath: m_Name
       value: PP_Bank_FenceRamp
@@ -103,6 +107,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2746739533237412361}
     m_Modifications:
+    - target: {fileID: 1551738567595767468, guid: 26d92937fb1c0bd418a38d431eb187af, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 99c28abc5fbc2af43854b7950b81eb1a, type: 2}
     - target: {fileID: 7120761754037857183, guid: 26d92937fb1c0bd418a38d431eb187af, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1
