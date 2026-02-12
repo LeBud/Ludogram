@@ -21,7 +21,7 @@ namespace Enemies {
         void OnTriggerEnter(Collider other) {
             if(areSpawned) return;
             
-            if (other.CompareTag("Player")) {
+            if (other.CompareTag("Player") || other.CompareTag("Car")) {
                 Spawn();
             }
         }
