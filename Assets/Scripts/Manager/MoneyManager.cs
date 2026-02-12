@@ -1,10 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Manager {
-    public class MoneyManager : MonoBehaviour {
-        HashSet<MoneyBag> detectableBags = new();
-        HashSet<MoneyBag> bagsInCar = new();
+    public class MoneyManager : MonoBehaviour
+    {
+
+        public int               quotas;
+        public int               moneySaved;
+        public int               moneyMissed;
+        public HashSet<MoneyBag> detectableBags = new();
+        public HashSet<MoneyBag> bagsInCar      = new();
+        
         
         public void RegisterMoneyBag(MoneyBag bag) {
             detectableBags.Add(bag);
@@ -30,6 +37,21 @@ namespace Manager {
         
         public HashSet<MoneyBag> GetBagsInCar() {
             return bagsInCar;
+        }
+
+        public int GetTotalOnMap()
+        {
+            int money = 0;
+            foreach (MoneyBag moneyBag in detectableBags)
+            {
+                money += moneyBag.moneyValue;
+            }
+            return money;
+        }
+
+        public int GetQuotasDifference()
+        {
+            return quotas - moneySaved;
         }
     }
 }

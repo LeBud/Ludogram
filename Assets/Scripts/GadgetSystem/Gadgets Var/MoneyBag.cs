@@ -1,16 +1,23 @@
+using System;
+using Manager;
 using UnityEngine;
 
 public class MoneyBag : Gadget
 {
     private                  Camera    currentCamera;
     [SerializeField] public Rigidbody rb;
-    [SerializeField] private int       moneyValue;
+    public  int       moneyValue;
     [SerializeField] private LayerMask moneyZoneLayerMask;
     [SerializeField] private float     launchSpeed;
     private                  bool      isUsed = false;
     [SerializeField] private Collider col;
     public bool isPickedUp {get; private set;}
-    
+
+    private void Start()
+    {
+        //GameManager.instance.moneyManager.RegisterMoneyBag(this);
+    }
+
     protected override void OnUse()
     {
         isUsed = true;
