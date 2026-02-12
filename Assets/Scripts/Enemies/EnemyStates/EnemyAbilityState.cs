@@ -12,6 +12,8 @@ namespace EnemyStates {
             ia.ability.triggerAbility = false;
             ia.ability.canUseTongue = false;
             
+            if(ia.InCar) return;
+            
             ia.movement.ResetMovement();
             Debug.Log("Enter Ability State");
         }

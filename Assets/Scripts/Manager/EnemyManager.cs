@@ -50,9 +50,9 @@ namespace Manager {
             frogSpawner.Add(frog);
         }
 
-        public void UpdatePlayerList() {
-            foreach (var enemy in enemies) {
-                enemy.movement.GetPlayers();
+        public void DeregisterCarFromSpawner(AiCarDriver ai) {
+            foreach (var spawnFrog in frogSpawner) {
+                spawnFrog.RemoveCarFromSpawned(ai);
             }
         }
     }
