@@ -43,8 +43,6 @@ GameObject:
   - component: {fileID: 1416765463818987862}
   - component: {fileID: 1807561865502453056}
   - component: {fileID: 5712146629174787583}
-  - component: {fileID: 55193854189258391}
-  - component: {fileID: 5833570765720234320}
   m_Layer: 0
   m_Name: SM_Bank_WallOrnament_01
   m_TagString: Untagged
@@ -100,7 +98,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 32994482dfeb3884ba39ec46792f8cbc, type: 2}
+  - {fileID: 2100000, guid: f5f0e608b0dec844bb1d2b43f861fe32, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -124,45 +122,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &55193854189258391
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8117212042870539033}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.7794305, y: 0.38038793, z: 1.0000002}
-  m_Center: {x: 0.38971537, y: -0.19019242, z: -0.5000001}
---- !u!65 &5833570765720234320
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8117212042870539033}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.4069984, y: 0.8186377, z: 1.0000002}
-  m_Center: {x: 0.57593143, y: -0.4093173, z: -0.5000001}
