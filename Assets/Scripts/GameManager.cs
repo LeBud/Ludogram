@@ -33,8 +33,6 @@ namespace Manager {
         private void HandlePlayerJoining(PlayerInput input) {
             players.Add(input);
             SetupCamera();
-
-            enemyManager.UpdatePlayerList();
         }
 
         public void RegisterPlayer(Controller player) {
