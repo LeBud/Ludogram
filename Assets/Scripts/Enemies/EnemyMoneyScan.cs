@@ -71,7 +71,7 @@ namespace Enemies {
             GameManager.instance.enemyManager.DeregisterTarget(pickupBag);
             pickupBag.transform.parent = null;
             pickupBag.rb.isKinematic = false;
-            pickupBag.DisableCollider();
+            pickupBag.EnableCollider();
             pickupBag = null;
         }
 

@@ -37,16 +37,19 @@ namespace Enemies {
                 if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
                     dir = CarDoors.instance.transform.position - raycastPoint.position;
                 else if (ia.money.targetedBag.isPickedUp) {
-                    var pos = ia.money.targetedBag.gadgetController.transform.position;
-                    pos.y += 0.5f;
+                    var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
                     dir = pos - raycastPoint.position;
                 }
                 
-                Physics.Raycast(transform.position, dir.normalized, out raycastHit, tongueAbilityRange);
+                float distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                
+                Physics.Raycast(raycastPoint.position, dir.normalized, out raycastHit, distance);
             }
             
             //if(hit.collider == null) return;
-            
+        }
+
+        private void FixedUpdate() {
             if(CanUseAbility())
                 UseAbility();
         }
@@ -61,7 +64,7 @@ namespace Enemies {
             
             if (raycastHit.transform.TryGetComponent(out SingleDoor door)) {
                 Debug.Log("Hit Door");
-                door.UseDoor();
+                door.ForceOpenDoor();
                 return;
             }
             
@@ -87,19 +90,19 @@ namespace Enemies {
             if (ia.money.HasTargetBag) {
                 Gizmos.color = Color.red;
                 var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+                float distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
                 
-                if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen) {
-                    Gizmos.color = Color.green;
-                    dir = CarDoors.instance.transform.position - raycastPoint.position;
-                }
-                else if (ia.money.targetedBag.isPickedUp) {
-                    Gizmos.color = Color.cornflowerBlue;
-                    var pos = ia.money.targetedBag.gadgetController.transform.position;
-                    pos.y += 0.5f;
-                    dir = pos - raycastPoint.position;
-                }
+                Gizmos.color = Color.green;
+                dir = CarDoors.instance.transform.position - raycastPoint.position;
+                distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
                 
-                Gizmos.DrawLine(raycastPoint.position, dir.normalized * tongueAbilityRange);
+                Gizmos.color = Color.cornflowerBlue;
+                var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
+                dir = pos - raycastPoint.position;
+                distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
             }
         }
 
