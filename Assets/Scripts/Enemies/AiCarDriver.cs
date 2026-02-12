@@ -16,6 +16,10 @@ namespace Enemies {
             carController.SetAiCar(true);
         }
 
+        private void Start() {
+            target = FindAnyObjectByType<AttachedPlayer>().transform;
+        }
+
         private void Update() {
             float forwardAmount = 0f;
             float turnAmount = 0f;
@@ -23,13 +27,15 @@ namespace Enemies {
             var distance = Vector3.Distance(transform.position, target.position);
 
             if (distance > distanceToReachTarget) {
-                var dot = Vector3.Dot(transform.forward, target.position);
+                var dirToMovePos = (target.position - transform.position).normalized;
+                var dot = Vector3.Dot(transform.forward, dirToMovePos);
                 if (dot > 0f) forwardAmount = 1f;
                 else forwardAmount = -1f;
                 
-                var angleToDir = Vector3.SignedAngle(transform.forward, target.position, Vector3.up);
-                if(angleToDir > 0f) turnAmount = 1f;
-                else turnAmount = -1f;
+                var angleToDir = Vector3.SignedAngle(transform.forward, dirToMovePos, Vector3.up);
+                if(angleToDir > 5f) turnAmount = 1f;
+                else if(angleToDir < -5f) turnAmount = -1f;
+                else  turnAmount = 0f;
             }
             
             carController.SetAiInputs(forwardAmount, turnAmount);
