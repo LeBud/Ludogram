@@ -19,10 +19,12 @@ namespace Enemies {
         [Header("Frog In Car")] 
         [SerializeField] private EnemyController[] aIs;
         
-        NavMeshPath currentPath;
-        Vector3[] corners;
-        int currentCornerIndex;
-        Vector3 lastTargetPos;
+        private NavMeshPath currentPath;
+        private Vector3[] corners;
+        private int currentCornerIndex;
+        private Vector3 lastTargetPos;
+
+        private Transform currentTarget;
         
         private void Awake() {
             if(TryGetComponent(out carController)) Debug.Log("AiCarDriver Awake");
@@ -34,6 +36,7 @@ namespace Enemies {
 
         private void Start() {
             RecalculatePath(carTarget.position);
+            SetCurrentTarget(carTarget);
         }
 
         private void Update() {
@@ -41,9 +44,14 @@ namespace Enemies {
                 GameManager.instance.enemyManager.DeregisterCarFromSpawner(this);
                 Destroy(gameObject);
             }
+
+            if(AllFrogHaveBag()) return;
             
-            float forwardAmount = 0f;
-            float turnAmount = 0f;
+            if (NoneHaveTarget() && currentTarget != carTarget) SetCurrentTarget(carTarget);
+            else SetCurrentTarget(GetClosestTargetBag());
+            
+            var forwardAmount = 0f;
+            var turnAmount = 0f;
             
             if((carTarget.position - lastTargetPos).sqrMagnitude > repathDistance * repathDistance)
                 RecalculatePath(carTarget.position);
@@ -74,8 +82,44 @@ namespace Enemies {
             
             carController.SetAiInputs(forwardAmount, turnAmount);
         }
+
+        private bool AllFrogHaveBag() {
+            foreach (var frog in aIs) {
+                if(frog.money.HasBag) continue;
+                return false;
+            }
+            
+            return true;
+        }
+
+        private bool NoneHaveTarget() {
+            foreach (var frog in aIs) {
+                if(!frog.money.HasTargetBag) continue;
+                return false;
+            }
+            
+            return true;
+        }
+
+        private Transform GetClosestTargetBag() {
+            var dist = float.MaxValue;
+            var index = 0;
+            for (var i = 0; i < aIs.Length; i++) {
+                var distance = Vector3.Distance(transform.position, aIs[i].money.targetedBag.transform.position);
+                if (distance < dist) {
+                    dist = distance;
+                    index = i;
+                }
+            }
+            
+            return aIs[index].money.targetedBag.transform;
+        }
         
-        void RecalculatePath(Vector3 targetPosition) {
+        public void SetCurrentTarget(Transform target) {
+            currentTarget = target;
+        }
+        
+        private void RecalculatePath(Vector3 targetPosition) {
             Debug.Log("Recalculating path");
             
             if (!NavMesh.SamplePosition(targetPosition, out var hit, 2f, NavMesh.AllAreas))
@@ -102,7 +146,7 @@ namespace Enemies {
             }
         }
         
-        Vector3 OffsetCornerFromWall(Vector3 corner, float clearance) {
+        private Vector3 OffsetCornerFromWall(Vector3 corner, float clearance) {
             if (NavMesh.FindClosestEdge(corner, out var edgeHit, NavMesh.AllAreas)) {
                 var offset = edgeHit.normal * clearance;
 
@@ -114,7 +158,7 @@ namespace Enemies {
             return corner;
         }
         
-        void OnDrawGizmos() {
+        private void OnDrawGizmos() {
             if (corners == null) return;
 
             Gizmos.color = Color.cyan;
