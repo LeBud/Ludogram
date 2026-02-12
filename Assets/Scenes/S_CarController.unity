@@ -58255,7 +58255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4596582657626198440, guid: 0922408974b6e6d449aea54b746bab2a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7031093937652154889, guid: 0922408974b6e6d449aea54b746bab2a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -58310,13 +58310,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1857543063023813178, guid: a2dda552a1ae9aa4fb6e56a57dbcf597, type: 3}
+      propertyPath: m_Name
+      value: GhostRDoor
+      objectReference: {fileID: 0}
     - target: {fileID: 3632505181501952786, guid: a2dda552a1ae9aa4fb6e56a57dbcf597, type: 3}
       propertyPath: m_Size.z
       value: 0.08
       objectReference: {fileID: 0}
-    - target: {fileID: 4308317801960502625, guid: a2dda552a1ae9aa4fb6e56a57dbcf597, type: 3}
-      propertyPath: m_Size.z
-      value: 0.08
+    - target: {fileID: 3853430500425061944, guid: a2dda552a1ae9aa4fb6e56a57dbcf597, type: 3}
+      propertyPath: m_Name
+      value: GhostLDoor
       objectReference: {fileID: 0}
     - target: {fileID: 7865809833305782790, guid: a2dda552a1ae9aa4fb6e56a57dbcf597, type: 3}
       propertyPath: m_Name
