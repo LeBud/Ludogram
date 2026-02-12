@@ -15,7 +15,7 @@ namespace Enemies {
         [SerializeField] private float timeWithoutTargetToDespawn = 5f;
         [SerializeField] private float rangeToGrabBag = 1.5f;
         [SerializeField] private Transform bagPos;
-
+        
         [Header("Money Settings")] 
         [SerializeField] private float timeToExitLevel = 2f;
         [SerializeField] private float rangeToExit = 1.5f;
@@ -32,6 +32,8 @@ namespace Enemies {
 
         private float timeToDespawn = 0f;
 
+        private MoneyBag previousTarget;
+        
         //====Manhole====
         public Transform closestManhole { get; private set; }
         private float timeToExit = 0f;
@@ -66,8 +68,10 @@ namespace Enemies {
             //Drop bag if get knockOut
             if(!HasBag) return;
             
+            GameManager.instance.enemyManager.DeregisterTarget(pickupBag);
             pickupBag.transform.parent = null;
             pickupBag.rb.isKinematic = false;
+            pickupBag.EnableCollider();
             pickupBag = null;
         }
 
@@ -78,9 +82,24 @@ namespace Enemies {
                 BagInCar = GameManager.instance.moneyManager.GetBagsInCar().Contains(targetedBag);
                 GrabBag();
             }
-            
-            if(!HasTargetBag && timeSinceLastScan < 0f) targetedBag = ScanBags();
-            if(HasTargetBag && timeSinceNewClosestScan < 0f) targetedBag = ScanBags();
+
+            if (!HasTargetBag && timeSinceLastScan < 0f) {
+                previousTarget = targetedBag;
+                targetedBag = ScanBags();
+                if(targetedBag != previousTarget){
+                    GameManager.instance.enemyManager.DeregisterTarget(previousTarget);
+                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
+                }
+            }
+
+            if (HasTargetBag && timeSinceNewClosestScan < 0f) {
+                previousTarget = targetedBag;
+                targetedBag = ScanBags();
+                if(targetedBag != previousTarget){
+                    GameManager.instance.enemyManager.DeregisterTarget(previousTarget);
+                    GameManager.instance.enemyManager.RegisterTarget(targetedBag);
+                }
+            }
             
             timeSinceLastScan -= Time.deltaTime;
             timeSinceNewClosestScan -= Time.deltaTime;
@@ -88,6 +107,7 @@ namespace Enemies {
 
         private void FrogExit() {
             GameManager.instance.moneyManager.DeregisterMoneyBag(pickupBag);
+            GameManager.instance.enemyManager.DeregisterTarget(pickupBag);
             
             Destroy(gameObject);
         }
@@ -95,19 +115,24 @@ namespace Enemies {
         private void GrabBag() {
             if (Vector3.Distance(targetedBag.transform.position, transform.position) > rangeToGrabBag) return;
             
+            Debug.Log("Grab from ground");
+            if(targetedBag.isPickedUp) targetedBag.gadgetController.DropGadget();
+            
             pickupBag = targetedBag;
-            pickupBag.rb.isKinematic = true;
-            pickupBag.transform.parent = transform;
-            pickupBag.transform.position = bagPos.position;
-            targetedBag = null;
+            SetPickUpBag();
         }
 
-        public void GrabBagByAbility(MoneyBag bag) {
-            pickupBag = bag;
+        private void SetPickUpBag() {
             pickupBag.rb.isKinematic = true;
             pickupBag.transform.parent = transform;
             pickupBag.transform.position = bagPos.position;
+            pickupBag.DisableCollider();
             targetedBag = null;
+        }
+        
+        public void GrabBagByAbility(MoneyBag bag) {
+            pickupBag = bag;
+            SetPickUpBag();
         }
         
         private MoneyBag ScanBags() {
@@ -160,6 +185,9 @@ namespace Enemies {
             var dist = maxDetectableRange;
             
             for (int i = 0; i < bags.Count; i++) {
+                if(GameManager.instance.enemyManager.targetedBag.Contains(bags[i]) && bags[i] != targetedBag)
+                    continue;
+                
                 var distance = Vector3.Distance(bags[i].transform.position, transform.position);
 
                 if (distance < dist) {

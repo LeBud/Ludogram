@@ -58,11 +58,16 @@ public class EnemyController : MonoBehaviour, IKnockable {
         var knockOutState = new EnemyKnockOutState(this);
         var ambushState = new EnemyAmbushState(this);
         var fleeState = new EnemyFleeState(this);
+        var abilityState = new EnemyAbilityState(this);
         
         //Set At State
         At(waitState, pursuitState, new FuncPredicate(() => money.HasTargetBag));
         At(pursuitState, waitState, new FuncPredicate(() => !money.HasBag && !money.HasTargetBag));
+        
         At(pursuitState, fleeState, new FuncPredicate(() => money.HasBag));
+        
+        At(pursuitState, abilityState, new FuncPredicate(() => ability.triggerAbility));
+        At(abilityState, pursuitState, new FuncPredicate(() => abilityState.IsStateFinished()));
         
         At(knockOutState, waitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
         
