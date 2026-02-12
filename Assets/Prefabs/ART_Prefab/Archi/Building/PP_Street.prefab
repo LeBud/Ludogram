@@ -3087,7 +3087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8099911305979420628, guid: 99e2d813283fd0e4d8749d1fbd28f9d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.09
+      value: 7.407
       objectReference: {fileID: 0}
     - target: {fileID: 8099911305979420628, guid: 99e2d813283fd0e4d8749d1fbd28f9d6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3095,7 +3095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8099911305979420628, guid: 99e2d813283fd0e4d8749d1fbd28f9d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.567245
+      value: -19.567
       objectReference: {fileID: 0}
     - target: {fileID: 8099911305979420628, guid: 99e2d813283fd0e4d8749d1fbd28f9d6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3280,7 +3280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1641295245072713826, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20.805649
+      value: -21
       objectReference: {fileID: 0}
     - target: {fileID: 1641295245072713826, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3310,12 +3310,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2261170784365158062, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 2261170784365158062, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5993296306502915957, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.84
+      objectReference: {fileID: 0}
     - target: {fileID: 7445492647731875684, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
       propertyPath: m_Name
       value: PV_BuildingMagasinOneblock (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3675314346192580020, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
+    - {fileID: 1012621245362223757, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
+    - {fileID: 7658000108763338135, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
@@ -4884,7 +4899,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1641295245072713826, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.880003
+      value: 5.37
       objectReference: {fileID: 0}
     - target: {fileID: 1641295245072713826, guid: 04915984fa6fe18498413d4fcc7b0992, type: 3}
       propertyPath: m_LocalPosition.z
