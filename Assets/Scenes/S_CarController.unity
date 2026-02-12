@@ -58559,6 +58559,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2354878678552807121, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8575b204d580c664a97284e5f83921e9, type: 2}
     - target: {fileID: 5740199188756455522, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
       propertyPath: m_Name
       value: FrogCar
@@ -58847,7 +58851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5845045999135552423, guid: af664ba4febd4ec468942ba1aa668c96, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5879751764248558616, guid: af664ba4febd4ec468942ba1aa668c96, type: 3}
       propertyPath: m_Layer
