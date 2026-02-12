@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2203949232563723795}
   m_Layer: 0
-  m_Name: PP_
+  m_Name: PP_GoldIngot_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,70 +40,90 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2203949232563723795}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 69c094eb8dc61c149890e286663ff767, type: 2}
-    - target: {fileID: 919132149155446097, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - target: {fileID: -5754084199372789682, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 1459814524038701324, guid: 7c95d31133635b54ab59b0ca95057a03, type: 3}
+    - target: {fileID: 919132149155446097, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       propertyPath: m_Name
-      value: SM_Money_01
+      value: SM_GoldIngot_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4289586606871794640}
-  m_SourcePrefab: {fileID: 100100000, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
 --- !u!4 &8136000362658977989 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
   m_PrefabInstance: {fileID: 8602535288553717550}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8909019006808916607 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f42ec883ff452904c9603c32308e3f94, type: 3}
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6827052c1748dd94e88ecaebdeb319ed, type: 3}
   m_PrefabInstance: {fileID: 8602535288553717550}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &4289586606871794640
