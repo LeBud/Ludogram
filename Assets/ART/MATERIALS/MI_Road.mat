@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MI_Road
-  m_Shader: {fileID: -6465566751694194690, guid: 92995f2ed28118640a1ac33627db5af2, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: c69196798c6a3444982bb2c7dc9d4da8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,8 +24,16 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseColor:
+        m_Texture: {fileID: 2800000, guid: c60f96c36f6d3bc47b5954ffcc7ab888, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _GridTexture:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: 8a4a49838eccd1342817cc1d249b7fa1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2D:
@@ -54,6 +62,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Blend: 1
     - _GrainScale: 0
     - _GrainScale_2: 0
     - _GrassRange_1: 1.43
@@ -65,6 +74,7 @@ Material:
     - _Recolor_ON_OFF: 1
     - _TextureSize: 0.24
     - _Texture_size: 0
+    - _Tiling: 0.2
     m_Colors:
     - _BaseColor: {r: 0.6320754, g: 0.5277234, b: 0.5277234, a: 1}
     - _GrainColor: {r: 0, g: 0, b: 0, a: 1}
