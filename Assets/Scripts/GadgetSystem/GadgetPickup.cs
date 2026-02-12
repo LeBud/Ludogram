@@ -17,10 +17,10 @@ namespace GadgetSystem {
             player = p;
         }
 
-        void Start()
-        {
+        void Start() {
             gadgetStaticTransform = gadgetTransform;
         }
+        
         #region InputSystem
 
         void OnEnable() {
@@ -32,7 +32,6 @@ namespace GadgetSystem {
         }
 
         #endregion
-
 
         [ContextMenu("Pickup")]
         public void TryPickupNearbyGadget() {
@@ -46,6 +45,11 @@ namespace GadgetSystem {
             
             if (hit.collider.TryGetComponent(out CarSeat seat) && !seat.playerAlreadySeated) {
                 seat.SetDriver(player);
+                return;
+            }
+
+            if (hit.collider.TryGetComponent(out SingleDoor door)) {
+                door.UseDoor();
                 return;
             }
             

@@ -2,12 +2,15 @@ using UnityEngine;
 
 public class MoneyBag : Gadget
 {
-    [SerializeField] public  Rigidbody rb;
-    [SerializeField]private int moneyValue;
-    [SerializeField]private LayerMask moneyZoneLayerMask;
-    [SerializeField]private  float     launchSpeed;
-    private bool      isUsed = false;
-
+    private                  Camera    currentCamera;
+    [SerializeField] public Rigidbody rb;
+    [SerializeField] private int       moneyValue;
+    [SerializeField] private LayerMask moneyZoneLayerMask;
+    [SerializeField] private float     launchSpeed;
+    private                  bool      isUsed = false;
+    [SerializeField] private Collider col;
+    public bool isPickedUp {get; private set;}
+    
     protected override void OnUse()
     {
         isUsed = true;
@@ -31,6 +34,8 @@ public class MoneyBag : Gadget
         gadgetController = gc;
         rb.isKinematic   = true;
         isUsed           = false;
+        col.enabled = false;
+        isPickedUp = true;
     }
 
     public override void Drop()
@@ -39,9 +44,19 @@ public class MoneyBag : Gadget
         if (isUsed) return;
         transform.SetParent(null);
         rb.isKinematic = false;
+        col.enabled = true;
+        isPickedUp = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 
+    public void EnableCollider() {
+        col.enabled = true;
+    }
+
+    public void DisableCollider() {
+        col.enabled = false;
+    }
+    
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == moneyZoneLayerMask)
