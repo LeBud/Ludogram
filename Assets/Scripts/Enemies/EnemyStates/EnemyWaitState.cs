@@ -6,6 +6,8 @@ namespace EnemyStates {
         }
 
         public override void OnEnter() {
+            if(ia.InCar) return;
+            
             ia.movement.ResetMovement();
         }
 

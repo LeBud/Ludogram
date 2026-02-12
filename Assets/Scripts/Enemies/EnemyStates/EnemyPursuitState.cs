@@ -12,6 +12,7 @@ namespace EnemyStates {
         }
 
         public override void Update() {
+            if(ia.InCar) return;
             //L'IA voiture c'est full prio sur le vanne que si il y a 1 sac ou plus dedans
             
             if(ia.money.HasTargetBag)
@@ -19,6 +20,8 @@ namespace EnemyStates {
         }
 
         public override void OnExit() {
+            if(ia.InCar) return;
+            
             ia.movement.ResetMovement();
         }
     }

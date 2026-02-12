@@ -43,7 +43,7 @@ namespace Enemies {
             }
                 
             var distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
-            var mask = LayerMask.GetMask("Ghost");
+            var mask = LayerMask.GetMask("Ghost", "Enemy");
             Physics.Raycast(raycastPoint.position, dir.normalized, out raycastHit, distance, ~mask);
         }
 
