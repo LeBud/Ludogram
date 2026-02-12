@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7331565223376541432}
   m_Layer: 0
-  m_Name: PP_Bank_lamp
+  m_Name: PP_Bank_Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,6 +80,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 0a7516ebc64187642a93584409a06c81, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 90f5437015ab157499523ba80275853f, type: 2}
     - target: {fileID: 919132149155446097, guid: 0a7516ebc64187642a93584409a06c81, type: 3}
       propertyPath: m_Name
       value: SM_Bank_Lamp
