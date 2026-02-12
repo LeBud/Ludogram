@@ -1,43 +1,52 @@
 using System;
 using CarScripts;
+using Manager;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Enemies {
     public class AiCarDriver : MonoBehaviour {
         private CarController carController;
-        private Transform target;
+        private Transform carTarget;
 
+        [Header("Settings")]
         [SerializeField] private float distanceToReachTarget;
+        [SerializeField] private float repathDistance = 10f;
+        [SerializeField] private float cornerReachDistance = 2f;
+        [SerializeField] private float cornerClearance = 4f;
+        [SerializeField] private float distanceToDespawn = 100f;
+
+        [Header("Frog In Car")] 
+        [SerializeField] private EnemyController[] aIs;
         
         NavMeshPath currentPath;
         Vector3[] corners;
         int currentCornerIndex;
-
         Vector3 lastTargetPos;
-        [SerializeField] float repathDistance = 10f;
-        [SerializeField] float cornerReachDistance = 2f;
-        [SerializeField] float cornerClearance = 4f;
         
         private void Awake() {
             if(TryGetComponent(out carController)) Debug.Log("AiCarDriver Awake");
             else Debug.LogError("No car controller found");
             
             carController.SetAiCar(true);
+            carTarget = FindAnyObjectByType<AttachedPlayer>().transform;
         }
 
         private void Start() {
-            target = FindAnyObjectByType<AttachedPlayer>().transform;
-            
-            RecalculatePath(target.position);
+            RecalculatePath(carTarget.position);
         }
 
         private void Update() {
+            if ((carTarget.position - lastTargetPos).magnitude > distanceToDespawn) {
+                GameManager.instance.enemyManager.DeregisterCarFromSpawner(this);
+                Destroy(gameObject);
+            }
+            
             float forwardAmount = 0f;
             float turnAmount = 0f;
             
-            if((target.position - lastTargetPos).sqrMagnitude > repathDistance * repathDistance)
-                RecalculatePath(target.position);
+            if((carTarget.position - lastTargetPos).sqrMagnitude > repathDistance * repathDistance)
+                RecalculatePath(carTarget.position);
             
             if(corners == null || corners.Length == 0) return;
             
@@ -49,7 +58,7 @@ namespace Enemies {
                 if (currentCornerIndex >= corners.Length) return;
             }
             
-            var distance = Vector3.Distance(transform.position, target.position);
+            var distance = Vector3.Distance(transform.position, carTarget.position);
 
             if (distance > distanceToReachTarget) {
                 var dirToMovePos = (targetCorner - transform.position).normalized;

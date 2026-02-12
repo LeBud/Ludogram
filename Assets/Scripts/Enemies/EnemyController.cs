@@ -18,7 +18,12 @@ public class EnemyController : MonoBehaviour, IKnockable {
     public float knockOutTime { get; private set; }
     public Vector3 knockOutForce { get; private set; }
 
+    [HideInInspector]
     public bool isKnockOut;
+
+    [SerializeField] private bool isInCar = false;
+    
+    public bool InCar { get; private set; }
     
     private void Awake() {
         Initialize();
@@ -26,24 +31,33 @@ public class EnemyController : MonoBehaviour, IKnockable {
     }
 
     private void Initialize() {
-        if(TryGetComponent(out NavMeshAgent ag)) agent = ag;
-        else Debug.LogError("No NavMeshAgent found");
-        if(TryGetComponent(out Rigidbody rb)) rigidbody = rb;
-        else Debug.LogError("No EnemyMovementController found");
-        if(TryGetComponent(out EnemyMovementController move)) movement = move;
-        else Debug.LogError("No EnemyMovementController found");
+        InCar = isInCar;
+        
+        if (!isInCar) {
+            if(TryGetComponent(out NavMeshAgent ag)) agent = ag;
+            else Debug.LogError("No NavMeshAgent found");
+            
+            if(TryGetComponent(out Rigidbody rb)) rigidbody = rb;
+            else Debug.LogError("No EnemyMovementController found");
+            
+            if(TryGetComponent(out EnemyMovementController move)) movement = move;
+            else Debug.LogError("No EnemyMovementController found");
+            
+            movement.Initialize(agent);
+            
+            rigidbody.isKinematic = true;
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+        
+        
         if(TryGetComponent(out EnemyMoneyScan mo)) money = mo;
         else Debug.LogError("No EnemyMoneyScan found");
+        
         if(TryGetComponent(out EnemyAbilityController ab)) ability = ab;
         else Debug.LogError("No EnemyAbilityController found");
         
-        movement.Initialize(agent);
         money.Initialize(this);
         ability.Initialize(this);
-        
-        //Set the rigidbody
-        rigidbody.isKinematic = true;
-        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     private void Start() {
@@ -53,28 +67,45 @@ public class EnemyController : MonoBehaviour, IKnockable {
     private void SetupStateMachine() {
         stateMachine = new FiniteStateMachine();
 
-        var waitState = new EnemyWaitState(this);
-        var pursuitState = new EnemyPursuitState(this);
-        var knockOutState = new EnemyKnockOutState(this);
-        var ambushState = new EnemyAmbushState(this);
-        var fleeState = new EnemyFleeState(this);
-        var abilityState = new EnemyAbilityState(this);
-        
-        //Set At State
-        At(waitState, pursuitState, new FuncPredicate(() => money.HasTargetBag));
-        At(pursuitState, waitState, new FuncPredicate(() => !money.HasBag && !money.HasTargetBag));
-        
-        At(pursuitState, fleeState, new FuncPredicate(() => money.HasBag));
-        
-        At(pursuitState, abilityState, new FuncPredicate(() => ability.triggerAbility));
-        At(abilityState, pursuitState, new FuncPredicate(() => abilityState.IsStateFinished()));
-        
-        At(knockOutState, waitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
-        
-        //Set Any State
-        Any(knockOutState, new FuncPredicate(() => enterKnockOut));
-        
-        stateMachine.SetState(waitState);
+        if (!isInCar) {
+            var waitState = new EnemyWaitState(this);
+            var pursuitState = new EnemyPursuitState(this);
+            var knockOutState = new EnemyKnockOutState(this);
+            var ambushState = new EnemyAmbushState(this);
+            var fleeState = new EnemyFleeState(this);
+            var abilityState = new EnemyAbilityState(this);
+            
+            //Set At State
+            At(waitState, pursuitState, new FuncPredicate(() => money.HasTargetBag));
+            At(pursuitState, waitState, new FuncPredicate(() => !money.HasBag && !money.HasTargetBag));
+            
+            At(pursuitState, fleeState, new FuncPredicate(() => money.HasBag));
+            
+            At(pursuitState, abilityState, new FuncPredicate(() => ability.triggerAbility));
+            At(abilityState, pursuitState, new FuncPredicate(() => abilityState.IsStateFinished()));
+            
+            At(knockOutState, waitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
+            
+            //Set Any State
+            Any(knockOutState, new FuncPredicate(() => enterKnockOut));
+            
+            stateMachine.SetState(waitState);
+        }
+        else {
+            var waitState = new EnemyWaitState(this);
+            var abilityState = new EnemyAbilityState(this);
+            var knockOutState = new EnemyKnockOutState(this);
+            
+            //Set At State
+            At(waitState, abilityState, new FuncPredicate(() => ability.triggerAbility));
+            At(abilityState, waitState, new FuncPredicate(() => abilityState.IsStateFinished()));
+            At(knockOutState, waitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
+            
+            //Set Any State
+            Any(knockOutState, new FuncPredicate(() => enterKnockOut));
+            
+            stateMachine.SetState(waitState);
+        }
     }
     
     void Update() {
