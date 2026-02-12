@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Manager;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,6 @@ using Random = UnityEngine.Random;
 
 public class GadgetSeller : MonoBehaviour
 {
-    public           int          currentMoney;
     public           List<Gadget> gadgetToSell = new();
     public int          total        = 0;
     [SerializeField] TMP_Text     priceText;
@@ -27,7 +27,7 @@ public class GadgetSeller : MonoBehaviour
     {
         if (other.TryGetComponent(out Gadget gadget))
         {
-            if (currentMoney >= total + gadget.Price)
+            if (GameManager.instance.moneyManager.moneySaved >= total + gadget.Price)
             {
                 shop.placedGadgets.Remove(gadget.gameObject);
                 gadgetToSell.Add(gadget);
@@ -52,9 +52,9 @@ public class GadgetSeller : MonoBehaviour
             gadgetToSell[i].transform.position = spawnPlace.position + position;
             gadgetToSell[i].gameObject.SetActive(true);
             gadgetToSell.Remove(gadgetToSell[i]);
-            total = 0;
         }
-        
+
+        GameManager.instance.moneyManager.ActualizeMoney(-total);
         shop.ResetGadget();
         total          = 0;
         priceText.text = total.ToString() + "$";

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Manager;
 using UnityEngine;
 
 public class ShopZone : MonoBehaviour
@@ -29,7 +30,7 @@ public class ShopZone : MonoBehaviour
         if (other.TryGetComponent(out Gadget gadget))
         {
             yield return new WaitForSeconds(0.5f);
-            if (gadgetSeller.currentMoney >= gadgetSeller.total + gadget.Price)
+            if (GameManager.instance.moneyManager.moneySaved >= gadgetSeller.total + gadget.Price)
             {
                 gadgetSeller.shop.placedGadgets.Remove(gadget.gameObject);
                 gadgetSeller.gadgetToSell.Add(gadget);

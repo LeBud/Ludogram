@@ -401,7 +401,7 @@ MonoBehaviour:
   rb: {fileID: 7786145555891057595}
   modelTransform: {fileID: 1894068283738562458}
   groundRayPosition: {fileID: 5810163413214570554}
-  borderRayPosition: {fileID: 0}
+  borderRayPosition: {fileID: 360500617645004554}
   cameraPosition: {fileID: 5580658350381849890}
   groundLayerMask:
     serializedVersion: 2
@@ -493,7 +493,7 @@ MonoBehaviour:
   maxJumpTime: 0.1
   fallTime: 0
   isGrounded: 0
-  maxStepHeight: 0.3
+  maxStepHeight: 1
   stepCheckDistance: 0.5
   stepUpSpeed: 5
   coyoteTime: 0

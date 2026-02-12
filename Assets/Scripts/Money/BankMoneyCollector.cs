@@ -8,9 +8,8 @@ public class BankMoneyCollector : MonoBehaviour
     {
         if (other.TryGetComponent(out MoneyBag moneyBag))
         {
-            GameManager.instance.moneyManager.moneySaved += moneyBag.moneyValue;
+            GameManager.instance.moneyManager.ActualizeMoney(moneyBag.moneyValue);
             GameManager.instance.moneyManager.DeregisterMoneyBag(moneyBag);
-            Destroy(moneyBag.gameObject);
         }
     }
     

@@ -15,24 +15,24 @@ public class MoneyBag : Gadget
 
     private void Start()
     {
-        //GameManager.instance.moneyManager.RegisterMoneyBag(this);
+        GameManager.instance.moneyManager.RegisterMoneyBag(this);
     }
 
     protected override void OnUse()
     {
-        isUsed = true;
-        target = null;
-        transform.SetParent(null);
-        rb.isKinematic = false;
-        Ray ray = new Ray(currentCamera.transform.position, currentCamera.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            rb.AddForce((hit.point - transform.position).normalized * launchSpeed, ForceMode.Impulse);
-        }
-        else
-        {
-            rb.AddForce(ray.direction * launchSpeed, ForceMode.Impulse);
-        }
+        // isUsed = true;
+        // target = null;
+        // transform.SetParent(null);
+        // rb.isKinematic = false;
+        // Ray ray = new Ray(currentCamera.transform.position, currentCamera.transform.forward);
+        // if (Physics.Raycast(ray, out RaycastHit hit))
+        // {
+        //     rb.AddForce((hit.point - transform.position).normalized * launchSpeed, ForceMode.Impulse);
+        // }
+        // else
+        // {
+        //     rb.AddForce(ray.direction * launchSpeed, ForceMode.Impulse);
+        // }
     }
 
     public override void OnPickup(GadgetController gc)
