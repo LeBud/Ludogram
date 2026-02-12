@@ -48,7 +48,7 @@ namespace Enemies {
             if(AllFrogHaveBag()) return;
             
             if (NoneHaveTarget() && currentTarget != carTarget) SetCurrentTarget(carTarget);
-            else SetCurrentTarget(GetClosestTargetBag());
+            else if(!NoneHaveTarget() && currentTarget == carTarget) SetCurrentTarget(GetClosestTargetBag());
             
             var forwardAmount = 0f;
             var turnAmount = 0f;
@@ -59,8 +59,8 @@ namespace Enemies {
             if(corners == null || corners.Length == 0) return;
             
             var targetCorner = corners[currentCornerIndex];
-            var distToCorner = targetCorner - transform.position;
-            if (distToCorner.magnitude < cornerReachDistance) {
+            
+            if ((targetCorner - transform.position).magnitude < cornerReachDistance) {
                 currentCornerIndex++;
 
                 if (currentCornerIndex >= corners.Length) return;
