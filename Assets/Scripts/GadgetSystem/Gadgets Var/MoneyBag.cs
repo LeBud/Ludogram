@@ -49,6 +49,14 @@ public class MoneyBag : Gadget
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 
+    public void EnableCollider() {
+        col.enabled = true;
+    }
+
+    public void DisableCollider() {
+        col.enabled = false;
+    }
+    
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == moneyZoneLayerMask)

@@ -19,8 +19,12 @@ namespace CarScripts {
         public void UseDoor() {
             areDoorsOpen = !areDoorsOpen;
 
-            if (areDoorsOpen) anim.SetBool("Open", true);
-            else anim.SetBool("Open", false);
+            anim.SetBool("Open", areDoorsOpen);
+        }
+
+        public void ForceOpenDoor() {
+            areDoorsOpen = true;
+            anim.SetBool("Open", areDoorsOpen);
         }
     }
 }
