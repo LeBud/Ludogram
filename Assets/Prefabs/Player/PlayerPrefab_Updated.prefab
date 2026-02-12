@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8149909411786639550}
   - component: {fileID: 2963120311227464727}
+  - component: {fileID: 7644666218923301032}
   - component: {fileID: 1505654648605785059}
   m_Layer: 0
   m_Name: Main Camera
@@ -116,6 +117,14 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!81 &7644666218923301032
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569684427134156208}
+  m_Enabled: 1
 --- !u!114 &1505654648605785059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +282,7 @@ GameObject:
   - component: {fileID: 1664221753916381289}
   m_Layer: 3
   m_Name: PlayerV2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -450,7 +459,7 @@ MonoBehaviour:
   groundNormal: {x: 0, y: 0, z: 0}
   normalMagn: 0
   slowFactor: 1
-  decelerationTime: 0.25
+  decelerationTime: 0.35
   jumpForceOverTime:
     serializedVersion: 2
     m_Curve:
@@ -487,6 +496,7 @@ MonoBehaviour:
   havePressedJump: 0
   lookSensitivity: 1
   lookVerticalLimit: 80
+  lookHorizontalLimit: 0
   cameraSpeed: 15
   enableHeadbob: 1
   headbobFrequency: 2
@@ -623,6 +633,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GadgetController
   player: {fileID: 7724837287475400754}
   gadgetObject: {fileID: 0}
+  buttonLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  isInShop: 0
+  gadgetSeller: {fileID: 0}
+  buttonToBuy: {fileID: 0}
 --- !u!114 &1664221753916381289
 MonoBehaviour:
   m_ObjectHideFlags: 0
