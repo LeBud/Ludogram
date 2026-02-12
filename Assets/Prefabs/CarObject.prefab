@@ -233,7 +233,7 @@ Transform:
   m_GameObject: {fileID: 1224385846923243917}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.329, z: -1.081}
+  m_LocalPosition: {x: -1, y: 0.3, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -422,7 +422,7 @@ Transform:
   m_GameObject: {fileID: 1784456891295511364}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0.26499987, z: 3.148002}
+  m_LocalPosition: {x: 1, y: 0.3, z: 2.885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 3632505181501952786}
   - component: {fileID: 1685142592808742162}
   m_Layer: 8
-  m_Name: RDoor
+  m_Name: GhostRDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -481,7 +481,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2, z: 0.1}
+  m_Size: {x: 1, y: 2, z: 0.08}
   m_Center: {x: -0.5, y: 0, z: 0}
 --- !u!114 &1685142592808742162
 MonoBehaviour:
@@ -1550,7 +1550,7 @@ GameObject:
   - component: {fileID: 4308317801960502625}
   - component: {fileID: 1389314203690529860}
   m_Layer: 8
-  m_Name: LDoor
+  m_Name: GhostLDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2104,7 +2104,7 @@ Transform:
   m_GameObject: {fileID: 4765284306039959376}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0.29400015, z: -0.9600034}
+  m_LocalPosition: {x: 1, y: 0.3, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2670,7 +2670,7 @@ Transform:
   m_GameObject: {fileID: 6329913618883374768}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0.313, z: 2.885}
+  m_LocalPosition: {x: -1, y: 0.3, z: 2.885}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
