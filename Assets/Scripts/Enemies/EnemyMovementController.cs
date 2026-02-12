@@ -29,14 +29,6 @@ namespace Enemies {
             if(lookAtWhereItMove)
                 LookAt(position);
         }
-
-        public void GetPlayers() {
-            playerInRange.Clear();
-
-            foreach (var player in GameManager.instance.GetPlayers()) {
-                playerInRange.Add(player);
-            }
-        }
         
         private void LookAt(Vector3 position) {
             var dir = (position - transform.position).normalized;

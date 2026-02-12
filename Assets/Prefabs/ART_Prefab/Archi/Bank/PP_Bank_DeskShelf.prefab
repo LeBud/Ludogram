@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 778550891979700053}
   - component: {fileID: 5162256002659196896}
   - component: {fileID: 3149928681965136014}
+  - component: {fileID: 2001748613473344612}
   m_Layer: 0
   m_Name: SM_Bank_DeskShelf
   m_TagString: Untagged
@@ -122,3 +123,24 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2001748613473344612
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6312805297101705184}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9503987, y: 0.7202561, z: 5.4499536}
+  m_Center: {x: -0.000000014901161, y: 0.000000014901161, z: 0}

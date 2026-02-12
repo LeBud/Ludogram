@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3711708657066412652}
   - component: {fileID: 8093883208868245925}
   - component: {fileID: 624266726968082644}
+  - component: {fileID: 6429578366698194645}
   m_Layer: 0
   m_Name: SM_Bank_Ramp
   m_TagString: Untagged
@@ -122,3 +123,24 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6429578366698194645
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8769901344108350144}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 0.26520213, z: 0.6342083}
+  m_Center: {x: -1, y: 0.13260101, z: 0}
