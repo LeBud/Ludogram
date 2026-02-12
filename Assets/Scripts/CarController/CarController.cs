@@ -137,6 +137,12 @@ namespace CarScripts {
         private float maxDriveForce => maxEngineTorque * gearRatio * finalDrive * transmissionEfficiency;
         private Vector3 dragForce => -airDrag * carRb.linearVelocity * carRb.linearVelocity.magnitude;
         private Vector3 rollingResistanceForce => rollingResistance * carRb.linearVelocity;
+
+        private bool AiCar = false;
+
+        public void SetAiCar(bool ai) {
+            AiCar = ai;
+        }
         
         void Start() {
             if (TryGetComponent(out carRb)) Debug.Log($"RigidBody Assigned");
@@ -201,6 +207,10 @@ namespace CarScripts {
         }
 
         void MyInputs() {
+            if(AiCar) return;
+            
+            Debug.Log(gameObject.name + "Read Inputs : " + steering);
+            
             if (inputs == null) {
                 steering = 0;
                 throttle = 0;
@@ -217,6 +227,13 @@ namespace CarScripts {
                 player.isDriving = false;
                 BindInput(null);
             }
+        }
+
+        public void SetAiInputs(float forward, float turn) {
+            steering = turn;
+            throttle = Mathf.Max(0, forward);
+            reverse = Mathf.Min(0, forward);
+            reverse = Mathf.Abs(reverse);
         }
         
         void LateUpdate() {
@@ -368,7 +385,7 @@ namespace CarScripts {
             
             if (throttle < 0.01f && forwardSpeed > 0f) driveForce -= engineBrakeTorque * forwardSpeed;
 
-            if (inputs == null) {
+            if (inputs == null && !AiCar) {
                 if (forwardSpeed > 1f) driveForce -= engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
                 else if (forwardSpeed < -1f) driveForce += engineBrakeTorque * brakeMultNoDriver * forwardSpeed;
             }
