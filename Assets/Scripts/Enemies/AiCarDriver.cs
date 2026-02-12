@@ -1,43 +1,60 @@
 using System;
 using CarScripts;
+using Manager;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Enemies {
     public class AiCarDriver : MonoBehaviour {
         private CarController carController;
-        private Transform target;
+        private Transform carTarget;
 
+        [Header("Settings")]
         [SerializeField] private float distanceToReachTarget;
-        
-        NavMeshPath currentPath;
-        Vector3[] corners;
-        int currentCornerIndex;
+        [SerializeField] private float repathDistance = 10f;
+        [SerializeField] private float cornerReachDistance = 2f;
+        [SerializeField] private float cornerClearance = 4f;
+        [SerializeField] private float distanceToDespawn = 100f;
 
-        Vector3 lastTargetPos;
-        [SerializeField] float repathDistance = 10f;
-        [SerializeField] float cornerReachDistance = 2f;
-        [SerializeField] float cornerClearance = 4f;
+        [Header("Frog In Car")] 
+        [SerializeField] private EnemyController[] aIs;
+        
+        private NavMeshPath currentPath;
+        private Vector3[] corners;
+        private int currentCornerIndex;
+        private Vector3 lastTargetPos;
+
+        private Transform currentTarget;
         
         private void Awake() {
             if(TryGetComponent(out carController)) Debug.Log("AiCarDriver Awake");
             else Debug.LogError("No car controller found");
             
             carController.SetAiCar(true);
+            carTarget = FindAnyObjectByType<AttachedPlayer>().transform;
         }
 
         private void Start() {
-            target = FindAnyObjectByType<AttachedPlayer>().transform;
-            
-            RecalculatePath(target.position);
+            RecalculatePath(carTarget.position);
+            SetCurrentTarget(carTarget);
         }
 
         private void Update() {
-            float forwardAmount = 0f;
-            float turnAmount = 0f;
+            if ((carTarget.position - lastTargetPos).magnitude > distanceToDespawn) {
+                GameManager.instance.enemyManager.DeregisterCarFromSpawner(this);
+                Destroy(gameObject);
+            }
+
+            if(AllFrogHaveBag()) return;
             
-            if((target.position - lastTargetPos).sqrMagnitude > repathDistance * repathDistance)
-                RecalculatePath(target.position);
+            if (NoneHaveTarget() && currentTarget != carTarget) SetCurrentTarget(carTarget);
+            else SetCurrentTarget(GetClosestTargetBag());
+            
+            var forwardAmount = 0f;
+            var turnAmount = 0f;
+            
+            if((carTarget.position - lastTargetPos).sqrMagnitude > repathDistance * repathDistance)
+                RecalculatePath(carTarget.position);
             
             if(corners == null || corners.Length == 0) return;
             
@@ -49,7 +66,7 @@ namespace Enemies {
                 if (currentCornerIndex >= corners.Length) return;
             }
             
-            var distance = Vector3.Distance(transform.position, target.position);
+            var distance = Vector3.Distance(transform.position, carTarget.position);
 
             if (distance > distanceToReachTarget) {
                 var dirToMovePos = (targetCorner - transform.position).normalized;
@@ -65,8 +82,44 @@ namespace Enemies {
             
             carController.SetAiInputs(forwardAmount, turnAmount);
         }
+
+        private bool AllFrogHaveBag() {
+            foreach (var frog in aIs) {
+                if(frog.money.HasBag) continue;
+                return false;
+            }
+            
+            return true;
+        }
+
+        private bool NoneHaveTarget() {
+            foreach (var frog in aIs) {
+                if(!frog.money.HasTargetBag) continue;
+                return false;
+            }
+            
+            return true;
+        }
+
+        private Transform GetClosestTargetBag() {
+            var dist = float.MaxValue;
+            var index = 0;
+            for (var i = 0; i < aIs.Length; i++) {
+                var distance = Vector3.Distance(transform.position, aIs[i].money.targetedBag.transform.position);
+                if (distance < dist) {
+                    dist = distance;
+                    index = i;
+                }
+            }
+            
+            return aIs[index].money.targetedBag.transform;
+        }
         
-        void RecalculatePath(Vector3 targetPosition) {
+        public void SetCurrentTarget(Transform target) {
+            currentTarget = target;
+        }
+        
+        private void RecalculatePath(Vector3 targetPosition) {
             Debug.Log("Recalculating path");
             
             if (!NavMesh.SamplePosition(targetPosition, out var hit, 2f, NavMesh.AllAreas))
@@ -93,7 +146,7 @@ namespace Enemies {
             }
         }
         
-        Vector3 OffsetCornerFromWall(Vector3 corner, float clearance) {
+        private Vector3 OffsetCornerFromWall(Vector3 corner, float clearance) {
             if (NavMesh.FindClosestEdge(corner, out var edgeHit, NavMesh.AllAreas)) {
                 var offset = edgeHit.normal * clearance;
 
@@ -105,7 +158,7 @@ namespace Enemies {
             return corner;
         }
         
-        void OnDrawGizmos() {
+        private void OnDrawGizmos() {
             if (corners == null) return;
 
             Gizmos.color = Color.cyan;
