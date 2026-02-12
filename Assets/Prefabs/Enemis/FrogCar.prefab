@@ -946,6 +946,12 @@ MonoBehaviour:
   repathDistance: 10
   cornerReachDistance: 2
   cornerClearance: 4
+  distanceToDespawn: 100
+  aIs:
+  - {fileID: 4458678234917307535}
+  - {fileID: 7364677014719515336}
+  - {fileID: 4156074382578465331}
+  - {fileID: 6897962626148493514}
 --- !u!1 &5987634924116873335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1741,6 +1747,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3136649058054281433, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
   m_PrefabInstance: {fileID: 1884959827795290155}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4156074382578465331 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2559715126180450840, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
+  m_PrefabInstance: {fileID: 1884959827795290155}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2182aebd19bc84f82ec19991dc2a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Robber
 --- !u!1001 &2062346463861789030
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1997,6 +2014,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3136649058054281433, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
   m_PrefabInstance: {fileID: 2190305653831833239}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4458678234917307535 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2559715126180450840, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
+  m_PrefabInstance: {fileID: 2190305653831833239}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2182aebd19bc84f82ec19991dc2a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Robber
 --- !u!1001 &5021929070090868944
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2190,6 +2218,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
+--- !u!114 &7364677014719515336 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2559715126180450840, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
+  m_PrefabInstance: {fileID: 5021929070090868944}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2182aebd19bc84f82ec19991dc2a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Robber
 --- !u!4 &7941786037504360457 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3136649058054281433, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
@@ -2393,3 +2432,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3136649058054281433, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
   m_PrefabInstance: {fileID: 8953036411149122258}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6897962626148493514 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2559715126180450840, guid: a967091b230fc7f4c8f89955f5af2263, type: 3}
+  m_PrefabInstance: {fileID: 8953036411149122258}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2182aebd19bc84f82ec19991dc2a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Robber
