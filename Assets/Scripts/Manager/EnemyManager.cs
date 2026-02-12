@@ -8,11 +8,16 @@ namespace Manager {
         private HashSet<ManholeCover> manholeCover = new();
         public HashSet<MoneyBag> targetedBag = new();
         
+        private HashSet<SpawnFrog> frogSpawner = new();
+        
         public void RegisterEnemy(EnemyController newEnemy) {
             enemies.Add(newEnemy);
         }
 
         public void DeregisterEnemy(EnemyController removedEnemy) {
+            foreach (var spawnFrog in frogSpawner) {
+                spawnFrog.RemoveFrogFromSpawned(removedEnemy);
+            }
             if(enemies.Contains(removedEnemy))
                 enemies.Remove(removedEnemy);
         }
@@ -39,6 +44,10 @@ namespace Manager {
             
             if(targetedBag.Contains(bag))
                 targetedBag.Remove(bag);
+        }
+
+        public void RegisterSpawner(SpawnFrog frog) {
+            frogSpawner.Add(frog);
         }
 
         public void UpdatePlayerList() {

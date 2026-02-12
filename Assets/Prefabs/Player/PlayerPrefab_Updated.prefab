@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 1664221753916381289}
   m_Layer: 3
   m_Name: PlayerV2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -496,6 +496,7 @@ MonoBehaviour:
   havePressedJump: 0
   lookSensitivity: 1
   lookVerticalLimit: 80
+  lookHorizontalLimit: 0
   cameraSpeed: 15
   enableHeadbob: 1
   headbobFrequency: 2
@@ -632,6 +633,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GadgetController
   player: {fileID: 7724837287475400754}
   gadgetObject: {fileID: 0}
+  buttonLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  isInShop: 0
+  gadgetSeller: {fileID: 0}
+  buttonToBuy: {fileID: 0}
 --- !u!114 &1664221753916381289
 MonoBehaviour:
   m_ObjectHideFlags: 0
