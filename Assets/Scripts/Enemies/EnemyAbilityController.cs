@@ -22,8 +22,7 @@ namespace Enemies {
         [HideInInspector]
         public bool canUseTongue = true;
         
-        //Faire l'action pour tirer la langue sur le sac Target dans MoneyScan
-        //Distinguer si le sac est dans le camion
+        private RaycastHit raycastHit;
 
         public void Initialize(EnemyController controller) {
             ia = controller;
@@ -31,7 +30,26 @@ namespace Enemies {
 
         private void Update() {
             currentCooldown -= Time.deltaTime;
+
+            if (ia.money.HasTargetBag) {
+                var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+
+                if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
+                    dir = CarDoors.instance.transform.position - raycastPoint.position;
+                else if (ia.money.targetedBag.isPickedUp) {
+                    var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
+                    dir = pos - raycastPoint.position;
+                }
+                
+                float distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                
+                Physics.Raycast(raycastPoint.position, dir.normalized, out raycastHit, distance);
+            }
             
+            //if(hit.collider == null) return;
+        }
+
+        private void FixedUpdate() {
             if(CanUseAbility())
                 UseAbility();
         }
@@ -39,35 +57,26 @@ namespace Enemies {
         private void UseAbility() {
             triggerAbility = true;
             currentCooldown = abilityCooldown;
-            var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+            
+            //if(raycastHit.collider == null) return;
 
-            if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
-                dir = CarDoors.instance.transform.position - raycastPoint.position;
-            else if (ia.money.targetedBag.isPickedUp) {
-                var pos = ia.money.targetedBag.gadgetController.transform.position;
-                pos.y += 0.5f;
-                dir = pos - raycastPoint.position;
-            }
+            Debug.Log("ability hit " + raycastHit.collider.name);
             
-            Physics.Raycast(transform.position, dir.normalized, out var hit, tongueAbilityRange);
-            
-            if(hit.collider == null) return;
-
-            Debug.Log("ability hit " + hit.collider.name);
-            
-            if (hit.transform.TryGetComponent(out SingleDoor door)) {
+            if (raycastHit.transform.TryGetComponent(out SingleDoor door)) {
                 Debug.Log("Hit Door");
-                door.UseDoor();
+                door.ForceOpenDoor();
                 return;
             }
             
-            if (hit.transform.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
-                c.pickUp.gadgetController.DropGadget();
+            if (raycastHit.transform.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
+                Debug.Log("Grab from player");
+                ia.money.targetedBag.gadgetController.DropGadget();
                 ia.money.GrabBagByAbility(ia.money.targetedBag);
                 return;
             }
 
-            if (hit.transform.TryGetComponent(out MoneyBag bag)) {
+            if (raycastHit.transform.TryGetComponent(out MoneyBag bag) && !ia.money.targetedBag.isPickedUp) {
+                Debug.Log("Grab with tongue");
                 ia.money.GrabBagByAbility(bag);
                 return;
             }
@@ -76,24 +85,24 @@ namespace Enemies {
         private void OnDrawGizmos() {
             if(!Application.isPlaying) return;
             
-            Gizmos.matrix = 
+            //Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
             
             if (ia.money.HasTargetBag) {
                 Gizmos.color = Color.red;
                 var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+                float distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
                 
-                if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen) {
-                    Gizmos.color = Color.green;
-                    dir = CarDoors.instance.transform.position - raycastPoint.position;
-                }
-                else if (ia.money.targetedBag.isPickedUp) {
-                    Gizmos.color = Color.cornflowerBlue;
-                    var pos = ia.money.targetedBag.gadgetController.transform.position;
-                    pos.y += 0.5f;
-                    dir = pos - raycastPoint.position;
-                }
+                Gizmos.color = Color.green;
+                dir = CarDoors.instance.transform.position - raycastPoint.position;
+                distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
                 
-                Gizmos.DrawLine(raycastPoint.position, dir.normalized * tongueAbilityRange);
+                Gizmos.color = Color.cornflowerBlue;
+                var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
+                dir = pos - raycastPoint.position;
+                distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
             }
         }
 
@@ -102,7 +111,7 @@ namespace Enemies {
             if(ia.money.HasTargetBag) getDist = Vector3.Distance(transform.position, ia.money.targetedBag.transform.position);
             else return false;
             
-            return currentCooldown <= 0f && getDist < maxRangeToAbility && getDist > minRangeToAbility && canUseTongue;
+            return currentCooldown <= 0f && getDist < maxRangeToAbility && getDist > minRangeToAbility && canUseTongue && raycastHit.collider;
         }
     }
 }
