@@ -749,7 +749,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 8575b204d580c664a97284e5f83921e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -822,7 +822,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5740199188756455522}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -891,8 +891,8 @@ MonoBehaviour:
   tireMassHighSpeed: 40
   rearSteeringAllowed: 0
   wheelDriveMode: 1
-  maxEngineTorque: 200
-  engineResponse: 2
+  maxEngineTorque: 300
+  engineResponse: 4
   engineBrakeTorque: 30
   brakeMultNoDriver: 6
   wheelRadius: 0.3
@@ -942,6 +942,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.AiCarDriver
   distanceToReachTarget: 7
+  repathDistance: 10
+  cornerReachDistance: 2
+  cornerClearance: 4
 --- !u!1 &5987634924116873335
 GameObject:
   m_ObjectHideFlags: 0
