@@ -71,6 +71,7 @@ namespace Enemies {
             GameManager.instance.enemyManager.DeregisterTarget(pickupBag);
             pickupBag.transform.parent = null;
             pickupBag.rb.isKinematic = false;
+            pickupBag.DisableCollider();
             pickupBag = null;
         }
 
@@ -114,19 +115,24 @@ namespace Enemies {
         private void GrabBag() {
             if (Vector3.Distance(targetedBag.transform.position, transform.position) > rangeToGrabBag) return;
             
+            Debug.Log("Grab from ground");
+            if(targetedBag.isPickedUp) targetedBag.gadgetController.DropGadget();
+            
             pickupBag = targetedBag;
-            pickupBag.rb.isKinematic = true;
-            pickupBag.transform.parent = transform;
-            pickupBag.transform.position = bagPos.position;
-            targetedBag = null;
+            SetPickUpBag();
         }
 
-        public void GrabBagByAbility(MoneyBag bag) {
-            pickupBag = bag;
+        private void SetPickUpBag() {
             pickupBag.rb.isKinematic = true;
             pickupBag.transform.parent = transform;
             pickupBag.transform.position = bagPos.position;
+            pickupBag.DisableCollider();
             targetedBag = null;
+        }
+        
+        public void GrabBagByAbility(MoneyBag bag) {
+            pickupBag = bag;
+            SetPickUpBag();
         }
         
         private MoneyBag ScanBags() {
