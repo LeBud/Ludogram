@@ -56,7 +56,7 @@ public class GadgetController : MonoBehaviour
 
 	public void ReleaseGadget()
 	{
-		if(!isInShop) selectedGadget.Release();
+		if(!isInShop || selectedGadget != null) selectedGadget.Release();
 	}
 	
 	public void DropGadget()

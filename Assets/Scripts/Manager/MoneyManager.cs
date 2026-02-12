@@ -6,17 +6,19 @@ using UnityEngine.Serialization;
 namespace Manager {
     public class MoneyManager : MonoBehaviour
     {
-        [SerializeField]  int               quotas;
-        public int               moneySaved;
-        int               quotasDifference;
-        int               moneyMissed;
-        HashSet<MoneyBag> detectableBags = new();
-        HashSet<MoneyBag> bagsInCar      = new();
+        [SerializeField] int quotas;
+        public           int moneySaved;
+        public           int moneyInCar;
+        int                  quotasDifference;
+        int                  moneyMissed;
+        HashSet<MoneyBag>    detectableBags = new();
+        HashSet<MoneyBag>    bagsInCar      = new();
         
         [Header("UI Elements")]
         [SerializeField] TMP_Text moneySavedText;
         [SerializeField] TMP_Text quotasDifText;
         [SerializeField] TMP_Text moneyMissedText;
+        [SerializeField] TMP_Text moneyInCarText;
 
         void Start()
         {
@@ -43,6 +45,7 @@ namespace Manager {
         public void RegisterBagInCar(MoneyBag bag) {
             bagsInCar.Add(bag);
             DeregisterMoneyBag(bag);
+            ActualizeMoneyInCar(GetMoneyOnCar());
             ActualizeMoneyOnMap();
         }
 
@@ -70,6 +73,12 @@ namespace Manager {
             ActualizeQuotasDifference();
         }
         
+        public void ActualizeMoneyInCar(int moneyValue)
+        {
+            moneyInCar          += moneyValue;
+            moneyInCarText.text =  moneyInCar + "$";
+        }
+        
         public void ActualizeQuotasDifference() {
             quotasDifText.text = moneySaved + "$/ " + quotas + "$";
         }
@@ -84,6 +93,16 @@ namespace Manager {
         {
             int money = 0;
             foreach (MoneyBag moneyBag in detectableBags)
+            {
+                money += moneyBag.moneyValue;
+            }
+            return money;
+        }
+        
+        public int GetMoneyOnCar()
+        {
+            int money = 0;
+            foreach (MoneyBag moneyBag in bagsInCar)
             {
                 money += moneyBag.moneyValue;
             }
