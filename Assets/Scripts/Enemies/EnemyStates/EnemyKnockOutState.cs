@@ -11,10 +11,12 @@ namespace EnemyStates {
             ia.DisableNavMesh();
             ia.UnKnockOut();
             ia.isKnockOut = true;
-            
-            ia.rigidbody.isKinematic = false;
-            ia.rigidbody.constraints = RigidbodyConstraints.None;
-            ia.rigidbody.AddForce(ia.knockOutForce, ForceMode.VelocityChange);
+
+            if (!ia.InCar) {
+                ia.rigidbody.isKinematic = false;
+                ia.rigidbody.constraints = RigidbodyConstraints.None;
+                ia.rigidbody.AddForce(ia.knockOutForce, ForceMode.VelocityChange);
+            }
             
             ia.money.DropBag();
             ia.money.ResetClosestExit();
@@ -26,9 +28,11 @@ namespace EnemyStates {
 
         public override void OnExit() {
             ResetState();
-            
-            ia.rigidbody.isKinematic = true;
-            ia.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+            if (!ia.InCar) {
+                ia.rigidbody.isKinematic = true;
+                ia.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+            }
             ia.transform.rotation = Quaternion.Euler(0,ia.transform.eulerAngles.y,0);
             
             ia.EnableNavMesh();
