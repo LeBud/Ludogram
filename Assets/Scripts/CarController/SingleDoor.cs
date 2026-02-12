@@ -7,10 +7,5 @@ namespace CarScripts {
         public void UseDoor() {
             controller.UseDoor();
         }
-
-        public void ForceOpenDoor() {
-            Debug.Log("Hit Door");
-            controller.ForceOpenDoor();
-        }
     }
 }

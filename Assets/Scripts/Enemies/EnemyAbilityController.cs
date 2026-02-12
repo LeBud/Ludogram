@@ -31,22 +31,20 @@ namespace Enemies {
         private void Update() {
             currentCooldown -= Time.deltaTime;
 
-            if (ia.money.HasTargetBag) {
-                var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
-
-                if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
-                    dir = CarDoors.instance.transform.position - raycastPoint.position;
-                else if (ia.money.targetedBag.isPickedUp) {
-                    var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
-                    dir = pos - raycastPoint.position;
-                }
-                
-                float distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
-                
-                Physics.Raycast(raycastPoint.position, dir.normalized, out raycastHit, distance);
-            }
+            if (!ia.money.HasTargetBag) return;
             
-            //if(hit.collider == null) return;
+            var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+
+            if (ia.money.BagInCar && !CarDoors.instance.areDoorsOpen)
+                dir = CarDoors.instance.transform.position - raycastPoint.position;
+            else if (ia.money.targetedBag.isPickedUp) {
+                var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
+                dir = pos - raycastPoint.position;
+            }
+                
+            var distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+            var mask = LayerMask.GetMask("Ghost");
+            Physics.Raycast(raycastPoint.position, dir.normalized, out raycastHit, distance, ~mask);
         }
 
         private void FixedUpdate() {
@@ -58,24 +56,20 @@ namespace Enemies {
             triggerAbility = true;
             currentCooldown = abilityCooldown;
             
-            //if(raycastHit.collider == null) return;
-
-            Debug.Log("ability hit " + raycastHit.collider.name);
-            
-            if (raycastHit.transform.TryGetComponent(out SingleDoor door)) {
+            if (raycastHit.collider.TryGetComponent(out SingleDoor door)) {
                 Debug.Log("Hit Door");
-                door.ForceOpenDoor();
+                CarDoors.instance.ForceOpenDoor();
                 return;
             }
             
-            if (raycastHit.transform.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
+            if (raycastHit.collider.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
                 Debug.Log("Grab from player");
                 ia.money.targetedBag.gadgetController.DropGadget();
                 ia.money.GrabBagByAbility(ia.money.targetedBag);
                 return;
             }
 
-            if (raycastHit.transform.TryGetComponent(out MoneyBag bag) && !ia.money.targetedBag.isPickedUp) {
+            if (raycastHit.collider.TryGetComponent(out MoneyBag bag) && !ia.money.targetedBag.isPickedUp) {
                 Debug.Log("Grab with tongue");
                 ia.money.GrabBagByAbility(bag);
                 return;
@@ -84,26 +78,24 @@ namespace Enemies {
 
         private void OnDrawGizmos() {
             if(!Application.isPlaying) return;
+
+            if (!ia.money.HasTargetBag) return;
             
-            //Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
-            
-            if (ia.money.HasTargetBag) {
-                Gizmos.color = Color.red;
-                var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
-                float distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
-                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
+            Gizmos.color = Color.red;
+            var dir = ia.money.targetedBag.transform.position - raycastPoint.position;
+            var distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+            Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
                 
-                Gizmos.color = Color.green;
-                dir = CarDoors.instance.transform.position - raycastPoint.position;
-                distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
-                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
+            Gizmos.color = Color.green;
+            dir = CarDoors.instance.transform.position - raycastPoint.position;
+            distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+            Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
                 
-                Gizmos.color = Color.cornflowerBlue;
-                var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
-                dir = pos - raycastPoint.position;
-                distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
-                Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
-            }
+            Gizmos.color = Color.cornflowerBlue;
+            var pos = ia.money.targetedBag.gadgetController.transform.position + Vector3.up * 0.5f;
+            dir = pos - raycastPoint.position;
+            distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+            Gizmos.DrawLine(raycastPoint.position, raycastPoint.position + dir.normalized * distance);
         }
 
         private bool CanUseAbility() {
