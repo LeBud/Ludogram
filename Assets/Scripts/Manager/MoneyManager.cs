@@ -1,34 +1,58 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Manager {
     public class MoneyManager : MonoBehaviour
     {
-
-        public int               quotas;
+        [SerializeField]  int               quotas;
         public int               moneySaved;
-        public int               moneyMissed;
-        public HashSet<MoneyBag> detectableBags = new();
-        public HashSet<MoneyBag> bagsInCar      = new();
+        int               quotasDifference;
+        int               moneyMissed;
+        HashSet<MoneyBag> detectableBags = new();
+        HashSet<MoneyBag> bagsInCar      = new();
         
+        [Header("UI Elements")]
+        [SerializeField] TMP_Text moneySavedText;
+        [SerializeField] TMP_Text quotasDifText;
+        [SerializeField] TMP_Text moneyMissedText;
+
+        void Start()
+        {
+            moneySaved          = 0;
+            moneySavedText.text = moneySaved + "$";
+
+            ActualizeQuotasDifference();
+            ActualizeMoneyOnMap();
+        }
         
         public void RegisterMoneyBag(MoneyBag bag) {
             detectableBags.Add(bag);
         }
 
         public void DeregisterMoneyBag(MoneyBag bag) {
-            if(detectableBags.Contains(bag))
+            if (detectableBags.Contains(bag))
+            {
                 detectableBags.Remove(bag);
+                ActualizeMoneyOnMap();
+            }
+            
         }
         
         public void RegisterBagInCar(MoneyBag bag) {
             bagsInCar.Add(bag);
+            DeregisterMoneyBag(bag);
+            ActualizeMoneyOnMap();
         }
 
         public void DeregisterBagInCar(MoneyBag bag) {
-            if(bagsInCar.Contains(bag))
+            if (bagsInCar.Contains(bag))
+            {
                 bagsInCar.Remove(bag);
+                RegisterMoneyBag(bag);
+                ActualizeMoneyOnMap();
+            }
         }
         
         public HashSet<MoneyBag> GetAllBags() {
@@ -39,7 +63,24 @@ namespace Manager {
             return bagsInCar;
         }
 
-        public int GetTotalOnMap()
+        public void ActualizeMoney(int moneyValue)
+        {
+            moneySaved          += moneyValue;
+            moneySavedText.text =  moneySaved + "$";
+            ActualizeQuotasDifference();
+        }
+        
+        public void ActualizeQuotasDifference() {
+            quotasDifText.text = moneySaved + "$/ " + quotas + "$";
+        }
+        
+        public void ActualizeMoneyOnMap() {
+            moneyMissed = GetMoneyOnMap();
+            moneyMissedText.text = moneyMissed + "$";
+        }
+        
+        
+        public int GetMoneyOnMap()
         {
             int money = 0;
             foreach (MoneyBag moneyBag in detectableBags)
@@ -48,10 +89,6 @@ namespace Manager {
             }
             return money;
         }
-
-        public int GetQuotasDifference()
-        {
-            return quotas - moneySaved;
-        }
+        
     }
 }
