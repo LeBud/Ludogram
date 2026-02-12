@@ -41,9 +41,9 @@ namespace Enemies {
                     dir = pos - raycastPoint.position;
                 }
                 
-                float distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
-                
-                Physics.Raycast(raycastPoint.position, dir.normalized, out raycastHit, distance);
+                var distance = Mathf.Min(dir.magnitude, tongueAbilityRange);
+                var mask = LayerMask.GetMask("Ghost");
+                Physics.Raycast(raycastPoint.position, dir.normalized, out raycastHit, distance, ~mask);
             }
             
             //if(hit.collider == null) return;
@@ -57,25 +57,29 @@ namespace Enemies {
         private void UseAbility() {
             triggerAbility = true;
             currentCooldown = abilityCooldown;
-            
-            //if(raycastHit.collider == null) return;
 
             Debug.Log("ability hit " + raycastHit.collider.name);
             
-            if (raycastHit.transform.TryGetComponent(out SingleDoor door)) {
+            // if (raycastHit.collider.GetComponent<SingleDoor>()) {
+            //     Debug.Log("Hit Door");
+            //     CarDoors.instance.ForceOpenDoor();
+            //     return;
+            // }
+            
+            if (raycastHit.collider.TryGetComponent(out SingleDoor door)) {
                 Debug.Log("Hit Door");
-                door.ForceOpenDoor();
+                CarDoors.instance.ForceOpenDoor();
                 return;
             }
             
-            if (raycastHit.transform.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
+            if (raycastHit.collider.TryGetComponent(out Controller c) && ia.money.targetedBag.isPickedUp) {
                 Debug.Log("Grab from player");
                 ia.money.targetedBag.gadgetController.DropGadget();
                 ia.money.GrabBagByAbility(ia.money.targetedBag);
                 return;
             }
 
-            if (raycastHit.transform.TryGetComponent(out MoneyBag bag) && !ia.money.targetedBag.isPickedUp) {
+            if (raycastHit.collider.TryGetComponent(out MoneyBag bag) && !ia.money.targetedBag.isPickedUp) {
                 Debug.Log("Grab with tongue");
                 ia.money.GrabBagByAbility(bag);
                 return;
