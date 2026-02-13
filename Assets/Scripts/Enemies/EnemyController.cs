@@ -76,11 +76,11 @@ public class EnemyController : MonoBehaviour, IKnockable {
         stateMachine = new FiniteStateMachine();
 
         if (!InCar) {
-            var waitState = new EnemyWaitState(this);
-            var pursuitState = new EnemyPursuitState(this);
-            var knockOutState = new EnemyKnockOutState(this);
-            var fleeState = new EnemyFleeState(this);
-            var abilityState = new EnemyAbilityState(this);
+            var waitState = new EnemyWaitState(this, animator);
+            var pursuitState = new EnemyPursuitState(this, animator);
+            var knockOutState = new EnemyKnockOutState(this, animator);
+            var fleeState = new EnemyFleeState(this, animator);
+            var abilityState = new EnemyAbilityState(this, animator);
             
             //Set At State
             At(waitState, pursuitState, new FuncPredicate(() => !money.HasBag &&  money.HasTargetBag));
