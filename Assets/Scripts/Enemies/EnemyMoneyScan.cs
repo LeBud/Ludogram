@@ -122,7 +122,7 @@ namespace Enemies {
             SetPickUpBag();
         }
 
-        private void SetPickUpBag() {
+        public void SetPickUpBag() {
             pickupBag.rb.isKinematic = true;
             pickupBag.transform.parent = transform;
             pickupBag.transform.position = bagPos.position;
@@ -132,7 +132,7 @@ namespace Enemies {
         
         public void GrabBagByAbility(MoneyBag bag) {
             pickupBag = bag;
-            SetPickUpBag();
+            //SetPickUpBag();
         }
         
         private MoneyBag ScanBags() {

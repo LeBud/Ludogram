@@ -11,6 +11,14 @@ namespace EnemyStates {
             stateDuration = ia.ability.abilityStateDuration;
             ia.ability.triggerAbility = false;
             ia.ability.canUseTongue = false;
+
+            ia.tongueRenderer.positionCount = 0;
+            ia.tongueRenderer.enabled = true;
+
+            ia.tongueRenderer.positionCount = 2;
+            
+            if(ia.money.HasBag)
+                ia.money.SetPickUpBag();
             
             if(ia.InCar) return;
             
@@ -20,10 +28,14 @@ namespace EnemyStates {
 
         public override void Update() {
             stateDuration -= Time.deltaTime;
+            
+            ia.tongueRenderer.SetPosition(0, ia.ability.raycastPoint.position);
+            ia.tongueRenderer.SetPosition(1, ia.ability.lastHitPos);
         }
 
         public override void OnExit() {
             ia.ability.canUseTongue = true;
+            ia.tongueRenderer.enabled = false;
         }
 
         public bool IsStateFinished() {
