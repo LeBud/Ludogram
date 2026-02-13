@@ -14,7 +14,7 @@ public class MoneyBag : Gadget
 
     private void Start()
     {
-        GameManager.instance.moneyManager.RegisterMoneyBag(this);
+        GameManager.instance.moneyManager.RegisterAllBags(this);
     }
 
     protected override void OnUse()
