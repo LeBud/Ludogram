@@ -35,6 +35,7 @@ namespace Manager {
         private void HandlePlayerJoining(PlayerInput input) {
             players.Add(input);
             SetupCamera();
+            input.GetComponent<SwitchPlayerModel>().SetPlayerMesh(input.playerIndex);
             
             if(playerSpawnPos == null) return;
             
