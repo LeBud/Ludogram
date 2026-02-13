@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
     public bool isKnockOut;
 
     [SerializeField] private bool isInCar = false;
-    
+    public Animator animator;
     public bool InCar { get; private set; }
     
     private void Awake() {
@@ -43,7 +43,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
             if(TryGetComponent(out EnemyMovementController move)) movement = move;
             else Debug.LogError("No EnemyMovementController found");
             
-            movement.Initialize(agent);
+            movement.Initialize(agent, this);
             
             rigidbody.isKinematic = true;
             rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -68,12 +68,12 @@ public class EnemyController : MonoBehaviour, IKnockable {
         stateMachine = new FiniteStateMachine();
 
         if (!isInCar) {
-            var waitState = new EnemyWaitState(this);
-            var pursuitState = new EnemyPursuitState(this);
-            var knockOutState = new EnemyKnockOutState(this);
-            var ambushState = new EnemyAmbushState(this);
-            var fleeState = new EnemyFleeState(this);
-            var abilityState = new EnemyAbilityState(this);
+            var waitState     = new EnemyWaitState(this, animator);
+            var pursuitState  = new EnemyPursuitState(this, animator);
+            var knockOutState = new EnemyKnockOutState(this, animator);
+            var ambushState   = new EnemyAmbushState(this, animator);
+            var fleeState     = new EnemyFleeState(this, animator);
+            var abilityState  = new EnemyAbilityState(this, animator);
             
             //Set At State
             At(waitState, pursuitState, new FuncPredicate(() => money.HasTargetBag));
@@ -92,9 +92,9 @@ public class EnemyController : MonoBehaviour, IKnockable {
             stateMachine.SetState(waitState);
         }
         else {
-            var waitState = new EnemyWaitState(this);
-            var abilityState = new EnemyAbilityState(this);
-            var knockOutState = new EnemyKnockOutState(this);
+            var waitState     = new EnemyWaitState(this, animator);
+            var abilityState  = new EnemyAbilityState(this, animator);
+            var knockOutState = new EnemyKnockOutState(this, animator);
             
             //Set At State
             At(waitState, abilityState, new FuncPredicate(() => ability.triggerAbility));

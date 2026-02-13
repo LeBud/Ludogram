@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 namespace Enemies {
     public class EnemyMovementController : MonoBehaviour {
+        private EnemyController controller;
         private NavMeshAgent agent;
         private MoneyBag moneyBag; //Réf pour avoir le money bag a attraper
 
@@ -15,10 +16,15 @@ namespace Enemies {
         [HideInInspector]
         public List<Controller> playerInRange = new();
         
-        public void Initialize(NavMeshAgent agent) {
+        public void Initialize(NavMeshAgent agent, EnemyController  controller) {
+            this.controller =  controller;
             this.agent = agent;
         }
 
+        void Update()
+        {
+            controller.animator.SetFloat("Blend",  agent.velocity.magnitude);
+        }
         public void ResetMovement() {
             agent.ResetPath();
         }

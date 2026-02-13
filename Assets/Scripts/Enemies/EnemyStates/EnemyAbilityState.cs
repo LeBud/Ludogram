@@ -4,15 +4,22 @@ using UnityEngine;
 namespace EnemyStates {
     public class EnemyAbilityState : EnemyBaseState {
         private float stateDuration = 0f;
-        public EnemyAbilityState(EnemyController ia) : base(ia) {
+        public EnemyAbilityState(EnemyController ia, Animator animator) : base(ia, animator) {
         }
 
         public override void OnEnter() {
+            animator.CrossFade(enemyOpenMouthHash, crossFadeDuration, mouthLayer);
+            animator.CrossFade(enemyGrabTongueHash, crossFadeDuration, torsoLayer);
+            animator.CrossFade(enemyGrabArmsHash, crossFadeDuration, torsoLayer);
+            
             stateDuration = ia.ability.abilityStateDuration;
             ia.ability.triggerAbility = false;
             ia.ability.canUseTongue = false;
-            
-            if(ia.InCar) return;
+
+            if (ia.InCar)
+            {
+                return;
+            }
             
             ia.movement.ResetMovement();
             Debug.Log("Enter Ability State");
@@ -23,6 +30,7 @@ namespace EnemyStates {
         }
 
         public override void OnExit() {
+            animator.CrossFade(enemyMouthClosedHash, crossFadeDuration, mouthLayer);
             ia.ability.canUseTongue = true;
         }
 

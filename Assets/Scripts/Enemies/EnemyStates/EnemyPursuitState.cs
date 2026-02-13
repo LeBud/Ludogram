@@ -5,10 +5,11 @@ using UnityEngine;
 
 namespace EnemyStates {
     public class EnemyPursuitState : EnemyBaseState {
-        public EnemyPursuitState(EnemyController ia) : base(ia) {
+        public EnemyPursuitState(EnemyController ia, Animator animator) : base(ia, animator) {
         }
 
         public override void OnEnter() {
+            animator.CrossFade(enemyLocomotionHash, crossFadeDuration, baseLayer);
         }
 
         public override void Update() {
