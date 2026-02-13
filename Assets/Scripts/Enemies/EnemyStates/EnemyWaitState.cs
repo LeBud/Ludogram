@@ -7,13 +7,16 @@ namespace EnemyStates {
         }
 
         public override void OnEnter() {
-            animator.CrossFade(enemySittingHash, crossFadeDuration, baseLayer);
-            if (ia.InCar)
-            {
+            if (ia.InCar) {
+                animator.CrossFade(enemySittingHash, crossFadeDuration, baseLayer);
                 return;
             }
             
             ia.movement.ResetMovement();
+        }
+
+        public override void OnExit() {
+            animator.CrossFade(enemyLocomotionHash, crossFadeDuration, baseLayer);
         }
 
     }

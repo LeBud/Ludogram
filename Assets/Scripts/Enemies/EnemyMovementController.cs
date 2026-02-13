@@ -21,9 +21,8 @@ namespace Enemies {
             this.agent = agent;
         }
 
-        void Update()
-        {
-            controller.animator.SetFloat("Blend",  agent.velocity.magnitude);
+        void Update() {
+            controller.animator.SetFloat("Blend",  agent.velocity.magnitude / agent.speed);
         }
         public void ResetMovement() {
             agent.ResetPath();

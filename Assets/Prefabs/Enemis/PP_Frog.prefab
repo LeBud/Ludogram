@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 6226562129351892669}
   - component: {fileID: 5404197909561709678}
   - component: {fileID: 8261763699978874181}
-  - component: {fileID: 1283324582215484373}
   - component: {fileID: 5563702627412948259}
   - component: {fileID: 1819784522964411657}
   - component: {fileID: 4367417677122724751}
@@ -146,28 +145,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!95 &1283324582215484373
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5845045999135552423}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: cde6238b27bcd84409473641c73b9e58, type: 3}
-  m_Controller: {fileID: 9100000, guid: ff785e13283f58e49ac2f0d210b95aa2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &5563702627412948259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,6 +160,7 @@ MonoBehaviour:
   isKnockOut: 0
   isInCar: 0
   tongueRenderer: {fileID: 0}
+  animator: {fileID: 3363089220378501644}
 --- !u!114 &1819784522964411657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +241,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 134bdb8e18d4daa459c13be4182ece64, type: 2}
+  - {fileID: 2100000, guid: 67d1b8e4a3f6ae940a16375a4372af8f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -534,6 +512,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2f8e5c5feb1d9994cbfc986eef67b60a, type: 2}
+    - target: {fileID: 5866666021909216657, guid: cde6238b27bcd84409473641c73b9e58, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ff785e13283f58e49ac2f0d210b95aa2, type: 2}
     - target: {fileID: 6940290155051485696, guid: cde6238b27bcd84409473641c73b9e58, type: 3}
       propertyPath: m_Layer
       value: 10
@@ -567,6 +549,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cde6238b27bcd84409473641c73b9e58, type: 3}
+--- !u!95 &3363089220378501644 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: cde6238b27bcd84409473641c73b9e58, type: 3}
+  m_PrefabInstance: {fileID: 9207189949296385949}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8668368285607590006 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cde6238b27bcd84409473641c73b9e58, type: 3}
