@@ -148,7 +148,7 @@ namespace Player
 			
 			if(TryGetComponent(out collider)) Debug.Log("Found collider");
 			else Debug.LogError("Collider not found");
-			
+
 			GameManager.instance.RegisterPlayer(this);
 		}
 

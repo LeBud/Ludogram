@@ -37,9 +37,10 @@ namespace Manager {
             SetupCamera();
             input.GetComponent<SwitchPlayerModel>().SetPlayerMesh(input.playerIndex);
             
-            if(playerSpawnPos == null) return;
+            //if(playerSpawnPos == null) return;
             
             input.transform.position = playerSpawnPos.position;
+            input.GetComponent<Controller>().GetRB().interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         public void RegisterPlayer(Controller player) {
