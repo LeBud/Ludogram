@@ -6,10 +6,11 @@ namespace StateMachine.BaseState_class
 {
 	public class MovementState : BaseState
 	{
-		public MovementState(Controller player) : base(player) {
+		public MovementState(Controller player, Animator animator) : base(player, animator) {
 		}
 		
 		public override void OnEnter() {
+			animator.CrossFade(locomotionHash, crossFadeDuration, baseLayer);
 			Keyframe[] keyframes = player.gravityForceOverTime.keys;
 			keyframes[0].value               = -player.jumpForceOverTime.Evaluate(player.jumpTime);
 			player.gravityForceOverTime.keys = keyframes;

@@ -6,11 +6,8 @@ using Manager;
 using StateMachine.BaseState_class;
 using StateMachine.Finite_State_Machine_class;
 using StateMachine.Finite_State_Machine_Interaces;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -26,6 +23,7 @@ namespace Player
 		[SerializeField] private Transform borderRayPosition;
 		[SerializeField] private Transform cameraPosition;
 		[SerializeField] private LayerMask groundLayerMask;
+		[SerializeField] private Animator animator;
 
 		[Header("Move Settings")]
 		[SerializeField]  private float          groundCheckDistance    = 0.2f;
@@ -158,11 +156,11 @@ namespace Player
 		{
 			stateMachine = new FiniteStateMachine();
 
-			var movementState = new MovementState(this);
-			var     jumpState     = new JumpState(this);
-			var     stunState     = new StunState(this);
-			var      carState      = new CarState(this);
-			var seatedState = new SeatedState(this);
+			var movementState = new MovementState(this, animator);
+			var     jumpState     = new JumpState(this, animator);
+			var     stunState     = new StunState(this, animator);
+			var      carState      = new CarState(this, animator);
+			var seatedState = new SeatedState(this, animator);
 			
 			At(movementState, jumpState, new FuncPredicate(() => isJumping || (havePressedJump && isGrounded)));
 			At(jumpState, movementState, new FuncPredicate(() =>  StopJumpCheck()));
@@ -359,6 +357,9 @@ namespace Player
 			}
 
 			rb.linearVelocity = finalVelocity;
+			
+			animator.SetFloat("Blend", movementInput.magnitude);
+			
 		}
 
 		
