@@ -1,11 +1,12 @@
 using Player;
 using StateMachine.Finite_State_Machine_class;
+using UnityEngine;
 
 namespace StateMachine.BaseState_class
 {
 	public class StunState : BaseState
 	{
-		public StunState(Controller player) : base(player)
+		public StunState(Controller player, Animator animator) : base(player, animator)
 		{
 		}
 
