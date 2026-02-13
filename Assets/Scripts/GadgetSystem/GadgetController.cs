@@ -44,14 +44,21 @@ public class GadgetController : MonoBehaviour
     
 	public void UseGadget()
 	{
-		if(isInShop) BuyGadget();
-		if (selectedGadget == null) return; 
-		
-		if (selectedGadget.CanUse())
+		if (isInShop)
 		{
-			selectedGadget.Use();
-//			Debug.Log($"{selectedGadget.Name} is used : {selectedGadget.CurrentUses}/{selectedGadget.MaxUses} usage restant");
+			BuyGadget();
 		}
+		else
+		{
+			if (selectedGadget == null) return; 
+		
+			if (selectedGadget.CanUse())
+			{
+				selectedGadget.Use();
+				//Debug.Log($"{selectedGadget.Name} is used : {selectedGadget.CurrentUses}/{selectedGadget.MaxUses} usage restant");
+			}
+		}
+		
 	}
 
 	public void ReleaseGadget()
