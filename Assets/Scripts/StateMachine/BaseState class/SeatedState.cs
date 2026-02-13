@@ -6,10 +6,12 @@ using UnityEngine;
 namespace StateMachine.BaseState_class
 {
     public class SeatedState : BaseState {
-        public SeatedState(Controller player) : base(player) { }
+        public SeatedState(Controller player, Animator animator) : base(player, animator) { }
 
         public override void OnEnter()
         {
+            animator.CrossFade(sittingHash, crossFadeDuration, baseLayer);
+            
             player.UnbindLook();
             player.GetInputs().SetLookCar(true);
             player.RebindLook();
@@ -27,6 +29,8 @@ namespace StateMachine.BaseState_class
         
         public override void OnExit()
         {
+            animator.CrossFade(locomotionHash, crossFadeDuration, baseLayer);
+            
             player.UnbindLook();
             player.GetInputs().SetLookCar(false);
             player.RebindLook();
