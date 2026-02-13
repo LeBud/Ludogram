@@ -26,6 +26,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
     [HideInInspector]
     public LineRenderer tongueRenderer;
     
+    public Animator animator;
     public bool InCar { get; private set; }
     
     private void Awake() {
@@ -46,7 +47,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
             if(TryGetComponent(out EnemyMovementController move)) movement = move;
             else Debug.LogError("No EnemyMovementController found");
             
-            movement.Initialize(agent);
+            movement.Initialize(agent, this);
             
             rigidbody.isKinematic = true;
             rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -100,9 +101,9 @@ public class EnemyController : MonoBehaviour, IKnockable {
             Debug.Log("Register Frog State");
         }
         else {
-            var waitState = new EnemyWaitState(this);
-            var abilityState = new EnemyAbilityState(this);
-            var knockOutState = new EnemyKnockOutState(this);
+            var waitState     = new EnemyWaitState(this, animator);
+            var abilityState  = new EnemyAbilityState(this, animator);
+            var knockOutState = new EnemyKnockOutState(this, animator);
             
             //Set At State
             At(waitState, abilityState, new FuncPredicate(() => ability.triggerAbility));
