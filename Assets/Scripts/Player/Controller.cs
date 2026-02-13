@@ -19,10 +19,11 @@ namespace Player
 		private FiniteStateMachine stateMachine;
 		private InputsBrain        pInput;
 
-		public Camera playerCamera;
+		public                   Camera    playerCamera;
 		[SerializeField] private Rigidbody rb;
 		[SerializeField] private Transform modelTransform;
 		[SerializeField] private Transform groundRayPosition;
+		[SerializeField] private Transform borderRayPosition;
 		[SerializeField] private Transform cameraPosition;
 		[SerializeField] private LayerMask groundLayerMask;
 
@@ -55,6 +56,12 @@ namespace Player
 		[HideInInspector] public  float maxJumpTime;
 		[HideInInspector] public  float fallTime;
 		[HideInInspector] public  bool  isGrounded;
+		
+		[Header("Step Up Settings")]
+		[SerializeField] private float maxStepHeight = 0.3f;         
+		[SerializeField] private float     stepCheckDistance = 0.5f; 
+		[SerializeField] private float     stepUpSpeed       = 5f;   
+		private                  bool      isSteppingUp = false;
 		
 		[Header("Coyote Settings")] 
 		[SerializeField] private float coyoteTime;
@@ -311,6 +318,7 @@ namespace Player
 			
 			if (movementInput.magnitude > 0.01f)
 			{
+				CheckBorder();
 				rb.useGravity         =  true;
 				movementTime       += Time.fixedDeltaTime;
 				horizontalVelocity =  orientedMove * movementSpeedOverTime.Evaluate(movementTime) * slowFactor;
@@ -391,6 +399,49 @@ namespace Player
 			{
 				groundNormal  = Vector3.up;
 			}
+		}
+
+		public void CheckBorder()
+		{
+			if (isSteppingUp || !isGrounded) return;
+    
+			Vector3 rayOrigin = borderRayPosition.position;
+			Vector3 direction = modelTransform.forward;
+    
+			if (Physics.Raycast(rayOrigin, direction, out RaycastHit lowerHit, stepCheckDistance, groundLayerMask))
+			{
+				Vector3 upperRayOrigin = rayOrigin + Vector3.up * maxStepHeight;
+        
+				if (!Physics.Raycast(upperRayOrigin, direction, stepCheckDistance, groundLayerMask))
+				{
+					float stepHeight = lowerHit.point.y - groundRayPosition.position.y;
+            
+					if (stepHeight > 0.05f && stepHeight <= maxStepHeight)
+					{
+						StartCoroutine(StepUp(stepHeight));
+					}
+				}
+			}
+		}
+
+		private IEnumerator StepUp(float height)
+		{
+			isSteppingUp = true;
+			Vector3 startPos  = transform.position;
+			Vector3 targetPos = startPos + Vector3.up * (height + 0.05f);
+    
+			float elapsed  = 0f;
+			float duration = height / stepUpSpeed;
+    
+			while (elapsed < duration)
+			{
+				elapsed += Time.deltaTime;
+				float t = elapsed / duration;
+				transform.position = Vector3.Lerp(startPos, targetPos, t);
+				yield return null;
+			}
+    
+			isSteppingUp = false;
 		}
 		
 		void HandleCamera() {
@@ -546,6 +597,7 @@ namespace Player
 		{
 			Gizmos.color = Color.red;
 			Gizmos.DrawRay(groundRayPosition.position, Vector3.down * groundCheckDistance);
+			Gizmos.DrawRay(borderRayPosition.position, modelTransform.forward *stepCheckDistance);
 		}
 
 		public IGadget GetGadget() {
