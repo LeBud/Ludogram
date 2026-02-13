@@ -914,6 +914,9 @@ MonoBehaviour:
   frictionCoefficient: 0.3
   carFrontalSurface: 2.2
   airDensity: 1.29
+  velThreshold: 20
+  pushPlayerForce: 20
+  openDoorWhenBrakeAtSpeed: 20
 --- !u!208 &6857720695272299563
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -945,7 +948,7 @@ MonoBehaviour:
   distanceToReachTarget: 7
   repathDistance: 10
   cornerReachDistance: 2
-  cornerClearance: 4
+  cornerClearance: 6
   distanceToDespawn: 100
   aIs:
   - {fileID: 4458678234917307535}

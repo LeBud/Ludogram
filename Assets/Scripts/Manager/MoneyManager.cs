@@ -11,8 +11,10 @@ namespace Manager {
         public           int moneyInCar;
         int                  quotasDifference;
         int                  moneyMissed;
+        
         HashSet<MoneyBag>    detectableBags = new();
         HashSet<MoneyBag>    bagsInCar      = new();
+        HashSet<MoneyBag>    allBags      = new();
         
         [Header("UI Elements")]
         [SerializeField] TMP_Text moneySavedText;
@@ -27,6 +29,10 @@ namespace Manager {
 
             ActualizeQuotasDifference();
             ActualizeMoneyOnMap();
+        }
+
+        public void RegisterAllBags(MoneyBag bag) {
+            allBags.Add(bag);
         }
         
         public void RegisterMoneyBag(MoneyBag bag) {
@@ -73,33 +79,33 @@ namespace Manager {
             ActualizeQuotasDifference();
         }
         
-        public void ActualizeMoneyInCar(int moneyValue)
+        private void ActualizeMoneyInCar(int moneyValue)
         {
             moneyInCar          += moneyValue;
             moneyInCarText.text =  moneyInCar + "$";
         }
         
-        public void ActualizeQuotasDifference() {
+        private void ActualizeQuotasDifference() {
             quotasDifText.text = moneySaved + "$/ " + quotas + "$";
         }
         
-        public void ActualizeMoneyOnMap() {
+        private void ActualizeMoneyOnMap() {
             moneyMissed = GetMoneyOnMap();
             moneyMissedText.text = moneyMissed + "$";
         }
         
         
-        public int GetMoneyOnMap()
+        private int GetMoneyOnMap()
         {
             int money = 0;
-            foreach (MoneyBag moneyBag in detectableBags)
+            foreach (MoneyBag moneyBag in allBags)
             {
                 money += moneyBag.moneyValue;
             }
             return money;
         }
         
-        public int GetMoneyOnCar()
+        private int GetMoneyOnCar()
         {
             int money = 0;
             foreach (MoneyBag moneyBag in bagsInCar)

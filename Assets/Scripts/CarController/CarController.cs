@@ -94,7 +94,10 @@ namespace CarScripts {
         [SerializeField] private float carFrontalSurface = 2.2f;
         [SerializeField] private float airDensity = 1.29f;
 
-        [Header("Other")] [SerializeField] private float velThreshold = 20f;
+        [Header("Other")] 
+        [SerializeField] private float velThreshold = 20f;
+        [SerializeField] private float pushPlayerForce = 20f;
+        [SerializeField] private float openDoorWhenBrakeAtSpeed = 20f;
         
         //Pour le moment ces valeurs ne sont pas utillisés
         // float b = 1.25f; //Distance entre le centre de gravité et l'essieu avant
@@ -298,10 +301,17 @@ namespace CarScripts {
         private void CheckForVelChange() {
             if(AiCar) return;
             
+            var forwardSpeed = Vector3.Dot(carRb.GetPointVelocity(transform.position), transform.forward);
+            
             if (previousVelocity.magnitude - carRb.linearVelocity.magnitude > velThreshold) {
                 CarDoors.instance.ForceOpenDoor();
-                FindAnyObjectByType<AttachedPlayer>().ApplyForceToController(-previousVelocity);
+                FindAnyObjectByType<AttachedPlayer>().ApplyForceToController(-previousVelocity.normalized * pushPlayerForce);
             }
+            else if (reverse >= .9f && forwardSpeed > openDoorWhenBrakeAtSpeed) {
+                CarDoors.instance.ForceOpenDoor();
+                FindAnyObjectByType<AttachedPlayer>().ApplyForceToController(-previousVelocity.normalized * pushPlayerForce);
+            }
+            
             previousVelocity = carRb.linearVelocity;
         }
 
