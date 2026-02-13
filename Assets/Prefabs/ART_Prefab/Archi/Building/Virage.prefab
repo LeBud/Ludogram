@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1693175636315080552
 Transform:
@@ -190,6 +190,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_Fence_04 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 72195760027814504, guid: 4f17009cbbc48d04da8f925d0eb8fa8c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3004354944568766185, guid: 4f17009cbbc48d04da8f925d0eb8fa8c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7899381197332311072, guid: 4f17009cbbc48d04da8f925d0eb8fa8c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.67981
@@ -248,6 +256,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1693175636315080552}
     m_Modifications:
+    - target: {fileID: 5482124656806352154, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7322304969620792794, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.7915955
@@ -292,6 +304,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_StreetLight_01
       objectReference: {fileID: 0}
+    - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -310,9 +326,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1693175636315080552}
     m_Modifications:
+    - target: {fileID: 3989652866345754662, guid: 76eab64ea7ba1ac469c3ab81b1a4d6d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4127471655974290577, guid: 76eab64ea7ba1ac469c3ab81b1a4d6d2, type: 3}
       propertyPath: m_Name
       value: PP_TrafficLight_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127471655974290577, guid: 76eab64ea7ba1ac469c3ab81b1a4d6d2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4770211478090818589, guid: 76eab64ea7ba1ac469c3ab81b1a4d6d2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -376,6 +400,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_StreetLight_02
       objectReference: {fileID: 0}
+    - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.299362
@@ -416,6 +444,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8307438214170309347, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -434,6 +466,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1693175636315080552}
     m_Modifications:
+    - target: {fileID: 5482124656806352154, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7322304969620792794, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.085602
@@ -477,6 +513,10 @@ PrefabInstance:
     - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -558,6 +598,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1693175636315080552}
     m_Modifications:
+    - target: {fileID: 5482124656806352154, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7322304969620792794, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.446411
@@ -602,6 +646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_StreetLight_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -620,6 +668,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1693175636315080552}
     m_Modifications:
+    - target: {fileID: 5482124656806352154, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7322304969620792794, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.201431
@@ -663,6 +715,10 @@ PrefabInstance:
     - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -810,6 +866,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_Fence_04
       objectReference: {fileID: 0}
+    - target: {fileID: 72195760027814504, guid: 4f17009cbbc48d04da8f925d0eb8fa8c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3004354944568766185, guid: 4f17009cbbc48d04da8f925d0eb8fa8c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7899381197332311072, guid: 4f17009cbbc48d04da8f925d0eb8fa8c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -20.548569
@@ -911,6 +975,14 @@ PrefabInstance:
     - target: {fileID: 7270612646574529944, guid: 2ee6e6f33ae99c9438fa3884330373ba, type: 3}
       propertyPath: m_Name
       value: PP_Fence_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270612646574529944, guid: 2ee6e6f33ae99c9438fa3884330373ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909019006808916607, guid: 2ee6e6f33ae99c9438fa3884330373ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1035,6 +1107,14 @@ PrefabInstance:
     - target: {fileID: 7270612646574529944, guid: 2ee6e6f33ae99c9438fa3884330373ba, type: 3}
       propertyPath: m_Name
       value: PP_Fence_03 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270612646574529944, guid: 2ee6e6f33ae99c9438fa3884330373ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909019006808916607, guid: 2ee6e6f33ae99c9438fa3884330373ba, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1222,9 +1302,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_TrafficCone_02
       objectReference: {fileID: 0}
+    - target: {fileID: 2907053575572842420, guid: 4b1bde51ff96e6f4b98e9974ab4049aa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7365926848371272370, guid: 4b1bde51ff96e6f4b98e9974ab4049aa, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.061
+      objectReference: {fileID: 0}
+    - target: {fileID: 7886603244554612744, guid: 4b1bde51ff96e6f4b98e9974ab4049aa, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1247,6 +1335,14 @@ PrefabInstance:
     - target: {fileID: 448160109757420453, guid: 7d6be412bdbdf7842a951d55cffbe319, type: 3}
       propertyPath: m_Name
       value: PP_TrafficCone_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 448160109757420453, guid: 7d6be412bdbdf7842a951d55cffbe319, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242897199339682516, guid: 7d6be412bdbdf7842a951d55cffbe319, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1906281335967211630, guid: 7d6be412bdbdf7842a951d55cffbe319, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1310,6 +1406,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1693175636315080552}
     m_Modifications:
+    - target: {fileID: 5482124656806352154, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7322304969620792794, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17.408173
@@ -1353,6 +1453,10 @@ PrefabInstance:
     - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1434,6 +1538,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1693175636315080552}
     m_Modifications:
+    - target: {fileID: 5482124656806352154, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7322304969620792794, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_LocalPosition.x
       value: -20.787613
@@ -1477,6 +1585,10 @@ PrefabInstance:
     - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_01 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

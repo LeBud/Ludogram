@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5389286830382414644
 Transform:
@@ -56,9 +56,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5389286830382414644}
     m_Modifications:
+    - target: {fileID: 2263265979336969540, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 2782339817307646484, guid: 938281d747e977646a4a48d9633117d6, type: 3}
       propertyPath: m_Name
       value: PP_Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782339817307646484, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3211862294463977595, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4056228884319917305, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632367494716190381, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695117153852871187, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5744954915767917862, guid: 938281d747e977646a4a48d9633117d6, type: 3}
       propertyPath: m_LocalScale.x
@@ -108,6 +132,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6090507629410625942, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239103750697485211, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -129,6 +161,10 @@ PrefabInstance:
     - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_02 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalScale.x
@@ -178,6 +214,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8307438214170309347, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -196,9 +236,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5389286830382414644}
     m_Modifications:
+    - target: {fileID: 2263265979336969540, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 2782339817307646484, guid: 938281d747e977646a4a48d9633117d6, type: 3}
       propertyPath: m_Name
       value: PP_Table (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782339817307646484, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3211862294463977595, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4056228884319917305, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632367494716190381, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695117153852871187, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5744954915767917862, guid: 938281d747e977646a4a48d9633117d6, type: 3}
       propertyPath: m_LocalScale.x
@@ -248,6 +312,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6090507629410625942, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239103750697485211, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -269,6 +341,10 @@ PrefabInstance:
     - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalScale.x
@@ -317,6 +393,10 @@ PrefabInstance:
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8307438214170309347, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -464,6 +544,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_StreetLight_02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.99999976
@@ -512,6 +596,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8307438214170309347, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -533,6 +621,10 @@ PrefabInstance:
     - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_02 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalScale.x
@@ -581,6 +673,10 @@ PrefabInstance:
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8307438214170309347, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -724,9 +820,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5389286830382414644}
     m_Modifications:
+    - target: {fileID: 2263265979336969540, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 2782339817307646484, guid: 938281d747e977646a4a48d9633117d6, type: 3}
       propertyPath: m_Name
       value: PP_Table (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2782339817307646484, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3211862294463977595, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4056228884319917305, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632367494716190381, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695117153852871187, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5744954915767917862, guid: 938281d747e977646a4a48d9633117d6, type: 3}
       propertyPath: m_LocalScale.x
@@ -776,6 +896,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6090507629410625942, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239103750697485211, guid: 938281d747e977646a4a48d9633117d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -794,6 +922,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5389286830382414644}
     m_Modifications:
+    - target: {fileID: 5482124656806352154, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7322304969620792794, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.99999976
@@ -845,6 +977,10 @@ PrefabInstance:
     - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
       propertyPath: m_Name
       value: PP_StreetLight_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8761807401634203081, guid: 7968e67229af57a4c868d6836f9a5855, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1117,6 +1253,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_StreetLight_02 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4485694325566816650, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.99999976
@@ -1164,6 +1304,10 @@ PrefabInstance:
     - target: {fileID: 7215846460884183818, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8307438214170309347, guid: 6c06d9bfde942474aa7e60ff7a033861, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
