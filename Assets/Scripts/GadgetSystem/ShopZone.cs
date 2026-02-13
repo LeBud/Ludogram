@@ -11,7 +11,7 @@ public class ShopZone : MonoBehaviour
     {
         if (other.TryGetComponent(out GadgetController gadgetController))
         {
-            Debug.Log(gadgetController.name);
+            Debug.Log("Entered Shop Zone");
             gadgetController.isInShop = true;
             gadgetController.buttonToBuy = gadgetSeller.buttonPrefab;
             gadgetController.gadgetSeller = gadgetSeller;
@@ -24,6 +24,7 @@ public class ShopZone : MonoBehaviour
     {
         if (other.TryGetComponent(out GadgetController gadgetController))
         {
+            Debug.Log("Exit Shop Zone");
             gadgetController.isInShop = false;
         }
         
