@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Menottes : Gadget
 {
@@ -20,7 +21,7 @@ public class Menottes : Gadget
         }
         else
         {
-            rb.AddForce((ray.direction + Vector3.up), ForceMode.Impulse);
+            rb.AddForce((ray.direction + Vector3.up) * (launchSpeed * 0.5f), ForceMode.Impulse);
         }
     }
 
@@ -45,8 +46,9 @@ public class Menottes : Gadget
     void OnCollisionEnter(Collision collision)
     {
         if (!isUsed) return;
-        if (collision.gameObject.TryGetComponent(out EnemyController enemy))
+        if (collision.gameObject.TryGetComponent(out NavMeshAgent enemy))
         {
+            enemy.speed = 0f;
             StartCoroutine(EffectManager.instance.SmoothDespawnEffect(gameObject, 0.2f));
         }
     }

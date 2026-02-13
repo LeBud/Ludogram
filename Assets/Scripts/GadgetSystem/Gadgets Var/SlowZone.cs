@@ -1,6 +1,7 @@
 using CarScripts;
 using Player;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SlowZone : MonoBehaviour
 {
@@ -28,8 +29,9 @@ public class SlowZone : MonoBehaviour
             other.attachedRigidbody.angularDamping = 10f;
         }
 
-        if (other.TryGetComponent(out EnemyController enemyController))
+        if (other.TryGetComponent(out NavMeshAgent ia))
         {
+            ia.speed = 1f;
             Debug.Log("Enemy In");
         }
     }
@@ -46,8 +48,9 @@ public class SlowZone : MonoBehaviour
             other.attachedRigidbody.angularDamping = 0f;
         }
         
-        if (other.TryGetComponent(out EnemyController enemyController))
+        if (other.TryGetComponent(out NavMeshAgent ia))
         {
+            ia.speed = 3.5f;
             Debug.Log("Enemy Out");
         }
     }
