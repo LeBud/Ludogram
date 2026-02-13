@@ -243,7 +243,7 @@ namespace CarScripts {
         }
         
         void FixedUpdate() {
-            if (throttle == 0 && brake == 0) {
+            if (throttle == 0 && reverse == 0) {
                 if (carRb.linearVelocity.magnitude < 2) {
                     carRb.linearVelocity = Vector3.Lerp(carRb.linearVelocity, Vector3.zero, Time.deltaTime * 10f);
                 }

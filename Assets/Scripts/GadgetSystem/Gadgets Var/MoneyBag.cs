@@ -10,7 +10,6 @@ public class MoneyBag : Gadget
     [SerializeField] private LayerMask moneyZoneLayerMask;
     [SerializeField] private float     launchSpeed;
     private                  bool      isUsed = false;
-    [SerializeField] private Collider col;
     public bool isPickedUp {get; private set;}
 
     private void Start()

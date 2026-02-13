@@ -28,9 +28,9 @@ public class MapGadget : Gadget
     
     public override void OnPickup(GadgetController gc)
     {
-        
         gadgetController = gc;
         rb.isKinematic = true;
+        col.enabled = false;
         transform.SetParent(GadgetPickup.gadgetStaticTransform);
         transform.position = GadgetPickup.gadgetStaticTransform.position;
     }
@@ -41,6 +41,7 @@ public class MapGadget : Gadget
         if(readState != null) StopCoroutine(readState);
         transform.SetParent(null);
         rb.isKinematic = false;
+        col.enabled = true;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 

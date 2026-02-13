@@ -1,11 +1,13 @@
 using StateMachine.Finite_State_Machine_class;
+using UnityEngine;
 
 namespace EnemyStates {
     public class EnemyFleeState : EnemyBaseState {
-        public EnemyFleeState(EnemyController ia) : base(ia) {
+        public EnemyFleeState(EnemyController ia, Animator animator) : base(ia, animator) {
         }
         
         public override void OnEnter() {
+            animator.CrossFade(enemyLocomotionHash, crossFadeDuration, baseLayer);
             if(ia.InCar) return;
             
             ia.movement.ResetMovement();

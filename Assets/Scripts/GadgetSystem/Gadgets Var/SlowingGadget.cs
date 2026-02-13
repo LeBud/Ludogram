@@ -48,6 +48,7 @@ namespace GadgetSystem.Gadgets_Var
         {
             currentCamera    = gc.player.playerCamera;
             gadgetController = gc;
+            col.enabled = false;
             rb.isKinematic   = true;
         }
 
@@ -56,6 +57,7 @@ namespace GadgetSystem.Gadgets_Var
             base.Drop();
             transform.SetParent(null);
             rb.isKinematic = false;
+            col.enabled = true;
             rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
         }
     }

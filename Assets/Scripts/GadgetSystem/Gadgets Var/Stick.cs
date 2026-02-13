@@ -58,6 +58,7 @@ public class Stick : Gadget
         RaycastHit[] target = Physics.SphereCastAll(baseCast, 0.25f, range, hitLayerMask);
         foreach (var hit in target)
         {
+            Debug.Log(hit.transform.name);
             if (hit.rigidbody)
             {
                 hit.rigidbody.AddForce(-hit.normal * setback, ForceMode.Impulse);
@@ -134,12 +135,14 @@ public class Stick : Gadget
     {
         gadgetController = gc;
         rb.isKinematic = true;
+        col.enabled = false;
     }
 
     public override void Drop()
     {
         base.Drop();
         rb.isKinematic = false;
+        col.enabled = true;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 
