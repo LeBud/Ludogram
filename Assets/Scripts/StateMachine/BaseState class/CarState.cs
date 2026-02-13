@@ -7,10 +7,12 @@ namespace StateMachine.BaseState_class
 {
 	public class CarState : BaseState
 	{
-		public CarState(Controller player) : base(player) { }
+		public CarState(Controller player, Animator animator) : base(player, animator) { }
 
 		public override void OnEnter()
 		{
+			animator.CrossFade(sittingHash, crossFadeDuration, baseLayer);
+			
 			player.currentCar.BindInput(player.GetInputs(), player);
 			
 			player.UnbindLook();
@@ -30,6 +32,8 @@ namespace StateMachine.BaseState_class
 		
 		public override void OnExit()
 		{
+			animator.CrossFade(locomotionHash, crossFadeDuration, baseLayer);
+			
 			player.UnbindLook();
 			player.GetInputs().SetLookCar(false);
 			player.RebindLook();

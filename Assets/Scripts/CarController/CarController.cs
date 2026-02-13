@@ -93,6 +93,8 @@ namespace CarScripts {
         [SerializeField] private float frictionCoefficient = 0.3f;
         [SerializeField] private float carFrontalSurface = 2.2f;
         [SerializeField] private float airDensity = 1.29f;
+
+        [Header("Other")] [SerializeField] private float velThreshold = 20f;
         
         //Pour le moment ces valeurs ne sont pas utillisés
         // float b = 1.25f; //Distance entre le centre de gravité et l'essieu avant
@@ -140,6 +142,8 @@ namespace CarScripts {
 
         private bool AiCar = false;
 
+        Vector3 previousVelocity;
+        
         public void SetAiCar(bool ai) {
             AiCar = ai;
         }
@@ -209,8 +213,6 @@ namespace CarScripts {
         void MyInputs() {
             if(AiCar) return;
             
-            Debug.Log(gameObject.name + "Read Inputs : " + steering);
-            
             if (inputs == null) {
                 steering = 0;
                 throttle = 0;
@@ -241,6 +243,12 @@ namespace CarScripts {
         }
         
         void FixedUpdate() {
+            if (throttle == 0 && brake == 0) {
+                if (carRb.linearVelocity.magnitude < 2) {
+                    carRb.linearVelocity = Vector3.Lerp(carRb.linearVelocity, Vector3.zero, Time.deltaTime * 10f);
+                }
+            }
+            
             foreach (var suspension in allSuspensions) {
                 var ray = new Ray(suspension.position, -suspension.up);
                 WheelContact contact;
@@ -284,6 +292,17 @@ namespace CarScripts {
             }
             
             CalculateFrictionForce();
+            CheckForVelChange();
+        }
+
+        private void CheckForVelChange() {
+            if(AiCar) return;
+            
+            if (previousVelocity.magnitude - carRb.linearVelocity.magnitude > velThreshold) {
+                CarDoors.instance.ForceOpenDoor();
+                FindAnyObjectByType<AttachedPlayer>().ApplyForceToController(-previousVelocity);
+            }
+            previousVelocity = carRb.linearVelocity;
         }
 
         void CalculateFrictionForce() {
