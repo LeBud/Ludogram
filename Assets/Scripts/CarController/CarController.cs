@@ -213,6 +213,11 @@ namespace CarScripts {
             }
         }
 
+        private void OnCollisionEnter(Collision collision) {
+            if(collision.transform.TryGetComponent(out EnemyController ctrl))
+                ctrl.KnockOut(4f, carRb.linearVelocity.normalized * 10 + Vector3.up * 10);
+        }
+
         void MyInputs() {
             if(AiCar) return;
             
