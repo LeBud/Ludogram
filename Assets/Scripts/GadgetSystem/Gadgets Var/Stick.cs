@@ -58,6 +58,7 @@ public class Stick : Gadget
         RaycastHit[] target = Physics.SphereCastAll(baseCast, 0.25f, range, hitLayerMask);
         foreach (var hit in target)
         {
+            Debug.Log(hit.transform.name);
             if (hit.rigidbody)
             {
                 hit.rigidbody.AddForce(-hit.normal * setback, ForceMode.Impulse);

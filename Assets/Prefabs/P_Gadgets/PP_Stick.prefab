@@ -87,13 +87,13 @@ MonoBehaviour:
   rb: {fileID: 64572172139850108}
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 247
-  knockTime: 0.5
+    m_Bits: 1271
+  knockTime: 2
   setback: 10
   range: 3
   movementTime: 1
   cooldown: 3
-  heavyStick: 1
+  heavyStick: 0
   maxLoadTime: 1
   maxLoadForce: 30
   canUse: 1
@@ -117,7 +117,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.2
-  m_Height: 1.2
+  m_Height: 1.4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6613217956424105906
