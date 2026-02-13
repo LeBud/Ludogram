@@ -114,8 +114,7 @@ namespace Player
 		private bool inCar;
 		public float interactTimer;
 		
-		void Awake()
-		{
+		void Awake() {
 			Initialize();
 			SetupStateMachine();
 		}
@@ -128,12 +127,15 @@ namespace Player
 			AssignActions();
 			SubscribeInputSystemActions();
 			GetInputs().DisableCarInput();
+			
+			transform.position = GameManager.instance.playerSpawnPos.position;
+			Physics.SyncTransforms();
+			rb.interpolation = RigidbodyInterpolation.Interpolate;
 		}
 
 		#region AWAKE METHODS
 
-		void Initialize()
-		{
+		void Initialize() {
 			if (TryGetComponent(out pInput)) {
 				pInput.Initialize();
 			}
@@ -148,7 +150,7 @@ namespace Player
 			
 			if(TryGetComponent(out collider)) Debug.Log("Found collider");
 			else Debug.LogError("Collider not found");
-			
+
 			GameManager.instance.RegisterPlayer(this);
 		}
 

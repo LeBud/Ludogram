@@ -9,6 +9,8 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	[SerializeField] protected int    price = 1;
 	protected                  int    currentUses;
     
+	protected Collider col;
+	
 	public string Name        => gadgetName;
 	public int  Price       => price;
 	public int    CurrentUses => currentUses;
@@ -23,8 +25,12 @@ public abstract class Gadget : MonoBehaviour, IGadget
 
 	public Transform target = null;
 	public GadgetController gadgetController;
-	
-	protected virtual void Awake() => currentUses = maxUses;
+
+	protected virtual void Awake() {
+		currentUses = maxUses;
+		if (TryGetComponent(out Collider c)) col = c;
+		else Debug.LogError(name + " has no collider");
+	}
 
 	public void Use()
 	{
