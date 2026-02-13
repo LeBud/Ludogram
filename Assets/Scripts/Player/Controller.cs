@@ -124,17 +124,18 @@ namespace Player
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			playerCameraTransform = playerCamera.transform;
-			rb.interpolation = RigidbodyInterpolation.Interpolate;
 			AssignActions();
 			SubscribeInputSystemActions();
 			GetInputs().DisableCarInput();
+			
+			transform.position = GameManager.instance.playerSpawnPos.position;
+			Physics.SyncTransforms();
+			rb.interpolation = RigidbodyInterpolation.Interpolate;
 		}
 
 		#region AWAKE METHODS
 
 		void Initialize() {
-			transform.position = GameManager.instance.playerSpawnPos.position;
-			
 			if (TryGetComponent(out pInput)) {
 				pInput.Initialize();
 			}
