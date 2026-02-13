@@ -33,7 +33,11 @@ public class GadgetSeller : MonoBehaviour
                 gadgetToSell.Add(gadget);
                 UdpatePrice(gadget.Price);
                 other.gameObject.SetActive(false);
-                other.attachedRigidbody.linearVelocity = Vector3.zero;
+                if (other.TryGetComponent(out Rigidbody rb))
+                {
+                    rb.linearVelocity = Vector3.zero;
+                }
+               
             }
         }
     }
