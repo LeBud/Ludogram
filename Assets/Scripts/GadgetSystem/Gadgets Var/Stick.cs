@@ -134,12 +134,14 @@ public class Stick : Gadget
     {
         gadgetController = gc;
         rb.isKinematic = true;
+        col.enabled = false;
     }
 
     public override void Drop()
     {
         base.Drop();
         rb.isKinematic = false;
+        col.enabled = true;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
 

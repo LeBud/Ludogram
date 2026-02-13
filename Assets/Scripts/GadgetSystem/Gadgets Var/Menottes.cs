@@ -30,6 +30,7 @@ public class Menottes : Gadget
         currentCamera    = gc.player.playerCamera;
         gadgetController = gc;
         rb.isKinematic   = true;
+        col.enabled = false;
         isUsed           = false;
     }
 
@@ -39,6 +40,7 @@ public class Menottes : Gadget
         if (isUsed) return;
         transform.SetParent(null);
         rb.isKinematic = false;
+        col.enabled = true;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
     

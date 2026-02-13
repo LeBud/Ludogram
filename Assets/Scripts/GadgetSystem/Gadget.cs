@@ -80,13 +80,11 @@ public abstract class Gadget : MonoBehaviour, IGadget
 	
 	public virtual void OnPickup(GadgetController gadgetController)
 	{
-		col.enabled = false;
 		Debug.Log(this.name);
 	}
 	
 	public virtual void Drop()
 	{
-		col.enabled = true;
 		target            = null;
 	}
 	

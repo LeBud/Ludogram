@@ -40,6 +40,7 @@ public class MoneyBag : Gadget
         gadgetController = gc;
         rb.isKinematic   = true;
         isUsed           = false;
+        col.enabled = false;
         isPickedUp = true;
     }
 
@@ -49,6 +50,7 @@ public class MoneyBag : Gadget
         if (isUsed) return;
         transform.SetParent(null);
         rb.isKinematic = false;
+        col.enabled = true;
         isPickedUp = false;
         rb.AddForce((Vector3.up + transform.forward)* 5, ForceMode.Impulse);
     }
