@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Manager {
@@ -14,7 +15,6 @@ namespace Manager {
         
         public void OnTriggerExit(Collider other) {
             if (other.TryGetComponent(out MoneyBag bag)) {
-                Debug.Log("Register money bag");
                 GameManager.instance.moneyManager.RegisterMoneyBag(bag);
             }
             
