@@ -22,6 +22,9 @@ public class EnemyController : MonoBehaviour, IKnockable {
     public bool isKnockOut;
 
     [SerializeField] private bool isInCar = false;
+
+    [HideInInspector]
+    public LineRenderer tongueRenderer;
     
     public bool InCar { get; private set; }
     
@@ -33,7 +36,7 @@ public class EnemyController : MonoBehaviour, IKnockable {
     private void Initialize() {
         InCar = isInCar;
         
-        if (!isInCar) {
+        if (!InCar) {
             if(TryGetComponent(out NavMeshAgent ag)) agent = ag;
             else Debug.LogError("No NavMeshAgent found");
             
@@ -56,8 +59,12 @@ public class EnemyController : MonoBehaviour, IKnockable {
         if(TryGetComponent(out EnemyAbilityController ab)) ability = ab;
         else Debug.LogError("No EnemyAbilityController found");
         
+        if(TryGetComponent(out LineRenderer ln)) tongueRenderer = ln;
+        else Debug.LogError("No LineRenderer found");
+        
         money.Initialize(this);
         ability.Initialize(this);
+        tongueRenderer.enabled = false;
     }
 
     private void Start() {
@@ -67,22 +74,21 @@ public class EnemyController : MonoBehaviour, IKnockable {
     private void SetupStateMachine() {
         stateMachine = new FiniteStateMachine();
 
-        if (!isInCar) {
+        if (!InCar) {
             var waitState = new EnemyWaitState(this);
             var pursuitState = new EnemyPursuitState(this);
             var knockOutState = new EnemyKnockOutState(this);
-            var ambushState = new EnemyAmbushState(this);
             var fleeState = new EnemyFleeState(this);
             var abilityState = new EnemyAbilityState(this);
             
             //Set At State
-            At(waitState, pursuitState, new FuncPredicate(() => money.HasTargetBag));
+            At(waitState, pursuitState, new FuncPredicate(() => !money.HasBag &&  money.HasTargetBag));
             At(pursuitState, waitState, new FuncPredicate(() => !money.HasBag && !money.HasTargetBag));
             
-            At(pursuitState, fleeState, new FuncPredicate(() => money.HasBag));
+            At(pursuitState, fleeState, new FuncPredicate(() => money.HasBag && !ability.triggerAbility && abilityState.IsStateFinished()));
             
             At(pursuitState, abilityState, new FuncPredicate(() => ability.triggerAbility));
-            At(abilityState, pursuitState, new FuncPredicate(() => abilityState.IsStateFinished()));
+            At(abilityState, pursuitState, new FuncPredicate(() => abilityState.IsStateFinished() && !ability.triggerAbility));
             
             At(knockOutState, waitState, new FuncPredicate(() => knockOutState.IsTimerFinished()));
             
@@ -90,6 +96,8 @@ public class EnemyController : MonoBehaviour, IKnockable {
             Any(knockOutState, new FuncPredicate(() => enterKnockOut));
             
             stateMachine.SetState(waitState);
+            
+            Debug.Log("Register Frog State");
         }
         else {
             var waitState = new EnemyWaitState(this);

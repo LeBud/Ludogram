@@ -13,17 +13,18 @@ namespace Enemies {
         [SerializeField] private float minRangeToAbility = 2f;
         [SerializeField] private float maxRangeToAbility = 14f;
         [SerializeField] public float abilityStateDuration = 1f;
-        [SerializeField] private Transform raycastPoint;
+        [SerializeField] public Transform raycastPoint;
+
+        public float currentCooldown { get; private set; }
         
-        private float currentCooldown = 0f;
-        
-        [HideInInspector]
+        //[HideInInspector]
         public bool triggerAbility = false;
         [HideInInspector]
         public bool canUseTongue = true;
-        
         private RaycastHit raycastHit;
-
+        
+        public Vector3 lastHitPos { get; private set; }
+        
         public void Initialize(EnemyController controller) {
             ia = controller;
         }
@@ -55,6 +56,8 @@ namespace Enemies {
         private void UseAbility() {
             triggerAbility = true;
             currentCooldown = abilityCooldown;
+            
+            lastHitPos = raycastHit.point;
             
             if (raycastHit.collider.TryGetComponent(out SingleDoor door)) {
                 Debug.Log("Hit Door");
