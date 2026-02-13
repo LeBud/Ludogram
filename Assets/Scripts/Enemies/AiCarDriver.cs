@@ -75,8 +75,8 @@ namespace Enemies {
                 else forwardAmount = -1f;
                 
                 var angleToDir = Vector3.SignedAngle(transform.forward, dirToMovePos, Vector3.up);
-                if(angleToDir > 10f) turnAmount = 1f;
-                else if(angleToDir < -10f) turnAmount = -1f;
+                if(angleToDir > 15f) turnAmount = 1f;
+                else if(angleToDir < -15f) turnAmount = -1f;
                 else  turnAmount = 0f;
             }
             
