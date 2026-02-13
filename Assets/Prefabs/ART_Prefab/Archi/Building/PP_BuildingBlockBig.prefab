@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7880597623026167914
 Transform:
@@ -88,6 +88,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7ac7f82d7eaa6f94a9b7713ef5f0c32b, type: 3}
       propertyPath: m_Name
       value: SM_BuildingBloc_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7ac7f82d7eaa6f94a9b7713ef5f0c32b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -183,6 +187,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: c1a37c0a243314a4caedc175857a8e0d, type: 3}
       propertyPath: m_Name
       value: SM_BuildingTransition_02 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c1a37c0a243314a4caedc175857a8e0d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

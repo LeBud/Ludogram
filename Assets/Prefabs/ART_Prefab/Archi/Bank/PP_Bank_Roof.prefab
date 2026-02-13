@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8776053060492240840
 Transform:
@@ -99,6 +99,18 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ccbb1337f4ab1d5408d2179af54245f4, type: 3}
       propertyPath: m_Name
       value: SM_Bank_Roof
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ccbb1337f4ab1d5408d2179af54245f4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5148817236446094103, guid: ccbb1337f4ab1d5408d2179af54245f4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507901977716847365, guid: ccbb1337f4ab1d5408d2179af54245f4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7339356831882890532, guid: ccbb1337f4ab1d5408d2179af54245f4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

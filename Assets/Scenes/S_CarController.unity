@@ -2362,8 +2362,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 571321693932660350, guid: 15a5129f07b972b4aa1b62b7c4d38554, type: 3}
+      propertyPath: FrogPrefab
+      value: 
+      objectReference: {fileID: 5740199188756455522, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
+    - target: {fileID: 571321693932660350, guid: 15a5129f07b972b4aa1b62b7c4d38554, type: 3}
       propertyPath: spawnPoint.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 571321693932660350, guid: 15a5129f07b972b4aa1b62b7c4d38554, type: 3}
       propertyPath: 'spawnPoint.Array.data[0]'
@@ -58445,17 +58449,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: PP_ManholeCover
       objectReference: {fileID: 0}
-    - target: {fileID: 4596582657626198440, guid: 0922408974b6e6d449aea54b746bab2a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7031093937652154889, guid: 0922408974b6e6d449aea54b746bab2a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.23
       objectReference: {fileID: 0}
     - target: {fileID: 7031093937652154889, guid: 0922408974b6e6d449aea54b746bab2a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.971
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7031093937652154889, guid: 0922408974b6e6d449aea54b746bab2a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -58551,63 +58551,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2dda552a1ae9aa4fb6e56a57dbcf597, type: 3}
---- !u!1001 &3422882173674231775
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5740199188756455522, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_Name
-      value: FrogCar
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 19.77
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.86
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850363224674258588, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 05313c811faaeb7488f24fc97c7fc9f6, type: 3}
 --- !u!1001 &8181234786143681339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58891,4 +58834,3 @@ SceneRoots:
   - {fileID: 1447003528}
   - {fileID: 1594980553}
   - {fileID: 404992952}
-  - {fileID: 3422882173674231775}
