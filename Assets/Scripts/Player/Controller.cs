@@ -114,8 +114,7 @@ namespace Player
 		private bool inCar;
 		public float interactTimer;
 		
-		void Awake()
-		{
+		void Awake() {
 			Initialize();
 			SetupStateMachine();
 		}
@@ -125,6 +124,7 @@ namespace Player
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			playerCameraTransform = playerCamera.transform;
+			rb.interpolation = RigidbodyInterpolation.Interpolate;
 			AssignActions();
 			SubscribeInputSystemActions();
 			GetInputs().DisableCarInput();
@@ -132,8 +132,9 @@ namespace Player
 
 		#region AWAKE METHODS
 
-		void Initialize()
-		{
+		void Initialize() {
+			transform.position = GameManager.instance.playerSpawnPos.position;
+			
 			if (TryGetComponent(out pInput)) {
 				pInput.Initialize();
 			}

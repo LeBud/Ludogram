@@ -15,7 +15,7 @@ namespace Manager {
         private HashSet<Controller> playerInCar = new();
         private List<Controller> playersRef = new();
 
-        [SerializeField] private Transform playerSpawnPos;
+        [SerializeField] public Transform playerSpawnPos;
         
         private void Awake() {
             if (instance == null) instance = this;
@@ -36,11 +36,6 @@ namespace Manager {
             players.Add(input);
             SetupCamera();
             input.GetComponent<SwitchPlayerModel>().SetPlayerMesh(input.playerIndex);
-            
-            //if(playerSpawnPos == null) return;
-            
-            input.transform.position = playerSpawnPos.position;
-            input.GetComponent<Controller>().GetRB().interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         public void RegisterPlayer(Controller player) {
